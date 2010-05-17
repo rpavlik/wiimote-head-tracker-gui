@@ -1,0 +1,122 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+header_name {.h} 
+code_name {.cpp}
+decl {class WiimoteTracker;} {public global
+} 
+
+decl {\#include <WiimoteTracker.h>} {global
+} 
+
+widget_class WiimoteTrackerGUI {
+  label {Wii Remote Head Tracker} open
+  xywh {433 227 480 295} type Double
+  code0 {_progress->maximum(4.0);}
+  code1 {_progress->minimum(1.0);}
+  class Fl_Window visible
+} {
+  Function {refreshDisplay()} {return_type void
+  } {
+    code {flush();} {}
+  }
+  Function {mainloop()} {return_type bool
+  } {
+    code {return (Fl::check() != 0);} {}
+  }
+  Function {setTracker(WiimoteTracker * tracker)} {return_type void
+  } {
+    code {_tracker = tracker;} {}
+  }
+  Function {setProgress(const float progress)} {return_type void
+  } {
+    code {_progress->value(progress);} {}
+  }
+  Function {setTrackerName(const char * name)} {return_type void
+  } {
+    code {_trackerName->value(name);} {}
+  }
+  Function {setLEDDistance(const float distance)} {return_type void
+  } {
+    code {_ledDistance->value(distance * 100.0);} {}
+  }
+  Fl_Menu_Bar {} {
+    xywh {0 0 480 25}
+  } {
+    Submenu {} {
+      label File open
+      xywh {5 5 100 20}
+    } {
+      MenuItem {} {
+        label {Open configuration...}
+        xywh {5 5 100 20} shortcut 0x4006f
+      }
+      MenuItem {} {
+        label {&Save configuration...}
+        xywh {5 5 100 20} shortcut 0x40073 divider
+      }
+      MenuItem {} {
+        label {&Quit}
+        callback {hide();}
+        xywh {5 5 100 20}
+      }
+    }
+    MenuItem {} {
+      label {About...}
+      xywh {0 0 36 21}
+    }
+  }
+  Fl_Tabs {} {
+    xywh {0 30 485 160}
+  } {
+    Fl_Group {} {
+      label {Tracker Status} open selected
+      xywh {5 55 480 135}
+    } {
+      Fl_Progress _progress {
+        label {Startup Progress}
+        protected xywh {10 70 470 35}
+      }
+    }
+    Fl_Group {} {
+      label Configuration open
+      xywh {5 55 480 135} hide
+    } {
+      Fl_Value_Input _ledDistance {
+        label {Distance between LEDs (cm)}
+        protected xywh {240 65 60 25} value 14.5
+      }
+      Fl_Input _trackerName {
+        label {Tracker Name}
+        protected xywh {240 90 125 25}
+        code0 {o->value("Tracker0");}
+      }
+      Fl_Button {} {
+        label {Apply Changes}
+        callback {_tracker->setTrackerName(_trackerName->value());
+_tracker->setLEDDistance(_ledDistance->value() / 100.0);
+_tracker->startTrackerDevice();}
+        xywh {35 120 330 25}
+      }
+    }
+    Fl_Group {} {
+      label Troubleshooting open
+      xywh {0 55 480 135} hide
+    } {
+      Fl_Button {} {
+        label {Restart Wiimote and Tracker}
+        callback {_tracker->startWiimoteDevice();}
+        xywh {60 125 160 40} align 128
+      }
+      Fl_Button {} {
+        label {Restart Tracker Filter Only}
+        callback {_tracker->startTrackerDevice();}
+        xywh {270 125 160 40} align 128
+      }
+    }
+  }
+  decl {WiimoteTracker * _tracker;} {protected
+  }
+  Fl_Text_Display {} {
+    xywh {10 200 460 85}
+  }
+} 
