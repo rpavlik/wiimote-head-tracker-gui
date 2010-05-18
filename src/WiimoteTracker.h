@@ -25,6 +25,8 @@
 #include <string>
 
 class WiimoteTrackerGUI;
+class WiimoteTrackerConfigGUI;
+class StartupProgress;
 class vrpn_Connection;
 class vrpn_WiiMote;
 class vrpn_Tracker_WiimoteHead;
@@ -59,6 +61,8 @@ class WiimoteTracker {
 		vrpn_WiiMote * _wiimote;
 		vrpn_Tracker_WiimoteHead * _tracker;
 
+		StartupProgress * _progress;
+		WiimoteTrackerConfigGUI * _config;
 		WiimoteTrackerGUI * _gui;
 };
 #endif // WIIMOTETRACKER

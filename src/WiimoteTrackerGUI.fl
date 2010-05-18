@@ -8,28 +8,54 @@ decl {class WiimoteTracker;} {public global
 decl {\#include <WiimoteTracker.h>} {global
 } 
 
-widget_class WiimoteTrackerGUI {
-  label {Wii Remote Head Tracker} open
-  xywh {433 227 480 295} type Double
-  code0 {_progress->maximum(4.0);}
-  code1 {_progress->minimum(1.0);}
+widget_class WiimoteTrackerConfigGUI {open
+  xywh {372 334 350 160} type Double
   class Fl_Window visible
 } {
-  Function {refreshDisplay()} {return_type void
-  } {
-    code {flush();} {}
+  decl {WiimoteTracker * _tracker;} {protected
   }
-  Function {mainloop()} {return_type bool
+  Fl_Value_Input _ledDistance {
+    label {Distance between LEDs (cm)}
+    protected xywh {215 35 60 25} maximum 50 step 0.1 value 14.5
+  }
+  Fl_Input _trackerName {
+    label {Tracker Device Name}
+    protected xywh {215 75 125 25}
+    code0 {o->value("Tracker0");}
+  }
+  Fl_Button {} {
+    label {Apply Changes and Restart Tracker}
+    callback {_tracker->setTrackerName(_trackerName->value());
+_tracker->setLEDDistance(_ledDistance->value() / 100.0);
+_tracker->startTrackerDevice();}
+    xywh {60 118 280 32}
+  }
+  Fl_Menu_Bar {} {open
+    xywh {0 0 350 25}
   } {
-    code {return (Fl::check() != 0);} {}
+    Submenu {} {
+      label File open
+      xywh {15 15 100 20}
+    } {
+      MenuItem {} {
+        label {Open configuration...}
+        xywh {15 15 100 20} shortcut 0x4006f
+      }
+      MenuItem {} {
+        label {&Save configuration...}
+        xywh {15 15 100 20} shortcut 0x40073 divider
+      }
+      MenuItem {} {
+        label {&Quit}
+        callback {// Hide main window to signal exit
+this->hide();}
+        xywh {15 15 100 20}
+      }
+    }
   }
   Function {setTracker(WiimoteTracker * tracker)} {return_type void
   } {
     code {_tracker = tracker;} {}
-  }
-  Function {setProgress(const float progress)} {return_type void
-  } {
-    code {_progress->value(progress);} {}
   }
   Function {setTrackerName(const char * name)} {return_type void
   } {
@@ -39,20 +65,181 @@ widget_class WiimoteTrackerGUI {
   } {
     code {_ledDistance->value(distance * 100.0);} {}
   }
+} 
+
+widget_class StartupProgress {
+  label {Starting Tracking System...} open
+  xywh {125 586 430 250} type Double
+  class Fl_Window modal visible
+} {
+  decl {WiimoteTracker * _tracker;} {}
+  Function {setTracker(WiimoteTracker * tracker)} {return_type void
+  } {
+    code {_tracker = tracker;} {}
+  }
+  Fl_Group {} {
+    label {VRPN Server Connection}
+    xywh {10 10 410 70} box EMBOSSED_BOX align 145
+  } {
+    Fl_Progress _connectionProgress {
+      protected xywh {20 40 260 30}
+    }
+    Fl_Button _connectionReset {
+      label Reset
+      callback {_tracker->startConnection();
+_tracker->startWiimoteDevice();
+_tracker->startTrackerDevice();}
+      protected xywh {290 40 120 30} deactivate
+    }
+  }
+  Fl_Group {} {
+    label {Wiimote Device}
+    xywh {10 90 410 70} box EMBOSSED_BOX align 145
+  } {
+    Fl_Progress _wiimoteProgress {
+      protected xywh {20 120 260 30}
+    }
+    Fl_Button _wiimoteReset {
+      label Reset
+      callback {_tracker->startWiimoteDevice();
+_tracker->startTrackerDevice();}
+      protected xywh {290 120 120 30} deactivate
+    }
+  }
+  Fl_Group {} {
+    label {Tracker Device}
+    xywh {10 170 410 70} box EMBOSSED_BOX align 145
+  } {
+    Fl_Progress _trackerProgress {
+      protected xywh {20 200 260 30}
+    }
+    Fl_Button _trackerReset {
+      label Reset
+      callback {_tracker->startTrackerDevice();}
+      protected xywh {290 200 120 30} deactivate
+    }
+  }
+  Function {setConnectionStatus(const float completion, const char * message, bool error=false)} {return_type void
+  } {
+    code {clearWiimoteStatus();
+
+// Set self
+_connectionProgress->minimum(0.0);
+_connectionProgress->maximum(1.0);
+_connectionProgress->value(completion);
+_connectionProgress->copy_label(message);
+_connectionProgress->redraw();
+
+if (error) {
+	_connectionReset->activate();
+} else {
+	_connectionReset->deactivate();
+}
+_connectionReset->redraw();} {}
+  }
+  Function {clearConnectionStatus()} {return_type void
+  } {
+    code {clearWiimoteStatus();
+_connectionProgress->value(0.0);
+_connectionProgress->label("Not started");
+_connectionProgress->redraw();
+_connectionReset->deactivate();
+_connectionReset->redraw();} {}
+  }
+  Function {setWiimoteStatus(const float completion, const char * message, bool error=false)} {return_type void
+  } {
+    code {clearTrackerStatus();
+
+// Set self
+_wiimoteProgress->minimum(0.0);
+_wiimoteProgress->maximum(1.0);
+_wiimoteProgress->value(completion);
+_wiimoteProgress->copy_label(message);
+_wiimoteProgress->redraw();
+
+if (error) {
+	_wiimoteReset->activate();
+} else {
+	_wiimoteReset->deactivate();
+}
+_wiimoteReset->redraw();} {}
+  }
+  Function {clearWiimoteStatus()} {return_type void
+  } {
+    code {clearTrackerStatus();
+_wiimoteProgress->value(0.0);
+_wiimoteProgress->label("Not started");
+_wiimoteProgress->redraw();
+
+_wiimoteReset->deactivate();
+_wiimoteReset->redraw();} {}
+  }
+  Function {setTrackerStatus(const float completion, const char * message, bool error=false)} {return_type void
+  } {
+    code {// Set self
+_trackerProgress->minimum(0.0);
+_trackerProgress->maximum(1.0);
+_trackerProgress->value(completion);
+_trackerProgress->copy_label(message);
+_trackerProgress->redraw();
+
+if (error) {
+	_trackerReset->activate();
+} else {
+	_trackerReset->deactivate();
+}
+_trackerReset->redraw();} {}
+  }
+  Function {clearTrackerStatus()} {return_type void
+  } {
+    code {_trackerProgress->value(0.0);
+_trackerProgress->label("Not started");
+_trackerProgress->redraw();
+
+_trackerReset->deactivate();
+_trackerReset->redraw();} {selected
+    }
+  }
+  Function {mainloop()} {return_type bool
+  } {
+    code {return (Fl::check() != 0);} {}
+  }
+} 
+
+widget_class WiimoteTrackerGUI {
+  label {Wii Remote Head Tracker} open
+  xywh {81 223 260 90} type Double
+  class Fl_Window visible
+} {
+  decl {WiimoteTracker * _tracker;} {protected
+  }
+  Function {refreshDisplay()} {open return_type void
+  } {
+    code {flush();
+redraw();} {}
+  }
+  Function {mainloop()} {open return_type bool
+  } {
+    code {return (Fl::check() != 0);} {}
+  }
+  Function {setTracker(WiimoteTracker * tracker)} {return_type void
+  } {
+    code {_tracker = tracker;} {}
+  }
   Fl_Menu_Bar {} {
-    xywh {0 0 480 25}
+    xywh {0 0 260 25}
   } {
     Submenu {} {
       label File open
       xywh {5 5 100 20}
     } {
       MenuItem {} {
-        label {Open configuration...}
-        xywh {5 5 100 20} shortcut 0x4006f
+        label {Re&configure tracker...}
+        xywh {0 0 36 21}
       }
       MenuItem {} {
-        label {&Save configuration...}
-        xywh {5 5 100 20} shortcut 0x40073 divider
+        label {&Open configuration...}
+        xywh {5 5 100 20} shortcut 0x4006f
       }
       MenuItem {} {
         label {&Quit}
@@ -65,58 +252,8 @@ widget_class WiimoteTrackerGUI {
       xywh {0 0 36 21}
     }
   }
-  Fl_Tabs {} {
-    xywh {0 30 485 160}
-  } {
-    Fl_Group {} {
-      label {Tracker Status} open selected
-      xywh {5 55 480 135}
-    } {
-      Fl_Progress _progress {
-        label {Startup Progress}
-        protected xywh {10 70 470 35}
-      }
-    }
-    Fl_Group {} {
-      label Configuration open
-      xywh {5 55 480 135} hide
-    } {
-      Fl_Value_Input _ledDistance {
-        label {Distance between LEDs (cm)}
-        protected xywh {240 65 60 25} value 14.5
-      }
-      Fl_Input _trackerName {
-        label {Tracker Name}
-        protected xywh {240 90 125 25}
-        code0 {o->value("Tracker0");}
-      }
-      Fl_Button {} {
-        label {Apply Changes}
-        callback {_tracker->setTrackerName(_trackerName->value());
-_tracker->setLEDDistance(_ledDistance->value() / 100.0);
-_tracker->startTrackerDevice();}
-        xywh {35 120 330 25}
-      }
-    }
-    Fl_Group {} {
-      label Troubleshooting open
-      xywh {0 55 480 135} hide
-    } {
-      Fl_Button {} {
-        label {Restart Wiimote and Tracker}
-        callback {_tracker->startWiimoteDevice();}
-        xywh {60 125 160 40} align 128
-      }
-      Fl_Button {} {
-        label {Restart Tracker Filter Only}
-        callback {_tracker->startTrackerDevice();}
-        xywh {270 125 160 40} align 128
-      }
-    }
-  }
-  decl {WiimoteTracker * _tracker;} {protected
-  }
-  Fl_Text_Display {} {
-    xywh {10 200 460 85}
+  Fl_Value_Output {} {
+    label {Visible Points}
+    xywh {150 40 30 30}
   }
 } 

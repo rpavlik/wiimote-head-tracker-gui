@@ -1,5 +1,5 @@
 /**	@file	WiimoteTracker.cpp
-	@brief	implementation
+	@brief	implementation involving interaction
 
 
 	@date	2010
@@ -22,18 +22,7 @@
 #include <vrpn_Tracker_WiimoteHead.h>
 
 // Standard includes
-#include <cassert>
-
-const int	CONNECTION_PORT = vrpn_DEFAULT_LISTEN_PORT_NO;  // Port for connection to listen on
-const int	TRACKER_FREQUENCY = 60;
-const int	DEBUG_DISPLAY_INTERVAL = 3; // # of seconds between status displays
-
-const float HAVE_CONNECTION = 1.0;
-const float HAVE_WIIMOTE = 2.0;
-const float HAVE_TRACKER = 3.0;
-
-const char * WIIMOTE_NAME = "WiimoteForHead";
-const char * WIIMOTE_REMOTE_NAME = "*WiimoteForHead";
+// - none
 
 WiimoteTracker::WiimoteTracker() :
 		_ready(false),
@@ -42,121 +31,52 @@ WiimoteTracker::WiimoteTracker() :
 		_connection(NULL),
 		_wiimote(NULL),
 		_tracker(NULL),
-		_gui(new WiimoteTrackerGUI(433,227,480,185, "Wii Remote Head Tracker")) {
+		_progress(new StartupProgress(20,20,430,250, "Starting Tracking System...")),
+		_config(new WiimoteTrackerConfigGUI(20, 20, 350, 160, "Tracker Configuration")),
+		_gui(new WiimoteTrackerGUI(20,20,260,90, "Wii Remote Head Tracker")) {
 
 }
 
 WiimoteTracker::~WiimoteTracker() {
+	delete _progress;
+	delete _config;
 	delete _gui;
+
 	teardownConnection();
-}
-
-void WiimoteTracker::startConnection() {
-	_connection = vrpn_create_server_connection(CONNECTION_PORT);
-	if (!_connection) {
-		// error condition creating connection
-		return;
-	}
-
-	_gui->setProgress(HAVE_CONNECTION);
-	_gui->mainloop();
-}
-
-void WiimoteTracker::teardownConnection() {
-	teardownWiimoteDevice();
-	if (_connection) {
-		delete _connection;
-		_connection = NULL;
-	}
-}
-
-void WiimoteTracker::startWiimoteDevice() {
-	_gui->refreshDisplay();
-
-	teardownWiimoteDevice();
-	if (!_connection) {
-		return;
-	}
-
-	_wiimote = new vrpn_WiiMote(WIIMOTE_NAME, _connection, 0);
-
-	if (!_wiimote) {
-		// error condition creating wiimote
-		return;
-	}
-
-	if (!_wiimote->isValid()) {
-		// Could not connect to a wiimote
-		teardownWiimoteDevice();
-		return;
-	}
-
-	_gui->setProgress(HAVE_WIIMOTE);
-	_gui->mainloop();
-}
-
-void WiimoteTracker::teardownWiimoteDevice() {
-	teardownTrackerDevice();
-	if (_wiimote) {
-		delete _wiimote;
-		_wiimote = NULL;
-	}
-}
-
-void WiimoteTracker::startTrackerDevice() {
-	_gui->refreshDisplay();
-
-	teardownTrackerDevice();
-	if (!_wiimote) {
-		return;
-	}
-	_tracker = new vrpn_Tracker_WiimoteHead(_trackerName.c_str(),
-			_connection,
-			WIIMOTE_REMOTE_NAME,
-			TRACKER_FREQUENCY,
-			_ledDistance);
-
-	if (!_tracker) {
-		// error condition creating tracker device
-		return;
-	}
-	_gui->setProgress(HAVE_TRACKER);
-	_gui->mainloop();
-}
-
-void WiimoteTracker::teardownTrackerDevice() {
-	if (_tracker) {
-		delete _tracker;
-		_tracker = NULL;
-	}
 }
 
 void WiimoteTracker::setLEDDistance(const float distanceInMeters) {
 	if (distanceInMeters <= 0) {
 		// Invalid change
-		_gui->setLEDDistance(_ledDistance);
+		_config->setLEDDistance(_ledDistance);
 		return;
 	}
 	// This invalidates the tracker
 	teardownTrackerDevice();
 	_ledDistance = distanceInMeters;
+	_config->setLEDDistance(_ledDistance);
 }
+
 void WiimoteTracker::setTrackerName(const std::string & trackerName) {
 	if (trackerName.size() == 0) {
 		// Invalid change
-		_gui->setTrackerName(_trackerName.c_str());
+		_config->setTrackerName(_trackerName.c_str());
 		return;
 	}
 	// This invalidates the tracker
 	teardownTrackerDevice();
 	_trackerName = trackerName;
+	_config->setTrackerName(_trackerName.c_str());
 }
 
 void WiimoteTracker::run() {
+	_progress->setTracker(this);
+	_progress->clearConnectionStatus();
+	_progress->clearWiimoteStatus();
+	_progress->clearTrackerStatus();
+
+	_config->setTracker(this);
 	_gui->setTracker(this);
-	_gui->setProgress(0);
-	_gui->show();
-	_gui->mainloop();
 
 	// Create connection
 	startConnection();

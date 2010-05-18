@@ -49,163 +49,16 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-/*
-#include <vrpn_Configure.h>
-
-#define FATAL_ERROR cerr << endl << "Press 'enter' to exit..." << endl;	cin.get(); return -1;
-
-#if defined(VRPN_USE_WIIUSE)
-#include "vrpn_Tracker.h"
-#include "vrpn_WiiMote.h"
-#include "vrpn_Tracker_WiimoteHead.h"
-
-#undef RP_PROFILING
-
-const char* TRACKER_NAME = "Tracker0";
-const char* WIIMOTE_NAME = "WiimoteForHead";
-const char* WIIMOTE_REMOTE_NAME = "*WiimoteForHead";
-const int	CONNECTION_PORT = vrpn_DEFAULT_LISTEN_PORT_NO;  // Port for connection to listen on
-const int	TRACKER_FREQUENCY = 60;
-const int	DEBUG_DISPLAY_INTERVAL = 3; // # of seconds between status displays
-
-#ifdef RP_PROFILING
-int reports = 0;
-const int	MAX_REPORTS = 3000;
-#endif
-
-vrpn_Tracker_WiimoteHead* wmtkr;
-vrpn_WiiMote* wiimote;
-vrpn_Tracker_Remote* tkr;
-vrpn_Connection* connection;
-long sender_id;
-long need_wiimote = false;
-long wiimote_timeout = 10;
-
-struct timeval last_display;
-
-static	double	duration(struct timeval t1, struct timeval t2) {
-	return (t1.tv_usec - t2.tv_usec) / 1000000.0 +
-	       (t1.tv_sec - t2.tv_sec);
-}
-*/
-
-/*****************************************************************************
- *
-   Callback handler
- *
- *****************************************************************************/
-/*
-void	VRPN_CALLBACK handle_pos(void*, const vrpn_TRACKERCB t) {
-	static int count = 0;
-	count++;
-	if (count > 300) {
-		printf("\n(%5f, %5f, %5f) ((%5f, %5f, %5f) %5f)\n",
-			   t.pos[0], t.pos[1], t.pos[2], t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
-		struct timeval now;
-		vrpn_gettimeofday(&now, NULL);
-		double interval = duration(now, last_display);
-		double frequency = count / interval;
-		count = 0;
-		printf("Update frequency:\t%5.2f Hz (%5.2f sec)\n",
-			frequency,
-			interval);
-		last_display = now;
-	}
-}
-*/
-
 #include "WiimoteTracker.h"
 
-int main(int argc, char* argv []) {
-	WiimoteTracker tracker;
-	tracker.run();
-	/*
-	int wmnum = -1;
-	if (argc == 1) {
-		cout << "Note: Using Wiimote 0 by default... to specify another [0-3]:" << endl;
-		cout <<  "Usage: " << argv[0] << " [WIIMOTENUM]" << endl;
-		wmnum = 0;
-	} else if (argc == 2) {
-		wmnum = atoi(argv[1]);
-		if (wmnum < 0 || wmnum > 3) {
-			// improper # provided - pretend as if we had too many arguments
-			// so we error out.
-			argc = 3;
-		} else {
-			cout << "Using specified Wiimote number " << wmnum << endl;
-		}
-	}
-
-	if (argc > 2) {
-		cerr <<  "ERROR: Please run this with no arguments or optionally a Wiimote number (0-3)" << endl;
-		cerr <<  "Usage: " << argv[0] << " [WIIMOTENUM]" << endl;
-		FATAL_ERROR;
-	}
-
-	// explicitly open the connection
-	connection = vrpn_create_server_connection(CONNECTION_PORT);
-
-	if (!connection) {
-		cerr << "Could not create VRPN server connection!" << endl;
-		FATAL_ERROR;
-	}
-
-	// Message not valid on Windows, where you must remove existing pairings
-	// and create a new one without a passcode before each time you start
-	// the tracker
-#ifndef _WIN32
-	cout << endl;
-	cout << "************************************************" << endl;
-	cout << "Press the 1 and 2 buttons on your Wiimote now..." << endl;
-	cout << "************************************************" << endl << endl;
+#ifdef _WIN32
+#define main WinMain
 #endif
 
-	wiimote = new vrpn_WiiMote(WIIMOTE_NAME, connection, wmnum);
-	if (!wiimote) {
-		cerr << "Could not create Wiimote server named " << WIIMOTE_NAME << endl;
-		FATAL_ERROR;
-	}
+int main (int argc, char* argv[]) {
 
-	cout << endl;
-	cout << "************************************************" << endl;
-	cout << "Wiimote successfully paired, starting tracker..." << endl;
-	cout << "************************************************" << endl << endl;
+	WiimoteTracker tracker;
+	tracker.run();
 
-	wmtkr = new vrpn_Tracker_WiimoteHead(TRACKER_NAME, connection, WIIMOTE_REMOTE_NAME, 60.0);
-	if (!wmtkr) {
-		cerr <<  "Could not create Wiimote Head Tracker named " << TRACKER_NAME << endl;
-		FATAL_ERROR;
-	}
-
-	cout << endl;
-	cout << "************************************************" << endl;
-	cout << "Tracker's name is: " << TRACKER_NAME << endl;
-	cout << "************************************************" << endl << endl;
-
-	vrpn_gettimeofday(&last_display, NULL);
-
-	// Open the tracker remote using this connection
-	tkr = new vrpn_Tracker_Remote(TRACKER_NAME, connection);
-	if (!wmtkr) {
-		cerr <<  "Could not create a remote for our own tracker " << TRACKER_NAME << endl;
-		FATAL_ERROR;
-	}
-
-	// Set up the tracker callback handler
-	tkr->register_change_handler(NULL, handle_pos);
-
-
-	while (1) {
-		// Let the tracker server, client and connection do their things
-		wiimote->mainloop();
-		wmtkr->mainloop();
-		tkr->mainloop();
-		connection->mainloop();
-		// Sleep for 1ms so we don't eat the CPU
-		vrpn_SleepMsecs(1);
-	}
-*/
 	return 0;
 }   /* main */
-
