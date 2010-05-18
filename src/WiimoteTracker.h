@@ -37,6 +37,13 @@ class WiimoteTracker {
 		WiimoteTracker();
 		~WiimoteTracker();
 
+		enum Component {
+			CMP_CONNECTION,
+			CMP_WIIMOTE,
+			CMP_TRACKER,
+			CMP_CLIENT
+		};
+
 		/// @name GUI-related methods
 		/// @{
 		void setLEDDistance(const float distanceInMeters);
@@ -46,6 +53,11 @@ class WiimoteTracker {
 		void reconfigure();
 		void stopTrackerSystem();
 		void startTrackerSystem();
+
+		void setProgress(const Component cmp, const float completion, const char * message);
+
+		void systemIsDown();
+		void systemIsUp();
 		/// @}
 
 		/// @name VRPN-related methods
@@ -58,9 +70,14 @@ class WiimoteTracker {
 
 		bool startTrackerDevice();
 		void teardownTrackerDevice();
+
+		bool startClientDevice();
+		void teardownClientDevice();
 		/// @}
 
 		bool isSystemRunning(bool updateProgress = false);
+
+
 
 
 	protected:

@@ -98,14 +98,14 @@ widget_class StartupProgress {
   callback {\#ifdef VERBOSE
 	std::cerr << "StartupProgress window callback" << std::endl;
 \#endif
-static_cast<StartupProgress*>(o)->cleanAndClose();} open
-  xywh {225 110 430 290} type Double align 80
+static_cast<StartupProgress*>(o)->cleanAndClose();} open selected
+  xywh {117 80 430 360} type Double align 80
   class Fl_Window modal visible
 } {
   decl {WiimoteTracker * _tracker;} {}
   Fl_Box _closeMessage {
     label {Startup successful, this window will close automatically...}
-    protected xywh {10 260 410 30} align 128
+    protected xywh {10 330 410 30} align 128
     code0 {hide();}
   }
   Fl_Group {} {
@@ -141,7 +141,7 @@ _tracker->startTrackerDevice();}
   }
   Fl_Group {} {
     label {Tracker Device}
-    xywh {10 170 410 90} box EMBOSSED_BOX align 145
+    xywh {10 170 410 70} box EMBOSSED_BOX align 145
   } {
     Fl_Progress _trackerProgress {
       protected xywh {20 200 260 30}
@@ -153,7 +153,7 @@ _tracker->startTrackerDevice();}
       protected xywh {290 200 120 30} deactivate
     }
     Fl_Box {} {
-      xywh {30 240 20 20}
+      xywh {30 240 20 0}
     }
   }
   Function {setTracker(WiimoteTracker * tracker)} {return_type void
@@ -253,6 +253,23 @@ _trackerReset->deactivate();} {}
     code {_closeMessage->hide();
 hide();} {}
   }
+  Fl_Group {} {
+    label {Tracker Client Device} open
+    xywh {10 250 410 70} box EMBOSSED_BOX align 145
+  } {
+    Fl_Progress _clientProgress {
+      protected xywh {20 280 260 30}
+    }
+    Fl_Button _clientReset {
+      label Reset
+      callback {o->deactivate();
+_tracker->startClientDevice();}
+      protected xywh {290 280 120 30} deactivate
+    }
+    Fl_Box {} {
+      xywh {30 320 20 0}
+    }
+  }
 } 
 
 widget_class WiimoteTrackerGUI {
@@ -261,7 +278,7 @@ widget_class WiimoteTrackerGUI {
 	std::cout << "WiimoteTrackerGUI window callback" << std::endl;
 \#endif
 o->hide();} open
-  xywh {51 287 520 560} type Double align 80
+  xywh {54 458 520 490} type Double align 80
   class Fl_Window modal visible
 } {
   decl {WiimoteTracker * _tracker;} {protected
@@ -291,7 +308,7 @@ o->hide();} open
     xywh {10 30 500 520}
   } {
     Fl_Group {} {
-      label {Tracker Status} open
+      label {Tracker Status}
       xywh {10 50 500 430}
     } {
       Fl_Light_Button _trackerButton {
@@ -307,7 +324,7 @@ o->hide();} open
         protected xywh {200 60 120 50} type Normal selection_color 63 labeltype ENGRAVED_LABEL align 176 deactivate
       }
       Fl_Value_Output rate {
-        label {Average Report Rate (Hz)} selected
+        label {Average Report Rate (Hz)}
         xywh {310 170 80 30}
       }
     }

@@ -138,6 +138,37 @@ bool WiimoteTracker::startTrackerDevice() {
 	return true;
 }
 
+bool WiimoteTracker::startTrackerDevice() {
+#ifdef VERBOSE
+	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
+#endif
+	_gui->setWorking();
+	teardownTrackerDevice();
+	if (!_wiimote || !_connection) {
+		return false;
+	}
+	_progress->show();
+	_progress->setTrackerStatus(0.2, "Creating tracker device...");
+	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+
+	_tracker = new vrpn_Tracker_WiimoteHead(_trackerName.c_str(),
+			_connection,
+			WIIMOTE_REMOTE_NAME,
+			TRACKER_FREQUENCY,
+			_ledDistance);
+
+	if (!_tracker) {
+		// error condition creating tracker device
+		_progress->setTrackerStatus(0.2, "Could not allocate tracker device!", true);
+		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+		return false;
+	}
+
+	_progress->setTrackerStatus(1, "Running");
+
+	return true;
+}
+
 void WiimoteTracker::teardownConnection() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;

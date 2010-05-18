@@ -135,3 +135,35 @@ void WiimoteTracker::startTrackerSystem() {
 		return;
 	}
 }
+
+void setProgress(const Component cmp, const float completion, const char * message) {
+	switch (cmp) {
+		case CMP_CONNECTION:
+
+		break;
+
+		case CMP_WIIMOTE:
+
+		break;
+
+		case CMP_TRACKER:
+
+		break;
+
+		case CMP_CLIENT:
+
+
+	}
+
+}
+
+void WiimoteTracker::systemIsDown() {
+
+
+}
+
+void WiimoteTracker::systemIsUp() {
+	_gui->setStatus(true);
+	_progress->scheduleClose(PROGRESS_WINDOW_TIMEOUT);
+	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+}
