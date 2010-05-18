@@ -43,40 +43,39 @@ const char * WIIMOTE_REMOTE_NAME = "*WiimoteForHead";
 const float PROGRESS_EVENT_TIMEOUT = 0.2;
 const float PROGRESS_WINDOW_TIMEOUT = 3.0;
 
-void WiimoteTracker::startConnection() {
+bool WiimoteTracker::startConnection() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
+	_gui->setWorking();
 	_progress->show();
 	_progress->setConnectionStatus(0.2, "Creating server connection");
-	//refresh_ui();
 	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
 
 	_connection = vrpn_create_server_connection(CONNECTION_PORT);
 	if (!_connection) {
 		// error condition creating connection
 		_progress->setConnectionStatus(0.2, "Could not create server connection!", true);
-		//refresh_ui();
 		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
-		return;
+		return false;
 	}
 
 	_progress->setConnectionStatus(1, "Running");
-	//refresh_ui();
 	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+	return true;
 }
 
 
-void WiimoteTracker::startWiimoteDevice() {
+bool WiimoteTracker::startWiimoteDevice() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
+	_gui->setWorking();
 	teardownWiimoteDevice();
 	if (!_connection) {
-		return;
+		return false;
 	}
 	_progress->show();
-	//refresh_ui();
 	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
 
 #ifndef _WIN32
@@ -91,33 +90,32 @@ void WiimoteTracker::startWiimoteDevice() {
 	if (!_wiimote) {
 		// error condition creating wiimote
 		_progress->setWiimoteStatus(0.2, "Could not allocate Wiimote device!", true);
-		//refresh_ui();
 		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
-		return;
+		return false;
 	}
 
 	if (!_wiimote->isValid()) {
 		_progress->setWiimoteStatus(0.3, "Could not connect to a Wiimote!", true);
-		//refresh_ui();
 		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
-		return;
+		return false;
 	}
 
 	_progress->setWiimoteStatus(1, "Running");
 	refresh_ui();
+	return true;
 }
 
-void WiimoteTracker::startTrackerDevice() {
+bool WiimoteTracker::startTrackerDevice() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
+	_gui->setWorking();
 	teardownTrackerDevice();
 	if (!_wiimote || !_connection) {
-		return;
+		return false;
 	}
 	_progress->show();
 	_progress->setTrackerStatus(0.2, "Creating tracker device...");
-	//refresh_ui();
 	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
 
 	_tracker = new vrpn_Tracker_WiimoteHead(_trackerName.c_str(),
@@ -129,16 +127,15 @@ void WiimoteTracker::startTrackerDevice() {
 	if (!_tracker) {
 		// error condition creating tracker device
 		_progress->setTrackerStatus(0.2, "Could not allocate tracker device!", true);
-		//refresh_ui();
 		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
-		return;
+		return false;
 	}
 
 	_progress->setTrackerStatus(1, "Running");
 	_gui->setStatus(true);
 	_progress->scheduleClose(PROGRESS_WINDOW_TIMEOUT);
-	//refresh_ui();
 	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+	return true;
 }
 
 void WiimoteTracker::teardownConnection() {

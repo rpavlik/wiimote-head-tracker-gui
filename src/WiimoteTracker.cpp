@@ -63,7 +63,7 @@ void WiimoteTracker::setLEDDistance(const float distanceInMeters) {
 }
 
 void WiimoteTracker::setTrackerName(const std::string & trackerName) {
-	if (trackerName.size() == 0) {
+	if (trackerName.size() == 0 || trackerName.find(" ") != std::string::npos) {
 		// Invalid change
 		_config->setTrackerName(_trackerName.c_str());
 		return;
@@ -81,7 +81,6 @@ void WiimoteTracker::run() {
 	_progress->setTracker(this);
 
 	// Prepare the main window
-	_gui->setWorking();
 	_gui->updateVersions();
 
 	// Show initial windows
@@ -89,24 +88,13 @@ void WiimoteTracker::run() {
 	_progress->show();
 	refresh_ui();
 
-	// Create connection
-	startConnection();
-
-	// Start up the wiimote
-	startWiimoteDevice();
-
-	// Start up the tracker
-	startTrackerDevice();
+	startTrackerSystem();
 
 	while (mainloop_ui()) {
 		if (isSystemRunning()) {
 				_wiimote->mainloop();
 				_tracker->mainloop();
 				_connection->mainloop();
-		} else {
-			// Set up the progress display
-			isSystemRunning(true);
-			_progress->show();
 		}
 		// Sleep for 1ms so we don't eat the CPU
 		vrpn_SleepMsecs(1);
@@ -116,4 +104,34 @@ void WiimoteTracker::run() {
 void WiimoteTracker::reconfigure() {
 	_config->show();
 	refresh_ui();
+}
+
+void WiimoteTracker::stopTrackerSystem() {
+	_gui->setWorking();
+	refresh_ui();
+	teardownConnection();
+	_gui->setStatus(false);
+}
+
+void WiimoteTracker::startTrackerSystem() {
+	_gui->setWorking();
+
+	bool ret;
+	// Create connection
+	ret = startConnection();
+	if (!ret) {
+		return;
+	}
+
+	// Start up the wiimote
+	ret = startWiimoteDevice();
+	if (!ret) {
+		return;
+	}
+
+	// Start up the tracker
+	ret = startTrackerDevice();
+	if (!ret) {
+		return;
+	}
 }

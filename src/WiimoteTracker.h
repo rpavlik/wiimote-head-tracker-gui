@@ -44,17 +44,19 @@ class WiimoteTracker {
 
 		void run();
 		void reconfigure();
+		void stopTrackerSystem();
+		void startTrackerSystem();
 		/// @}
 
 		/// @name VRPN-related methods
 		/// @{
-		void startConnection();
+		bool startConnection();
 		void teardownConnection();
 
-		void startWiimoteDevice();
+		bool startWiimoteDevice();
 		void teardownWiimoteDevice();
 
-		void startTrackerDevice();
+		bool startTrackerDevice();
 		void teardownTrackerDevice();
 		/// @}
 

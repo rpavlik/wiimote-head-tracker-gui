@@ -14,7 +14,7 @@ decl {\#include <string>} {global
 decl {\#include <iostream>} {global
 } 
 
-decl {\#undef VERBOSE} {selected global
+decl {\#undef VERBOSE} {global
 } 
 
 decl {class WiimoteTracker;} {public global
@@ -95,7 +95,9 @@ _tracker->startTrackerDevice();}
 
 widget_class StartupProgress {
   label {Starting Tracking System...}
-  callback {std::cout << "StartupProgress window callback" << std::endl;
+  callback {\#ifdef VERBOSE
+	std::cerr << "StartupProgress window callback" << std::endl;
+\#endif
 static_cast<StartupProgress*>(o)->cleanAndClose();} open
   xywh {225 110 430 290} type Double align 80
   class Fl_Window modal visible
@@ -158,7 +160,7 @@ _tracker->startTrackerDevice();}
   } {
     code {_tracker = tracker;} {}
   }
-  Function {setConnectionStatus(const float completion, const char * message, bool error=false)} {open return_type void
+  Function {setConnectionStatus(const float completion, const char * message, bool error=false)} {return_type void
   } {
     code {\#ifdef VERBOSE
 	std::cerr << __FUNCTION__ << "@" << __FILE__ << ":" << __LINE__;
@@ -193,14 +195,12 @@ _wiimoteProgress->minimum(0.0);
 _wiimoteProgress->maximum(1.0);
 _wiimoteProgress->value(completion);
 _wiimoteProgress->copy_label(message);
-_wiimoteProgress->redraw();
 
 if (error) {
 	_wiimoteReset->activate();
 } else {
 	_wiimoteReset->deactivate();
-}
-_wiimoteReset->redraw();} {}
+}} {}
   }
   Function {setTrackerStatus(const float completion, const char * message, bool error=false)} {open return_type void
   } {
@@ -213,62 +213,53 @@ _trackerProgress->minimum(0.0);
 _trackerProgress->maximum(1.0);
 _trackerProgress->value(completion);
 _trackerProgress->copy_label(message);
-_trackerProgress->redraw();
 
 if (error) {
 	_trackerReset->activate();
 } else {
 	_trackerReset->deactivate();
-}
-_trackerReset->redraw();} {}
+}} {}
   }
-  Function {clearConnectionStatus()} {return_type void
+  Function {clearConnectionStatus()} {open return_type void
   } {
     code {clearWiimoteStatus();
 _connectionProgress->value(0.0);
 _connectionProgress->label("Not started");
-_connectionProgress->redraw();
-_connectionReset->deactivate();
-_connectionReset->redraw();} {}
+_connectionReset->deactivate();} {}
   }
-  Function {clearWiimoteStatus()} {return_type void
+  Function {clearWiimoteStatus()} {open return_type void
   } {
     code {clearTrackerStatus();
 _wiimoteProgress->value(0.0);
 _wiimoteProgress->label("Not started");
-_wiimoteProgress->redraw();
 
-_wiimoteReset->deactivate();
-_wiimoteReset->redraw();} {}
+_wiimoteReset->deactivate();} {}
   }
-  Function {clearTrackerStatus()} {return_type void
+  Function {clearTrackerStatus()} {open return_type void
   } {
     code {_trackerProgress->value(0.0);
 _trackerProgress->label("Not started");
-_trackerProgress->redraw();
 
-_trackerReset->deactivate();
-_trackerReset->redraw();} {}
+_trackerReset->deactivate();} {}
     code {_closeMessage->hide();} {}
   }
-  Function {scheduleClose(const float seconds)} {open return_type void
+  Function {scheduleClose(const float seconds)} {return_type void
   } {
-    code {_closeMessage->show();
-Fl_Window::show();
-refresh_ui();} {}
+    code {_closeMessage->show();} {}
     code {Fl::add_timeout(seconds, &closeStartupWindow, this);} {}
   }
   Function {cleanAndClose()} {open return_type void
   } {
     code {_closeMessage->hide();
 hide();} {}
-    code {refresh_ui();} {}
   }
 } 
 
 widget_class WiimoteTrackerGUI {
   label {Wii Remote Head Tracker}
-  callback {std::cout << "WiimoteTrackerGUI window callback" << std::endl;
+  callback {\#ifdef VERBOSE
+	std::cout << "WiimoteTrackerGUI window callback" << std::endl;
+\#endif
 o->hide();} open
   xywh {51 287 520 560} type Double align 80
   class Fl_Window modal visible
@@ -296,36 +287,27 @@ o->hide();} open
       }
     }
   }
-  Fl_Tabs {} {
+  Fl_Tabs {} {open
     xywh {10 30 500 520}
   } {
     Fl_Group {} {
-      label {Tracker Status}
+      label {Tracker Status} open
       xywh {10 50 500 430}
     } {
-      Fl_Value_Output points {
-        label {Visible Points}
-        xywh {310 130 80 30}
-      }
       Fl_Light_Button _trackerButton {
-        label {@>    Start Tracker}
-        callback {setWorking();
-refresh_ui();
-if (o->value() == 0) {
+        label {Please Wait...}
+        callback {if (o->value() == 0) {
 	// Was not running - start tracker
-	_tracker->startConnection();
-	_tracker->startWiimoteDevice();
-	_tracker->startTrackerDevice();
+	_tracker->startTrackerSystem();
 
 } else {
 	// was running - stop tracker
-	_tracker->teardownConnection();
-	setStatus(false);
+	_tracker->stopTrackerSystem();
 }}
-        protected xywh {200 60 120 50} selection_color 63 labeltype ENGRAVED_LABEL align 176
+        protected xywh {200 60 120 50} type Normal selection_color 63 labeltype ENGRAVED_LABEL align 176 deactivate
       }
       Fl_Value_Output rate {
-        label {Average Report Rate (Hz)}
+        label {Average Report Rate (Hz)} selected
         xywh {310 170 80 30}
       }
     }
@@ -416,9 +398,10 @@ if (o->value() == 0) {
   } {
     code {if (started) {
 	_trackerButton->label("@[]    Stop Tracker");
-	
+	_trackerButton->value(1);	
 } else {
 	_trackerButton->label("@>    Start Tracker");
+	_trackerButton->value(0);
 }
 _trackerButton->activate();} {}
   }
