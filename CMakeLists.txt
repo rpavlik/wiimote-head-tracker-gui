@@ -37,12 +37,13 @@ endif()
 # Link these libraries
 set(EXTRA_LIBS ${FLTK_LIBRARIES} ${VRPN_SERVER_LIBRARIES} ${WIIUSE_LIBRARIES})
 
-
 include_directories(${FLTK_INCLUDE_DIR} ${VRPN_INCLUDE_DIRS})
 
 ###
 # Build the project
 ###
+
+add_definitions("-DTRACKER_APP_VERSION=\"${CPACK_PACKAGE_VERSION}\"")
 
 # The app is in the "src" subdirectory
 add_subdirectory(src)

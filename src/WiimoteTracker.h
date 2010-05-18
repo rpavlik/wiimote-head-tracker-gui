@@ -37,9 +37,17 @@ class WiimoteTracker {
 		WiimoteTracker();
 		~WiimoteTracker();
 
+		/// @name GUI-related methods
+		/// @{
 		void setLEDDistance(const float distanceInMeters);
 		void setTrackerName(const std::string & trackerName);
 
+		void run();
+		void reconfigure();
+		/// @}
+
+		/// @name VRPN-related methods
+		/// @{
 		void startConnection();
 		void teardownConnection();
 
@@ -48,21 +56,32 @@ class WiimoteTracker {
 
 		void startTrackerDevice();
 		void teardownTrackerDevice();
+		/// @}
 
-		void run();
+		bool isSystemRunning(bool updateProgress = false);
+
 
 	protected:
-		bool _ready;
-
+		/// @name Configuration data
+		/// @{
 		std::string _trackerName;
 		float _ledDistance;
+		/// @}
 
+		/// @name VRPN objects
+		/// @{
 		vrpn_Connection * _connection;
 		vrpn_WiiMote * _wiimote;
 		vrpn_Tracker_WiimoteHead * _tracker;
+		/// @}
 
+		/// @name GUI windows
+		/// @{
 		StartupProgress * _progress;
 		WiimoteTrackerConfigGUI * _config;
 		WiimoteTrackerGUI * _gui;
+		/// @}
+
+
 };
 #endif // WIIMOTETRACKER

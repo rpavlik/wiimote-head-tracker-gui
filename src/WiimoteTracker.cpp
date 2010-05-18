@@ -1,7 +1,6 @@
 /**	@file	WiimoteTracker.cpp
 	@brief	implementation involving interaction
 
-
 	@date	2010
 
 	@author
@@ -22,27 +21,33 @@
 #include <vrpn_Tracker_WiimoteHead.h>
 
 // Standard includes
-// - none
+#include <cassert>
 
 WiimoteTracker::WiimoteTracker() :
-		_ready(false),
 		_trackerName("Tracker0"),
 		_ledDistance(0.145),
 		_connection(NULL),
 		_wiimote(NULL),
 		_tracker(NULL),
-		_progress(new StartupProgress(20,20,430,250, "Starting Tracking System...")),
-		_config(new WiimoteTrackerConfigGUI(20, 20, 350, 160, "Tracker Configuration")),
-		_gui(new WiimoteTrackerGUI(20,20,260,90, "Wii Remote Head Tracker")) {
-
+		_progress(new StartupProgress(430,290, "Starting Tracking System...")),
+		_config(new WiimoteTrackerConfigGUI(350, 160, "Tracker Configuration")),
+		_gui(new WiimoteTrackerGUI(520,560, "Wii Remote Head Tracker")) {
+	assert(_progress);
+	assert(_config);
+	assert(_gui);
 }
 
 WiimoteTracker::~WiimoteTracker() {
-	delete _progress;
-	delete _config;
-	delete _gui;
-
 	teardownConnection();
+
+	delete _progress;
+	_progress = NULL;
+
+	delete _config;
+	_config = NULL;
+
+	delete _gui;
+	_gui = NULL;
 }
 
 void WiimoteTracker::setLEDDistance(const float distanceInMeters) {
@@ -70,13 +75,19 @@ void WiimoteTracker::setTrackerName(const std::string & trackerName) {
 }
 
 void WiimoteTracker::run() {
-	_progress->setTracker(this);
-	_progress->clearConnectionStatus();
-	_progress->clearWiimoteStatus();
-	_progress->clearTrackerStatus();
-
+	// Set tracker pointers in GUI
 	_config->setTracker(this);
 	_gui->setTracker(this);
+	_progress->setTracker(this);
+
+	// Prepare the main window
+	_gui->setWorking();
+	_gui->updateVersions();
+
+	// Show initial windows
+	_gui->show();
+	_progress->show();
+	refresh_ui();
 
 	// Create connection
 	startConnection();
@@ -87,20 +98,22 @@ void WiimoteTracker::run() {
 	// Start up the tracker
 	startTrackerDevice();
 
-	while (_gui->mainloop()) {
-		if (_wiimote) {
-			_wiimote->mainloop();
+	while (mainloop_ui()) {
+		if (isSystemRunning()) {
+				_wiimote->mainloop();
+				_tracker->mainloop();
+				_connection->mainloop();
+		} else {
+			// Set up the progress display
+			isSystemRunning(true);
+			_progress->show();
 		}
-
-		if (_tracker) {
-			_tracker->mainloop();
-		}
-
-		if (_connection) {
-			_connection->mainloop();
-		}
-
 		// Sleep for 1ms so we don't eat the CPU
 		vrpn_SleepMsecs(1);
 	}
+}
+
+void WiimoteTracker::reconfigure() {
+	_config->show();
+	refresh_ui();
 }

@@ -2,15 +2,47 @@
 version 1.0109 
 header_name {.h} 
 code_name {.cpp}
+decl {\#include "WiimoteTracker.h"} {global
+} 
+
+decl {\#include "SoftwareVersions.h"} {public global
+} 
+
+decl {\#include <string>} {global
+} 
+
+decl {\#include <iostream>} {global
+} 
+
+decl {\#undef VERBOSE} {selected global
+} 
+
 decl {class WiimoteTracker;} {public global
 } 
 
-decl {\#include <WiimoteTracker.h>} {global
+decl {class StartupProgress;} {public global
 } 
 
-widget_class WiimoteTrackerConfigGUI {open
-  xywh {372 334 350 160} type Double
-  class Fl_Window visible
+Function {refresh_ui()} {return_type bool
+} {
+  code {Fl::flush();} {}
+  code {return (Fl::check() != 0);} {}
+} 
+
+Function {mainloop_ui(const float timeout = 0.0)} {open return_type bool
+} {
+  code {return (Fl::wait(timeout) >= 0) && (Fl::first_window() != NULL);} {}
+} 
+
+Function {closeStartupWindow(void* userdata)} {private return_type void
+} {
+  code {StartupProgress * p = static_cast<StartupProgress *>(userdata);
+p->cleanAndClose();} {}
+} 
+
+widget_class WiimoteTrackerConfigGUI {
+  xywh {775 450 350 160} type Double align 80 hide
+  class Fl_Window
 } {
   decl {WiimoteTracker * _tracker;} {protected
   }
@@ -43,13 +75,7 @@ _tracker->startTrackerDevice();}
       }
       MenuItem {} {
         label {&Save configuration...}
-        xywh {15 15 100 20} shortcut 0x40073 divider
-      }
-      MenuItem {} {
-        label {&Quit}
-        callback {// Hide main window to signal exit
-this->hide();}
-        xywh {15 15 100 20}
+        xywh {15 15 100 20} shortcut 0x40073
       }
     }
   }
@@ -68,14 +94,17 @@ this->hide();}
 } 
 
 widget_class StartupProgress {
-  label {Starting Tracking System...} open
-  xywh {125 586 430 250} type Double
+  label {Starting Tracking System...}
+  callback {std::cout << "StartupProgress window callback" << std::endl;
+static_cast<StartupProgress*>(o)->cleanAndClose();} open
+  xywh {225 110 430 290} type Double align 80
   class Fl_Window modal visible
 } {
   decl {WiimoteTracker * _tracker;} {}
-  Function {setTracker(WiimoteTracker * tracker)} {return_type void
-  } {
-    code {_tracker = tracker;} {}
+  Fl_Box _closeMessage {
+    label {Startup successful, this window will close automatically...}
+    protected xywh {10 260 410 30} align 128
+    code0 {hide();}
   }
   Fl_Group {} {
     label {VRPN Server Connection}
@@ -86,7 +115,8 @@ widget_class StartupProgress {
     }
     Fl_Button _connectionReset {
       label Reset
-      callback {_tracker->startConnection();
+      callback {o->deactivate();
+_tracker->startConnection();
 _tracker->startWiimoteDevice();
 _tracker->startTrackerDevice();}
       protected xywh {290 40 120 30} deactivate
@@ -101,26 +131,39 @@ _tracker->startTrackerDevice();}
     }
     Fl_Button _wiimoteReset {
       label Reset
-      callback {_tracker->startWiimoteDevice();
+      callback {o->deactivate();
+_tracker->startWiimoteDevice();
 _tracker->startTrackerDevice();}
       protected xywh {290 120 120 30} deactivate
     }
   }
   Fl_Group {} {
     label {Tracker Device}
-    xywh {10 170 410 70} box EMBOSSED_BOX align 145
+    xywh {10 170 410 90} box EMBOSSED_BOX align 145
   } {
     Fl_Progress _trackerProgress {
       protected xywh {20 200 260 30}
     }
     Fl_Button _trackerReset {
       label Reset
-      callback {_tracker->startTrackerDevice();}
+      callback {o->deactivate();
+_tracker->startTrackerDevice();}
       protected xywh {290 200 120 30} deactivate
     }
+    Fl_Box {} {
+      xywh {30 240 20 20}
+    }
   }
-  Function {setConnectionStatus(const float completion, const char * message, bool error=false)} {return_type void
+  Function {setTracker(WiimoteTracker * tracker)} {return_type void
   } {
+    code {_tracker = tracker;} {}
+  }
+  Function {setConnectionStatus(const float completion, const char * message, bool error=false)} {open return_type void
+  } {
+    code {\#ifdef VERBOSE
+	std::cerr << __FUNCTION__ << "@" << __FILE__ << ":" << __LINE__;
+	std::cerr << " (" << completion << ") " << message << std::endl;
+\#endif} {}
     code {clearWiimoteStatus();
 
 // Set self
@@ -137,17 +180,12 @@ if (error) {
 }
 _connectionReset->redraw();} {}
   }
-  Function {clearConnectionStatus()} {return_type void
+  Function {setWiimoteStatus(const float completion, const char * message, bool error=false)} {open return_type void
   } {
-    code {clearWiimoteStatus();
-_connectionProgress->value(0.0);
-_connectionProgress->label("Not started");
-_connectionProgress->redraw();
-_connectionReset->deactivate();
-_connectionReset->redraw();} {}
-  }
-  Function {setWiimoteStatus(const float completion, const char * message, bool error=false)} {return_type void
-  } {
+    code {\#ifdef VERBOSE
+	std::cerr << __FUNCTION__ << "@" << __FILE__ << ":" << __LINE__;
+	std::cerr << " (" << completion << ") " << message << std::endl;
+\#endif} {}
     code {clearTrackerStatus();
 
 // Set self
@@ -164,18 +202,12 @@ if (error) {
 }
 _wiimoteReset->redraw();} {}
   }
-  Function {clearWiimoteStatus()} {return_type void
+  Function {setTrackerStatus(const float completion, const char * message, bool error=false)} {open return_type void
   } {
-    code {clearTrackerStatus();
-_wiimoteProgress->value(0.0);
-_wiimoteProgress->label("Not started");
-_wiimoteProgress->redraw();
-
-_wiimoteReset->deactivate();
-_wiimoteReset->redraw();} {}
-  }
-  Function {setTrackerStatus(const float completion, const char * message, bool error=false)} {return_type void
-  } {
+    code {\#ifdef VERBOSE
+	std::cerr << __FUNCTION__ << "@" << __FILE__ << ":" << __LINE__;
+	std::cerr << " (" << completion << ") " << message << std::endl;
+\#endif} {}
     code {// Set self
 _trackerProgress->minimum(0.0);
 _trackerProgress->maximum(1.0);
@@ -190,6 +222,25 @@ if (error) {
 }
 _trackerReset->redraw();} {}
   }
+  Function {clearConnectionStatus()} {return_type void
+  } {
+    code {clearWiimoteStatus();
+_connectionProgress->value(0.0);
+_connectionProgress->label("Not started");
+_connectionProgress->redraw();
+_connectionReset->deactivate();
+_connectionReset->redraw();} {}
+  }
+  Function {clearWiimoteStatus()} {return_type void
+  } {
+    code {clearTrackerStatus();
+_wiimoteProgress->value(0.0);
+_wiimoteProgress->label("Not started");
+_wiimoteProgress->redraw();
+
+_wiimoteReset->deactivate();
+_wiimoteReset->redraw();} {}
+  }
   Function {clearTrackerStatus()} {return_type void
   } {
     code {_trackerProgress->value(0.0);
@@ -197,37 +248,37 @@ _trackerProgress->label("Not started");
 _trackerProgress->redraw();
 
 _trackerReset->deactivate();
-_trackerReset->redraw();} {selected
-    }
+_trackerReset->redraw();} {}
+    code {_closeMessage->hide();} {}
   }
-  Function {mainloop()} {return_type bool
+  Function {scheduleClose(const float seconds)} {open return_type void
   } {
-    code {return (Fl::check() != 0);} {}
+    code {_closeMessage->show();
+Fl_Window::show();
+refresh_ui();} {}
+    code {Fl::add_timeout(seconds, &closeStartupWindow, this);} {}
+  }
+  Function {cleanAndClose()} {open return_type void
+  } {
+    code {_closeMessage->hide();
+hide();} {}
+    code {refresh_ui();} {}
   }
 } 
 
 widget_class WiimoteTrackerGUI {
-  label {Wii Remote Head Tracker} open
-  xywh {81 223 260 90} type Double
-  class Fl_Window visible
+  label {Wii Remote Head Tracker}
+  callback {std::cout << "WiimoteTrackerGUI window callback" << std::endl;
+o->hide();} open
+  xywh {51 287 520 560} type Double align 80
+  class Fl_Window modal visible
 } {
   decl {WiimoteTracker * _tracker;} {protected
   }
-  Function {refreshDisplay()} {open return_type void
-  } {
-    code {flush();
-redraw();} {}
-  }
-  Function {mainloop()} {open return_type bool
-  } {
-    code {return (Fl::check() != 0);} {}
-  }
-  Function {setTracker(WiimoteTracker * tracker)} {return_type void
-  } {
-    code {_tracker = tracker;} {}
+  decl {SoftwareVersions _vers;} {protected
   }
   Fl_Menu_Bar {} {
-    xywh {0 0 260 25}
+    xywh {0 0 520 25}
   } {
     Submenu {} {
       label File open
@@ -235,11 +286,8 @@ redraw();} {}
     } {
       MenuItem {} {
         label {Re&configure tracker...}
-        xywh {0 0 36 21}
-      }
-      MenuItem {} {
-        label {&Open configuration...}
-        xywh {5 5 100 20} shortcut 0x4006f
+        callback {_tracker->reconfigure();}
+        xywh {0 0 36 21} divider
       }
       MenuItem {} {
         label {&Quit}
@@ -247,13 +295,226 @@ redraw();} {}
         xywh {5 5 100 20}
       }
     }
-    MenuItem {} {
-      label {About...}
-      xywh {0 0 36 21}
+  }
+  Fl_Tabs {} {
+    xywh {10 30 500 520}
+  } {
+    Fl_Group {} {
+      label {Tracker Status}
+      xywh {10 50 500 430}
+    } {
+      Fl_Value_Output points {
+        label {Visible Points}
+        xywh {310 130 80 30}
+      }
+      Fl_Light_Button _trackerButton {
+        label {@>    Start Tracker}
+        callback {setWorking();
+refresh_ui();
+if (o->value() == 0) {
+	// Was not running - start tracker
+	_tracker->startConnection();
+	_tracker->startWiimoteDevice();
+	_tracker->startTrackerDevice();
+
+} else {
+	// was running - stop tracker
+	_tracker->teardownConnection();
+	setStatus(false);
+}}
+        protected xywh {200 60 120 50} selection_color 63 labeltype ENGRAVED_LABEL align 176
+      }
+      Fl_Value_Output rate {
+        label {Average Report Rate (Hz)}
+        xywh {310 170 80 30}
+      }
+    }
+    Fl_Group {} {
+      label About
+      xywh {10 50 500 500} hide
+    } {
+      Fl_Box {} {
+        label {Wii Remote Head Tracker (with Integrated GUI)}
+        xywh {145 53 230 46} labeltype EMBOSSED_LABEL labelsize 16 align 128
+      }
+      Fl_Box _appVer {
+        label {Version X.XX}
+        protected xywh {55 96 410 24} labelfont 1
+      }
+      Fl_Group {} {
+        label {Original Author: Ryan Pavlik} open
+        xywh {20 120 480 120} box EMBOSSED_BOX labelfont 1 align 17
+      } {
+        Fl_Box {} {
+          label {<rpavlik@@iastate.edu> <abiryan@@ryand.net> http://academic.cleardefinition.com}
+          xywh {20 154 480 38} labelsize 12 align 128
+        }
+        Fl_Box {} {
+          label {Developed at the Virtual Reality Applications Center at Iowa State University}
+          xywh {20 196 480 14} labelsize 12 align 128
+        }
+        Fl_Box {} {
+          label {Funded by NSF Award CMMI-0928774}
+          xywh {20 214 480 16} labelsize 12 align 128
+        }
+      }
+      Fl_Group {} {
+        label {Compiled Against} open
+        xywh {20 300 480 80} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
+      } {
+        Fl_Box _vrpnVer {
+          label {vrpn: ver. XX.XX}
+          xywh {30 322 460 20} labelsize 12 align 128
+        }
+        Fl_Box _wiiuseVer {
+          label {WiiUse version X.XX}
+          xywh {30 342 460 18} labelsize 12 align 128
+        }
+        Fl_Box _fltkVer {
+          label {FLTK version X.XX}
+          xywh {30 358 460 22} labelsize 12 align 128
+        }
+      }
+      Fl_Group {} {
+        label {Academic Citation} open
+        xywh {20 240 480 60} box EMBOSSED_BOX labelfont 1 align 17
+      } {
+        Fl_Box {} {
+          label {Pavlik, R. and Vance, J. "A Modular Implementation of Wii Remote Head Tracking for Virtual Reality." ASME Paper WINVR2010-3771}
+          xywh {30 260 460 40} labelsize 12 align 128
+        }
+      }
+      Fl_Group {} {
+        label {Copyright and Licenses} open
+        xywh {20 380 480 160} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
+      } {
+        Fl_Button {} {
+          label {Show Copyright and License Details}
+          callback {showLicenseDetails();}
+          xywh {30 490 460 40}
+        }
+        Fl_Box {} {
+          label {Based in part on the work of the FLTK project (http://www.fltk.org).}
+          xywh {40 412 440 18} labelsize 10 align 128
+        }
+        Fl_Box {} {
+          label {Based in part on Fl_Native_File_Chooser (http://seriss.com/people/erco/fltk/Fl_Native_File_Chooser/).}
+          xywh {40 428 440 32} labelsize 10 align 128
+        }
+        Fl_Box {} {
+          label {Based in part on the work of the WiiUse project (http://wiiuse.net/).}
+          xywh {40 462 440 18} labelsize 10 align 128
+        }
+      }
     }
   }
-  Fl_Value_Output {} {
-    label {Visible Points}
-    xywh {150 40 30 30}
+  Function {setTracker(WiimoteTracker * tracker)} {return_type void
+  } {
+    code {_tracker = tracker;} {}
+  }
+  Function {setStatus(bool started)} {return_type void
+  } {
+    code {if (started) {
+	_trackerButton->label("@[]    Stop Tracker");
+	
+} else {
+	_trackerButton->label("@>    Start Tracker");
+}
+_trackerButton->activate();} {}
+  }
+  Function {setWorking()} {return_type void
+  } {
+    code {_trackerButton->copy_label("Please wait...");
+_trackerButton->deactivate();} {}
+  }
+  Function {updateVersions()} {return_type void
+  } {
+    code {_appVer->label(_vers._appVer.c_str());
+_vrpnVer->label(_vers._vrpnVer.c_str());
+_wiiuseVer->label(_vers._wiiuseVer.c_str());
+_fltkVer->label(_vers._fltkVer.c_str());} {}
+  }
+  Function {showLicenseDetails()} {return_type void
+  } {
+    Fl_Window _licenses {
+      label Licenses
+      callback {o->hide();}
+      protected xywh {10 49 590 580} type Double hide modal
+    } {
+      Fl_Group {} {
+        label {Tracking Module and GUI} open
+        xywh {10 20 570 70} box DOWN_BOX labelsize 12
+      } {
+        Fl_Box {} {
+          label {Copyright 2009-2010 Iowa State University. }
+          xywh {90 23 410 20} labelsize 10 align 128
+        }
+        Fl_Box {} {
+          label {Distributed under the Boost Software License, Version 1.0.}
+          xywh {90 41 410 18} labelsize 10 align 128
+        }
+        Fl_Box {} {
+          label {(See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) }
+          xywh {90 55 410 32} labelsize 10 align 128
+        }
+      }
+      Fl_Group {} {
+        label VRPN open
+        xywh {10 110 570 80} box DOWN_BOX labelsize 12
+      } {
+        Fl_Box {} {
+          label {VRPN (The Virtual Reality Peripheral Network) has been placed into the public domain by the copyright owner Russell M. Taylor II at the University of North Carolina at Chapel Hill on 5/4/98. }
+          xywh {90 120 410 40} labelsize 10 align 128
+        }
+        Fl_Box {} {
+          label {For information, please see http://www.vprn.org/}
+          xywh {90 170 410 20} labelsize 10 align 128
+        }
+      }
+      Fl_Group {} {
+        label {FLTK, Fl_Native_File_Chooser} open
+        xywh {10 210 570 200} box DOWN_BOX labelsize 12
+      } {
+        Fl_Box {} {
+          label {Fl_Native_File_Chooser is available under the terms of the Fl_Native_File_Chooser License (GNU Library General Public License version 2 with FLTK exceptions).}
+          xywh {20 240 550 30} labelsize 10 align 128
+        }
+        Fl_Box {} {
+          label {FLTK is available under the terms of the FLTK License (GNU Library General Public License version 2 with exceptions).}
+          xywh {20 210 550 30} labelsize 10 align 128
+        }
+        Fl_Box {} {
+          label {This library is free software; you can redistribute it and/or modify it under the terms of the GNU Library General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.}
+          xywh {20 280 550 40} labelsize 10 align 148
+        }
+        Fl_Box {} {
+          label {This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License for more details.}
+          xywh {20 325 550 40} labelsize 10 align 148
+        }
+        Fl_Box {} {
+          label {You should have received a copy of the GNU Library General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA}
+          xywh {20 370 550 30} labelsize 10 align 148
+        }
+      }
+      Fl_Group {} {
+        label WiiUse open
+        xywh {10 430 570 140} box DOWN_BOX labelsize 12
+      } {
+        Fl_Box {} {
+          label {WiiUse is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.}
+          xywh {20 440 550 40} labelsize 10 align 148
+        }
+        Fl_Box {} {
+          label {WiiUse is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.}
+          xywh {20 485 550 40} labelsize 10 align 148
+        }
+        Fl_Box {} {
+          label {You should have received a copy of the GNU General Public License along with WiiUse.  If not, see <http://www.gnu.org/licenses/>.}
+          xywh {20 530 550 30} labelsize 10 align 148
+        }
+      }
+    }
+    code {_licenses->show();
+refresh_ui();} {}
   }
 } 
