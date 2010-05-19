@@ -30,11 +30,6 @@
 
 const int	CONNECTION_PORT = vrpn_DEFAULT_LISTEN_PORT_NO;  // Port for connection to listen on
 const int	TRACKER_FREQUENCY = 60;
-const int	DEBUG_DISPLAY_INTERVAL = 3; // # of seconds between status displays
-
-const float HAVE_CONNECTION = 1.0;
-const float HAVE_WIIMOTE = 2.0;
-const float HAVE_TRACKER = 3.0;
 
 const char * WIIMOTE_NAME = "WiimoteForHead";
 const char * WIIMOTE_REMOTE_NAME = "*WiimoteForHead";
@@ -78,6 +73,7 @@ static void	VRPN_CALLBACK handle_pos(void* userdata, const vrpn_TRACKERCB t) {
 /// @}
 
 WiimoteTracker::WiimoteTracker() :
+		_activeConfig(),
 		_connection(NULL),
 		_wiimote(NULL),
 		_tracker(NULL),
@@ -204,11 +200,11 @@ bool WiimoteTracker::startTrackerDevice() {
 	}
 	_view->setProgress(STG_TRACKER_STARTING);
 
-	_tracker = new vrpn_Tracker_WiimoteHead(_trackerName.c_str(),
+	_tracker = new vrpn_Tracker_WiimoteHead(_activeConfig.getTrackerName().c_str(),
 			_connection,
 			WIIMOTE_REMOTE_NAME,
 			TRACKER_FREQUENCY,
-			_ledDistance);
+			_activeConfig.getLEDDistance());
 
 	if (!_tracker) {
 		// error condition creating tracker device
@@ -231,7 +227,7 @@ bool WiimoteTracker::startClientDevice() {
 	}
 	_view->setProgress(STG_CLIENT_STARTING);
 
-	_client = new vrpn_Tracker_Remote(_trackerName.c_str(),
+	_client = new vrpn_Tracker_Remote(_activeConfig.getTrackerName().c_str(),
 			_connection);
 
 	if (!_client) {
@@ -287,6 +283,30 @@ void WiimoteTracker::teardownClientDevice() {
 		delete _client;
 		_client = NULL;
 	}
+}
+
+bool WiimoteTracker::applyNewConfiguration(const TrackerConfiguration & config) {
+	// If we were running, we will start running again.
+	bool wasRunning(isSystemRunning());
+	_view->systemInTransition();
+	teardownTrackerDevice();
+	_activeConfig = config;
+	if (wasRunning) {
+		bool ret = startTrackerDevice();
+		if (!ret) {
+			return false;
+		}
+
+		ret = startClientDevice();
+		if (!ret) {
+			return false;
+		}
+
+		_view->systemIsUp();
+	} else {
+		_view->systemIsDown();
+	}
+	return true;
 }
 
 bool WiimoteTracker::isSystemRunning() const {

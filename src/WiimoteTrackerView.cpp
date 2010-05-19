@@ -28,7 +28,7 @@
 WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 		_progress(new StartupProgress(430,360, "Starting Tracking System...")),
 		_config(new WiimoteTrackerConfigGUI(350, 160, "Tracker Configuration")),
-		_gui(new WiimoteTrackerGUI(520,560, "Wii Remote Head Tracker")),
+		_gui(new WiimoteTrackerGUI(520, 560, "Wii Remote Head Tracker")),
 		_controller(controller) {
 	assert(_progress);
 	assert(_config);
@@ -47,38 +47,35 @@ WiimoteTrackerView::~WiimoteTrackerView() {
 	_gui = NULL;
 }
 
-void WiimoteTrackerView::setLEDDistance(const float distanceInMeters) {
-	if (distanceInMeters <= 0) {
-		// Invalid change
-		_config->setLEDDistance(_controller->_ledDistance);
+void WiimoteTrackerView::applyNewConfiguration() {
+	std::string trackerName = _config->_trackerName->value();
+	float distanceInMeters = _config->_ledDistance->value() / 100.0;
+	TrackerConfiguration newConfig;
+	try {
+		newConfig = TrackerConfiguration(distanceInMeters, trackerName);
+	} catch (std::exception & e) {
+		std::cerr << "Could not create new configuration with parameters " << distanceInMeters << " and '" << trackerName << "'" << std::endl;
+		std::cerr << "Exception details: " << e.what() << std::endl;
+		updateConfigWindow();
 		return;
 	}
-	// This invalidates the tracker
-	_controller->teardownTrackerDevice();
-	_controller->_ledDistance = distanceInMeters;
-	_config->setLEDDistance(_controller->_ledDistance);
-}
 
-void WiimoteTrackerView::setTrackerName(const std::string & trackerName) {
-	if (trackerName.size() == 0 || trackerName.find(" ") != std::string::npos) {
-		// Invalid change
-		_config->setTrackerName(_controller->_trackerName.c_str());
-		return;
+	bool ret = _controller->applyNewConfiguration(newConfig);
+
+	if (!ret) {
+		std::cerr << "Could not apply new configuration with parameters " << distanceInMeters << " and '" << trackerName << "'" << std::endl;
+		std::cerr << "Controller rejected the change" << std::endl;
 	}
-	// This invalidates the tracker
-	_controller->teardownTrackerDevice();
-	_controller->_trackerName = trackerName;
-	_config->setTrackerName(_controller->_trackerName.c_str());
+
+	updateConfigWindow();
+	return;
 }
 
 void WiimoteTrackerView::run() {
-
 	// Set tracker pointers in GUI
 	_config->setTracker(_controller, this);
 	_gui->setTracker(_controller, this);
 	_progress->setTracker(_controller, this);
-
-
 
 	// Prepare the main window
 	_gui->updateVersions();
@@ -97,6 +94,7 @@ void WiimoteTrackerView::run() {
 
 
 void WiimoteTrackerView::reconfigure() {
+	updateConfigWindow();
 	_config->show();
 	refresh_ui();
 }
@@ -264,7 +262,12 @@ void WiimoteTrackerView::systemIsUp() {
 void WiimoteTrackerView::systemInTransition() {
 	_gui->setWorking();
 	refresh_ui();
+}
 
+void WiimoteTrackerView::updateConfigWindow() {
+	_config->_trackerName->value(_controller->_activeConfig.getTrackerName().c_str());
+	_config->_ledDistance->value(_controller->_activeConfig.getLEDDistance() * 100.0);
+	refresh_ui();
 }
 
 bool WiimoteTrackerView::processView(bool wait) {

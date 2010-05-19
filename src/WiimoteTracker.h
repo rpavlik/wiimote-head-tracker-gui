@@ -17,6 +17,7 @@
 
 // Internal Includes
 #include "SystemComponents.h"
+#include "TrackerConfiguration.h"
 
 // Library/third-party includes
 // - none
@@ -60,13 +61,15 @@ class WiimoteTracker {
 
 		bool isSystemRunning() const;
 
+		bool applyNewConfiguration(const TrackerConfiguration & config);
+
+		/// @brief Function used by the VRPN callback to store periodic data
 		void setReport(const std::string & pos, const std::string & rot, const float rate);
 
 	protected:
 		/// @name Configuration data
 		/// @{
-		std::string _trackerName;
-		float _ledDistance;
+		TrackerConfiguration _activeConfig;
 		/// @}
 
 		/// @name VRPN objects

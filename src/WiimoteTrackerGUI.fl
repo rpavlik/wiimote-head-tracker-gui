@@ -47,8 +47,8 @@ p->cleanAndClose();} {}
 } 
 
 widget_class WiimoteTrackerConfigGUI {open
-  xywh {775 450 350 160} type Double align 80 hide
-  class Fl_Window
+  xywh {1344 358 350 160} type Double align 80
+  class Fl_Window visible
 } {
   decl {WiimoteTracker * _tracker;} {protected
   }
@@ -65,16 +65,14 @@ widget_class WiimoteTrackerConfigGUI {open
   }
   Fl_Button {} {
     label {Apply Changes and Restart Tracker}
-    callback {_view->setTrackerName(_trackerName->value());
-_view->setLEDDistance(_ledDistance->value() / 100.0);
-_tracker->startTrackerDevice();}
+    callback {_view->applyNewConfiguration();} selected
     xywh {60 118 280 32}
   }
-  Fl_Menu_Bar {} {open
+  Fl_Menu_Bar {} {
     xywh {0 0 350 25}
   } {
     Submenu {} {
-      label File open
+      label File
       xywh {15 15 100 20}
     } {
       MenuItem {} {
@@ -96,10 +94,11 @@ _view = view;} {}
   } {
     code {_trackerName->value(name);} {}
   }
-  Function {setLEDDistance(const float distance)} {open return_type void
+  Function {setLEDDistance(const float distance)} {return_type void
   } {
     code {_ledDistance->value(distance * 100.0);} {}
   }
+  decl {friend class WiimoteTrackerView;} {}
 } 
 
 widget_class StartupProgress {
@@ -108,8 +107,8 @@ widget_class StartupProgress {
 	std::cerr << "StartupProgress window callback" << std::endl;
 \#endif
 static_cast<StartupProgress*>(o)->cleanAndClose();} open
-  xywh {1324 297 430 360} type Double align 80
-  class Fl_Window modal visible
+  xywh {1324 297 430 360} type Double align 80 hide
+  class Fl_Window modal
 } {
   decl {WiimoteTracker * _tracker;} {protected
   }
@@ -190,7 +189,7 @@ _tracker->startClientDevice();}
     code {_closeMessage->show();} {}
     code {Fl::add_timeout(seconds, &closeStartupWindow, this);} {}
   }
-  Function {cleanAndClose()} {open return_type void
+  Function {cleanAndClose()} {return_type void
   } {
     code {_closeMessage->hide();
 if (!_tracker->isSystemRunning()) {
@@ -199,7 +198,7 @@ if (!_tracker->isSystemRunning()) {
 }
 hide();} {}
   }
-  Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {open return_type void
+  Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {return_type void
   } {
     code {_tracker = tracker;
 _view = view;
@@ -213,9 +212,9 @@ widget_class WiimoteTrackerGUI {
   callback {\#ifdef VERBOSE
 	std::cout << "WiimoteTrackerGUI window callback" << std::endl;
 \#endif
-o->hide();} open selected
-  xywh {1945 310 520 560} type Double align 80
-  class Fl_Window modal visible
+o->hide();} open
+  xywh {1945 310 520 560} type Double align 80 hide
+  class Fl_Window modal
 } {
   decl {WiimoteTracker * _tracker;} {protected
   }
@@ -223,7 +222,7 @@ o->hide();} open selected
   }
   decl {SoftwareVersions _vers;} {protected
   }
-  Fl_Menu_Bar {} {open
+  Fl_Menu_Bar {} {
     xywh {0 0 520 25}
   } {
     Submenu {} {
@@ -242,7 +241,7 @@ o->hide();} open selected
       }
     }
   }
-  Fl_Tabs {} {open
+  Fl_Tabs {} {
     xywh {10 30 500 520}
   } {
     Fl_Group {} {
@@ -358,7 +357,7 @@ o->hide();} open selected
       }
     }
   }
-  Function {setStatus(bool started)} {open return_type void
+  Function {setStatus(bool started)} {return_type void
   } {
     code {if (started) {
 	_trackerButton->label("@-5square    Stop Tracker");

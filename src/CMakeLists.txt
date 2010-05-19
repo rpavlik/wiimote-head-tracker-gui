@@ -3,6 +3,8 @@ set(SOURCES
 	main.cpp
 	SoftwareVersions.h
 	SystemComponents.h
+	TrackerConfiguration.h
+	TrackerConfiguration.cpp
 	WiimoteTracker.cpp
 	WiimoteTracker.h
 	WiimoteTrackerView.cpp

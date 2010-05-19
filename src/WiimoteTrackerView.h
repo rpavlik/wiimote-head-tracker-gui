@@ -40,13 +40,12 @@ class WiimoteTrackerView {
 
 		/// @name GUI-related methods
 		/// @{
-		void setLEDDistance(const float distanceInMeters);
-		void setTrackerName(const std::string & trackerName);
+		void setProgressRanges();
 
 		void run();
-		void reconfigure();
 
-		void setProgressRanges();
+		void reconfigure();
+		void applyNewConfiguration();
 
 		void setProgress(const StartupStage stg);
 		void setProgress(const Component cmp, const float completion, const char * message, bool fail = false);
@@ -57,6 +56,7 @@ class WiimoteTrackerView {
 		/// @brief Marks the GUI with "please wait"
 		void systemInTransition();
 
+		void updateConfigWindow();
 		/// @}
 
 		bool processView(bool wait = false);
