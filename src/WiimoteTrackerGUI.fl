@@ -1,8 +1,11 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 header_name {.h} 
 code_name {.cpp}
-decl {\#include "WiimoteTracker.h"} {global
+decl {\#include "WiimoteTrackerView.h"} {global
+} 
+
+decl {\#include "WiimoteTracker.h"} {selected global
 } 
 
 decl {\#include "SoftwareVersions.h"} {public global
@@ -15,6 +18,9 @@ decl {\#include <iostream>} {global
 } 
 
 decl {\#undef VERBOSE} {global
+} 
+
+decl {class WiimoteTrackerView;} {public global
 } 
 
 decl {class WiimoteTracker;} {public global
@@ -40,11 +46,13 @@ Function {closeStartupWindow(void* userdata)} {private return_type void
 p->cleanAndClose();} {}
 } 
 
-widget_class WiimoteTrackerConfigGUI {
+widget_class WiimoteTrackerConfigGUI {open
   xywh {775 450 350 160} type Double align 80 hide
   class Fl_Window
 } {
   decl {WiimoteTracker * _tracker;} {protected
+  }
+  decl {WiimoteTrackerView * _view;} {protected
   }
   Fl_Value_Input _ledDistance {
     label {Distance between LEDs (cm)}
@@ -79,9 +87,10 @@ _tracker->startTrackerDevice();}
       }
     }
   }
-  Function {setTracker(WiimoteTracker * tracker)} {return_type void
+  Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {return_type void
   } {
-    code {_tracker = tracker;} {}
+    code {_tracker = tracker;
+_view = view;} {}
   }
   Function {setTrackerName(const char * name)} {return_type void
   } {
@@ -98,11 +107,14 @@ widget_class StartupProgress {
   callback {\#ifdef VERBOSE
 	std::cerr << "StartupProgress window callback" << std::endl;
 \#endif
-static_cast<StartupProgress*>(o)->cleanAndClose();} open selected
+static_cast<StartupProgress*>(o)->cleanAndClose();} open
   xywh {117 80 430 360} type Double align 80
   class Fl_Window modal visible
 } {
-  decl {WiimoteTracker * _tracker;} {}
+  decl {WiimoteTracker * _tracker;} {protected
+  }
+  decl {WiimoteTrackerView * _view;} {protected
+  }
   Fl_Box _closeMessage {
     label {Startup successful, this window will close automatically...}
     protected xywh {10 330 410 30} align 128
@@ -156,10 +168,6 @@ _tracker->startTrackerDevice();}
       xywh {30 240 20 0}
     }
   }
-  Function {setTracker(WiimoteTracker * tracker)} {return_type void
-  } {
-    code {_tracker = tracker;} {}
-  }
   Function {setConnectionStatus(const float completion, const char * message, bool error=false)} {return_type void
   } {
     code {\#ifdef VERBOSE
@@ -182,7 +190,7 @@ if (error) {
 }
 _connectionReset->redraw();} {}
   }
-  Function {setWiimoteStatus(const float completion, const char * message, bool error=false)} {open return_type void
+  Function {setWiimoteStatus(const float completion, const char * message, bool error=false)} {return_type void
   } {
     code {\#ifdef VERBOSE
 	std::cerr << __FUNCTION__ << "@" << __FILE__ << ":" << __LINE__;
@@ -202,7 +210,7 @@ if (error) {
 	_wiimoteReset->deactivate();
 }} {}
   }
-  Function {setTrackerStatus(const float completion, const char * message, bool error=false)} {open return_type void
+  Function {setTrackerStatus(const float completion, const char * message, bool error=false)} {return_type void
   } {
     code {\#ifdef VERBOSE
 	std::cerr << __FUNCTION__ << "@" << __FILE__ << ":" << __LINE__;
@@ -220,14 +228,14 @@ if (error) {
 	_trackerReset->deactivate();
 }} {}
   }
-  Function {clearConnectionStatus()} {open return_type void
+  Function {clearConnectionStatus()} {return_type void
   } {
     code {clearWiimoteStatus();
 _connectionProgress->value(0.0);
 _connectionProgress->label("Not started");
 _connectionReset->deactivate();} {}
   }
-  Function {clearWiimoteStatus()} {open return_type void
+  Function {clearWiimoteStatus()} {return_type void
   } {
     code {clearTrackerStatus();
 _wiimoteProgress->value(0.0);
@@ -235,7 +243,7 @@ _wiimoteProgress->label("Not started");
 
 _wiimoteReset->deactivate();} {}
   }
-  Function {clearTrackerStatus()} {open return_type void
+  Function {clearTrackerStatus()} {return_type void
   } {
     code {_trackerProgress->value(0.0);
 _trackerProgress->label("Not started");
@@ -248,7 +256,7 @@ _trackerReset->deactivate();} {}
     code {_closeMessage->show();} {}
     code {Fl::add_timeout(seconds, &closeStartupWindow, this);} {}
   }
-  Function {cleanAndClose()} {open return_type void
+  Function {cleanAndClose()} {return_type void
   } {
     code {_closeMessage->hide();
 hide();} {}
@@ -270,6 +278,11 @@ _tracker->startClientDevice();}
       xywh {30 320 20 0}
     }
   }
+  Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {return_type void
+  } {
+    code {_tracker = tracker;
+_view = view;} {}
+  }
 } 
 
 widget_class WiimoteTrackerGUI {
@@ -278,10 +291,12 @@ widget_class WiimoteTrackerGUI {
 	std::cout << "WiimoteTrackerGUI window callback" << std::endl;
 \#endif
 o->hide();} open
-  xywh {54 458 520 490} type Double align 80
+  xywh {314 157 520 490} type Double align 80
   class Fl_Window modal visible
 } {
   decl {WiimoteTracker * _tracker;} {protected
+  }
+  decl {WiimoteTrackerView * _view;} {protected
   }
   decl {SoftwareVersions _vers;} {protected
   }
@@ -407,10 +422,6 @@ o->hide();} open
       }
     }
   }
-  Function {setTracker(WiimoteTracker * tracker)} {return_type void
-  } {
-    code {_tracker = tracker;} {}
-  }
   Function {setStatus(bool started)} {return_type void
   } {
     code {if (started) {
@@ -516,5 +527,10 @@ _fltkVer->label(_vers._fltkVer.c_str());} {}
     }
     code {_licenses->show();
 refresh_ui();} {}
+  }
+  Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {return_type void
+  } {
+    code {_tracker = tracker;
+_view = view;} {}
   }
 } 

@@ -16,7 +16,7 @@
 #define _WIIMOTETRACKER_H
 
 // Internal Includes
-// - none
+#include "SystemComponents.h"
 
 // Library/third-party includes
 // - none
@@ -24,43 +24,19 @@
 // Standard includes
 #include <string>
 
-const float PROGRESS_EVENT_TIMEOUT = 0.2;
-const float PROGRESS_WINDOW_TIMEOUT = 3.0;
-
-class WiimoteTrackerGUI;
-class WiimoteTrackerConfigGUI;
-class StartupProgress;
 class vrpn_Connection;
 class vrpn_WiiMote;
 class vrpn_Tracker_WiimoteHead;
+class vrpn_Tracker_Remote;
+
+class WiimoteTrackerView;
 
 class WiimoteTracker {
 	public:
 		WiimoteTracker();
 		~WiimoteTracker();
-
-		enum Component {
-			CMP_CONNECTION,
-			CMP_WIIMOTE,
-			CMP_TRACKER,
-			CMP_CLIENT
-		};
-
-		/// @name GUI-related methods
-		/// @{
-		void setLEDDistance(const float distanceInMeters);
-		void setTrackerName(const std::string & trackerName);
-
+		
 		void run();
-		void reconfigure();
-		void stopTrackerSystem();
-		void startTrackerSystem();
-
-		void setProgress(const Component cmp, const float completion, const char * message);
-
-		void systemIsDown();
-		void systemIsUp();
-		/// @}
 
 		/// @name VRPN-related methods
 		/// @{
@@ -79,9 +55,6 @@ class WiimoteTracker {
 
 		bool isSystemRunning(bool updateProgress = false);
 
-
-
-
 	protected:
 		/// @name Configuration data
 		/// @{
@@ -94,15 +67,10 @@ class WiimoteTracker {
 		vrpn_Connection * _connection;
 		vrpn_WiiMote * _wiimote;
 		vrpn_Tracker_WiimoteHead * _tracker;
+		vrpn_Tracker_Remote * _client;
 		/// @}
-
-		/// @name GUI windows
-		/// @{
-		StartupProgress * _progress;
-		WiimoteTrackerConfigGUI * _config;
-		WiimoteTrackerGUI * _gui;
-		/// @}
-
-
+		
+		/// @brief Pointer to view
+		WiimoteTrackerView * _view;
 };
 #endif // WIIMOTETRACKER

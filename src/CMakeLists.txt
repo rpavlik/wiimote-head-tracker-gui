@@ -2,9 +2,11 @@ set(FLTK_SOURCES WiimoteTrackerGUI.fl)
 set(SOURCES
 	main.cpp
 	SoftwareVersions.h
+	SystemComponents.h
 	WiimoteTracker.cpp
-	WiimoteTracker_VRPN.cpp
-	WiimoteTracker.h)
+	WiimoteTracker.h
+	WiimoteTrackerView.cpp
+	WiimoteTrackerView.h)
 
 fltk_wrap_ui(wiimoteheadtracker ${FLTK_SOURCES})
 
