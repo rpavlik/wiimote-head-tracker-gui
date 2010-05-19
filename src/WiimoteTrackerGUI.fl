@@ -29,15 +29,34 @@ decl {class WiimoteTracker;} {public global
 decl {class StartupProgress;} {public global
 } 
 
+decl {WiimoteTracker * _tracker;} {protected
+} 
+
+decl {WiimoteTrackerView * _view;} {protected
+} 
+
+Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {return_type void
+} {
+  code {_tracker = tracker;
+_view = view;} {}
+} 
+
 Function {refresh_ui()} {return_type bool
 } {
   code {Fl::flush();} {}
   code {return (Fl::check() != 0);} {}
 } 
 
-Function {mainloop_ui(const float timeout = 0.0)} {open return_type bool
+Function {mainloop_ui(const float timeout = 0.0)} {return_type bool
 } {
   code {return (Fl::wait(timeout) >= 0) && (Fl::first_window() != NULL);} {}
+} 
+
+Function {quitApp()} {return_type void
+} {
+  code {while (Fl::first_window()) {
+	Fl::first_window()->hide();
+}} {}
 } 
 
 Function {closeStartupWindow(void* userdata)} {private return_type void
@@ -46,14 +65,10 @@ Function {closeStartupWindow(void* userdata)} {private return_type void
 p->cleanAndClose();} {}
 } 
 
-widget_class WiimoteTrackerConfigGUI {open
+widget_class WiimoteTrackerConfigGUI {selected
   xywh {1344 358 350 160} type Double align 80
-  class Fl_Window visible
+  class Fl_Window modal visible
 } {
-  decl {WiimoteTracker * _tracker;} {protected
-  }
-  decl {WiimoteTrackerView * _view;} {protected
-  }
   Fl_Value_Input _ledDistance {
     label {Distance between LEDs (cm)}
     protected xywh {215 35 60 25} maximum 50 step 0.1 value 14.5
@@ -65,7 +80,7 @@ widget_class WiimoteTrackerConfigGUI {open
   }
   Fl_Button {} {
     label {Apply Changes and Restart Tracker}
-    callback {_view->applyNewConfiguration();} selected
+    callback {_view->applyNewConfiguration();}
     xywh {60 118 280 32}
   }
   Fl_Menu_Bar {} {
@@ -85,11 +100,6 @@ widget_class WiimoteTrackerConfigGUI {open
       }
     }
   }
-  Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {return_type void
-  } {
-    code {_tracker = tracker;
-_view = view;} {}
-  }
   Function {setTrackerName(const char * name)} {return_type void
   } {
     code {_trackerName->value(name);} {}
@@ -106,14 +116,10 @@ widget_class StartupProgress {
   callback {\#ifdef VERBOSE
 	std::cerr << "StartupProgress window callback" << std::endl;
 \#endif
-static_cast<StartupProgress*>(o)->cleanAndClose();} open
+static_cast<StartupProgress*>(o)->cleanAndClose();}
   xywh {1324 297 430 360} type Double align 80 hide
   class Fl_Window modal
 } {
-  decl {WiimoteTracker * _tracker;} {protected
-  }
-  decl {WiimoteTrackerView * _view;} {protected
-  }
   Fl_Box _closeMessage {
     label {Startup successful, this window will close automatically...}
     protected xywh {10 330 410 30} align 128 hide
@@ -198,31 +204,17 @@ if (!_tracker->isSystemRunning()) {
 }
 hide();} {}
   }
-  Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {return_type void
-  } {
-    code {_tracker = tracker;
-_view = view;
-_view->setProgressRanges();} {}
-  }
   decl {friend class WiimoteTrackerView;} {}
 } 
 
 widget_class WiimoteTrackerGUI {
-  label {Wii Remote Head Tracker}
-  callback {\#ifdef VERBOSE
-	std::cout << "WiimoteTrackerGUI window callback" << std::endl;
-\#endif
-o->hide();} open
-  xywh {1945 310 520 560} type Double align 80 hide
-  class Fl_Window modal
+  label {Wii Remote Head Tracker} open
+  xywh {1945 310 520 560} type Double align 80
+  class Fl_Window modal visible
 } {
-  decl {WiimoteTracker * _tracker;} {protected
-  }
-  decl {WiimoteTrackerView * _view;} {protected
-  }
   decl {SoftwareVersions _vers;} {protected
   }
-  Fl_Menu_Bar {} {
+  Fl_Menu_Bar {} {open
     xywh {0 0 520 25}
   } {
     Submenu {} {
@@ -236,7 +228,7 @@ o->hide();} open
       }
       MenuItem {} {
         label {&Quit}
-        callback {hide();}
+        callback {quitApp();}
         xywh {5 5 100 20}
       }
     }
@@ -245,7 +237,7 @@ o->hide();} open
     xywh {10 30 500 520}
   } {
     Fl_Group {} {
-      label {Tracker Status} open
+      label {Tracker Status}
       xywh {10 50 500 490}
     } {
       Fl_Light_Button _trackerButton {
@@ -266,15 +258,15 @@ o->hide();} open
       } {
         Fl_Value_Output _rate {
           label {Average Tracker Report Rate (Hz)}
-          protected xywh {340 280 80 30}
+          protected xywh {340 280 80 30} box ENGRAVED_BOX
         }
         Fl_Output _pos {
           label Position
-          protected xywh {250 340 170 30}
+          protected xywh {250 340 170 30} box ENGRAVED_BOX color 49
         }
         Fl_Output _rot {
           label {Rotation (quaternion)}
-          protected xywh {250 370 170 30}
+          protected xywh {250 370 170 30} box ENGRAVED_BOX color 49
         }
       }
     }
@@ -357,6 +349,11 @@ o->hide();} open
       }
     }
   }
+  Function {setWorking()} {return_type void
+  } {
+    code {_trackerButton->copy_label("Please wait...");
+_trackerButton->deactivate();} {}
+  }
   Function {setStatus(bool started)} {return_type void
   } {
     code {if (started) {
@@ -367,11 +364,6 @@ o->hide();} open
 	_trackerButton->value(0);
 }
 _trackerButton->activate();} {}
-  }
-  Function {setWorking()} {return_type void
-  } {
-    code {_trackerButton->copy_label("Please wait...");
-_trackerButton->deactivate();} {}
   }
   Function {updateVersions()} {return_type void
   } {
@@ -463,10 +455,9 @@ _fltkVer->label(_vers._fltkVer.c_str());} {}
     code {_licenses->show();
 refresh_ui();} {}
   }
-  Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {return_type void
+  Function {reconfigure()} {return_type void
   } {
-    code {_tracker = tracker;
-_view = view;} {}
+    code {_view->reconfigure();} {}
   }
   decl {friend class WiimoteTrackerView;} {}
 } 

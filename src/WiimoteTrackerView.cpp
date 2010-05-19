@@ -73,9 +73,10 @@ void WiimoteTrackerView::applyNewConfiguration() {
 
 void WiimoteTrackerView::run() {
 	// Set tracker pointers in GUI
-	_config->setTracker(_controller, this);
-	_gui->setTracker(_controller, this);
-	_progress->setTracker(_controller, this);
+	setTracker(_controller, this);
+
+	// Set up progress bars
+	setProgressRanges();
 
 	// Prepare the main window
 	_gui->updateVersions();
