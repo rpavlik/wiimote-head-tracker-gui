@@ -269,14 +269,17 @@ static void PreselectPathname(NavCBRecPtr cbparm, const char *path) {
     // XXX: path must be a dir, or kNavCtlSetLocation fails with -50.
     //      Why, I don't know. Let me know with a bug report. -erco
     //
-    if ( ! IsDir(path) ) {
-	path = dirname(path);
+	char * cleanpath;
+	cleanpath = strdup(path);
+    if ( ! IsDir(cleanpath) ) {
+	cleanpath = dirname(cleanpath);
     }
     OSStatus err;
     FSRef fsref;
-    err = FSPathMakeRef((const UInt8*)path, &fsref, NULL);
+    err = FSPathMakeRef((const UInt8*)cleanpath, &fsref, NULL);
     if ( err != noErr) {
-	fprintf(stderr, "FSPathMakeRef(%s) failed: err=%d\n", path, (int)err);
+	fprintf(stderr, "FSPathMakeRef(%s) failed: err=%d\n", cleanpath, (int)err);
+	free(cleanpath);
 	return;
     }
     AEDesc desc;
@@ -289,6 +292,7 @@ static void PreselectPathname(NavCBRecPtr cbparm, const char *path) {
 	fprintf(stderr, "NavCustomControl() failed: err=%d\n", (int)err);
     }
     AEDisposeDesc(&desc);
+	free(cleanpath);
 }
 
 // NAV CALLBACK EVENT HANDLER
