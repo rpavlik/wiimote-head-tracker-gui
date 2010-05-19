@@ -22,6 +22,7 @@
 // Standard includes
 #include <cassert>
 #include <iostream>
+#include <sstream>
 
 #undef VERBOSE
 #undef VERY_VERBOSE
@@ -38,12 +39,54 @@ const float HAVE_TRACKER = 3.0;
 const char * WIIMOTE_NAME = "WiimoteForHead";
 const char * WIIMOTE_REMOTE_NAME = "*WiimoteForHead";
 
+/// @name VRPN utility function and callback
+/// @{
+static	double	duration(struct timeval t1, struct timeval t2) {
+	return (t1.tv_usec - t2.tv_usec) / 1000000.0 +
+	       (t1.tv_sec - t2.tv_sec);
+}
+
+static void	VRPN_CALLBACK handle_pos(void* userdata, const vrpn_TRACKERCB t) {
+	static bool first = true;
+	static int count = 0;
+	static struct timeval last_display;
+	if (first) {
+		vrpn_gettimeofday(&last_display, NULL);
+		first = false;
+	}
+	count++;
+	if (count > REPORT_STRIDE) {
+		struct timeval now;
+		vrpn_gettimeofday(&now, NULL);
+		const double interval = duration(now, last_display);
+		const double frequency = count / interval;
+		std::stringstream pos, rot;
+		pos << "(" <<
+			t.pos[0] << ", " <<
+			t.pos[1] << ", " <<
+			t.pos[2] << ")";
+		rot << "(" <<
+			t.quat[0] << ", " <<
+			t.quat[1] << ", " <<
+			t.quat[2] << ", " <<
+			t.quat[3] << ")";
+		static_cast<WiimoteTracker*>(userdata)->setReport(pos.str(), rot.str(), frequency);
+		count = 0;
+		last_display = now;
+	}
+}
+/// @}
+
 WiimoteTracker::WiimoteTracker() :
 		_connection(NULL),
 		_wiimote(NULL),
 		_tracker(NULL),
 		_client(NULL),
-		_view(new WiimoteTrackerView(this)) {
+		_view(new WiimoteTrackerView(this)),
+		_newReport(true),
+		_pos("Report not yet received."),
+		_rot("Report not yet received."),
+		_rate(0) {
 }
 
 WiimoteTracker::~WiimoteTracker() {
@@ -54,7 +97,7 @@ WiimoteTracker::~WiimoteTracker() {
 void WiimoteTracker::run() {
 	_view->run();
 	startTrackerSystem();
-	
+
 	while (_view->processView()) {
 		if (isSystemRunning()) {
 			_wiimote->mainloop();
@@ -66,39 +109,42 @@ void WiimoteTracker::run() {
 	}
 }
 
-void WiimoteTracker::reconfigure() {
-	_config->show();
-	refresh_ui();
-}
-
 void WiimoteTracker::stopTrackerSystem() {
-	_gui->setWorking();
-	refresh_ui();
+	_view->systemInTransition();
 	teardownConnection();
-	_gui->setStatus(false);
+	_view->systemIsDown();
 }
 
 void WiimoteTracker::startTrackerSystem() {
-	_gui->setWorking();
-	
+	_view->systemInTransition();
+	_view->setProgress(STG_NOT_STARTED);
+
 	bool ret;
 	// Create connection
 	ret = startConnection();
 	if (!ret) {
 		return;
 	}
-	
+
 	// Start up the wiimote
 	ret = startWiimoteDevice();
 	if (!ret) {
 		return;
 	}
-	
+
 	// Start up the tracker
 	ret = startTrackerDevice();
 	if (!ret) {
 		return;
 	}
+
+	// Start up the client
+	ret = startClientDevice();
+	if (!ret) {
+		return;
+	}
+
+	_view->systemIsUp();
 }
 
 
@@ -106,21 +152,16 @@ bool WiimoteTracker::startConnection() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
-	_gui->setWorking();
-	_progress->show();
-	_progress->setConnectionStatus(0.2, "Creating server connection");
-	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+	_view->setProgress(STG_CONNECTION_STARTING);
 
 	_connection = vrpn_create_server_connection(CONNECTION_PORT);
 	if (!_connection) {
 		// error condition creating connection
-		_progress->setConnectionStatus(0.2, "Could not create server connection!", true);
-		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+		_view->setProgress(STG_CONNECTION_FAILED);
 		return false;
 	}
 
-	_progress->setConnectionStatus(1, "Running");
-	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+	_view->setProgress(STG_CONNECTION_RUNNING);
 	return true;
 }
 
@@ -129,38 +170,27 @@ bool WiimoteTracker::startWiimoteDevice() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
-	_gui->setWorking();
+
 	teardownWiimoteDevice();
 	if (!_connection) {
 		return false;
 	}
-	_progress->show();
-	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
 
-#ifndef _WIN32
-	_progress->setWiimoteStatus(0.2, "Press 1 and 2 on Wiimote now!");
-#else
-	_progress->setWiimoteStatus(0.2, "Connecting to Wiimote...");
-#endif
-	refresh_ui();
-
+	_view->setProgress(STG_WIIMOTE_STARTING);
 	_wiimote = new vrpn_WiiMote(WIIMOTE_NAME, _connection, 0);
 
 	if (!_wiimote) {
 		// error condition creating wiimote
-		_progress->setWiimoteStatus(0.2, "Could not allocate Wiimote device!", true);
-		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+		_view->setProgress(STG_WIIMOTE_ALLOCATE_FAILED);
 		return false;
 	}
 
 	if (!_wiimote->isValid()) {
-		_progress->setWiimoteStatus(0.3, "Could not connect to a Wiimote!", true);
-		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+		_view->setProgress(STG_WIIMOTE_CONNECT_FAILED);
 		return false;
 	}
 
-	_progress->setWiimoteStatus(1, "Running");
-	refresh_ui();
+	_view->setProgress(STG_WIIMOTE_RUNNING);
 	return true;
 }
 
@@ -168,14 +198,11 @@ bool WiimoteTracker::startTrackerDevice() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
-	_gui->setWorking();
 	teardownTrackerDevice();
 	if (!_wiimote || !_connection) {
 		return false;
 	}
-	_progress->show();
-	_progress->setTrackerStatus(0.2, "Creating tracker device...");
-	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+	_view->setProgress(STG_TRACKER_STARTING);
 
 	_tracker = new vrpn_Tracker_WiimoteHead(_trackerName.c_str(),
 			_connection,
@@ -185,15 +212,11 @@ bool WiimoteTracker::startTrackerDevice() {
 
 	if (!_tracker) {
 		// error condition creating tracker device
-		_progress->setTrackerStatus(0.2, "Could not allocate tracker device!", true);
-		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+		_view->setProgress(STG_TRACKER_ALLOCATE_FAILED);
 		return false;
 	}
 
-	_progress->setTrackerStatus(1, "Running");
-	_gui->setStatus(true);
-	_progress->scheduleClose(PROGRESS_WINDOW_TIMEOUT);
-	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+	_view->setProgress(STG_TRACKER_RUNNING);
 	return true;
 }
 
@@ -201,31 +224,25 @@ bool WiimoteTracker::startClientDevice() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
-	_gui->setWorking();
+
 	teardownClientDevice();
 	if (!_wiimote || !_connection || !_tracker) {
 		return false;
 	}
-	/*
-	_progress->show();
-	_progress->setTrackerStatus(0.2, "Creating tracker device...");
-	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+	_view->setProgress(STG_CLIENT_STARTING);
 
-	_tracker = new vrpn_Tracker_WiimoteHead(_trackerName.c_str(),
-			_connection,
-			WIIMOTE_REMOTE_NAME,
-			TRACKER_FREQUENCY,
-			_ledDistance);
+	_client = new vrpn_Tracker_Remote(_trackerName.c_str(),
+			_connection);
 
-	if (!_tracker) {
-		// error condition creating tracker device
-		_progress->setTrackerStatus(0.2, "Could not allocate tracker device!", true);
-		mainloop_ui(PROGRESS_EVENT_TIMEOUT);
+	if (!_client) {
+		// error condition creating client device
+		_view->setProgress(STG_CLIENT_ALLOCATE_FAILED);
 		return false;
 	}
 
-	_progress->setTrackerStatus(1, "Running");
-	 */
+	_client->register_change_handler(this, handle_pos);
+
+	_view->setProgress(STG_CLIENT_RUNNING);
 	return true;
 }
 
@@ -238,7 +255,6 @@ void WiimoteTracker::teardownConnection() {
 		delete _connection;
 		_connection = NULL;
 	}
-	_progress->clearConnectionStatus();
 }
 
 void WiimoteTracker::teardownWiimoteDevice() {
@@ -250,73 +266,39 @@ void WiimoteTracker::teardownWiimoteDevice() {
 		delete _wiimote;
 		_wiimote = NULL;
 	}
-	_progress->clearWiimoteStatus();
 }
 
 void WiimoteTracker::teardownTrackerDevice() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
+	teardownClientDevice();
 	if (_tracker) {
 		delete _tracker;
 		_tracker = NULL;
 	}
-	_progress->clearTrackerStatus();
 }
 
-bool WiimoteTracker::isSystemRunning(bool updateProgress) {
+void WiimoteTracker::teardownClientDevice() {
+#ifdef VERBOSE
+	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
+#endif
+	if (_client) {
+		delete _client;
+		_client = NULL;
+	}
+}
+
+bool WiimoteTracker::isSystemRunning() const {
 #ifdef VERY_VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
-	if (!_connection) {
-		if (updateProgress) {
-			_progress->setConnectionStatus(0.2, "Could not create server connection!", true);
-			refresh_ui();
-		}
-		return false;
-	}
+	return (_connection && _wiimote && _tracker && _client);
+}
 
-	if (updateProgress) {
-		_progress->setConnectionStatus(1, "Running");
-	}
-
-	if (!_wiimote) {
-		// error condition creating wiimote
-		if (updateProgress) {
-			_progress->setWiimoteStatus(0.2, "Could not allocate Wiimote device!", true);
-			refresh_ui();
-		}
-		return false;
-	}
-
-	if (!_wiimote->isValid()) {
-		if (updateProgress) {
-			_progress->setWiimoteStatus(0.3, "Could not connect to a Wiimote!", true);
-			refresh_ui();
-		}
-		return false;
-	}
-
-	if (updateProgress) {
-		_progress->setWiimoteStatus(1, "Running");
-	}
-
-	if (!_tracker) {
-		// error condition creating tracker device
-		if (updateProgress) {
-			_progress->setTrackerStatus(0.2, "Could not allocate tracker device!", true);
-			refresh_ui();
-		}
-		return false;
-	}
-
-	if (updateProgress) {
-		_progress->setTrackerStatus(1, "Running");
-		_gui->setStatus(true);
-		_progress->scheduleClose(PROGRESS_WINDOW_TIMEOUT);
-		refresh_ui();
-	}
-
-	// If we made it here it's all working
-	return true;
+void WiimoteTracker::setReport(const std::string & pos, const std::string & rot, const float rate) {
+	_pos = pos;
+	_rot = rot;
+	_rate = rate;
+	_newReport = true;
 }

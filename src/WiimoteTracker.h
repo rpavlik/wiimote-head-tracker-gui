@@ -31,15 +31,20 @@ class vrpn_Tracker_Remote;
 
 class WiimoteTrackerView;
 
+#define REPORT_STRIDE 300
+
 class WiimoteTracker {
 	public:
 		WiimoteTracker();
 		~WiimoteTracker();
-		
+
 		void run();
 
 		/// @name VRPN-related methods
 		/// @{
+		void stopTrackerSystem();
+		void startTrackerSystem();
+
 		bool startConnection();
 		void teardownConnection();
 
@@ -53,7 +58,9 @@ class WiimoteTracker {
 		void teardownClientDevice();
 		/// @}
 
-		bool isSystemRunning(bool updateProgress = false);
+		bool isSystemRunning() const;
+
+		void setReport(const std::string & pos, const std::string & rot, const float rate);
 
 	protected:
 		/// @name Configuration data
@@ -69,8 +76,19 @@ class WiimoteTracker {
 		vrpn_Tracker_WiimoteHead * _tracker;
 		vrpn_Tracker_Remote * _client;
 		/// @}
-		
+
 		/// @brief Pointer to view
 		WiimoteTrackerView * _view;
+
+		/// @name Data from selected reports, to display
+		/// @{
+		bool _newReport;
+		std::string _pos;
+		std::string _rot;
+		float _rate;
+		/// @}
+
+		/// @todo Remove this once configuration adjustment is improved.
+		friend class WiimoteTrackerView;
 };
 #endif // WIIMOTETRACKER

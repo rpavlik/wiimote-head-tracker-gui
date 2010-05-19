@@ -45,16 +45,20 @@ class WiimoteTrackerView {
 
 		void run();
 		void reconfigure();
-		void stopTrackerSystem();
-		void startTrackerSystem();
+
+		void setProgressRanges();
 
 		void setProgress(const StartupStage stg);
-		void setProgress(const Component cmp, const float completion, const char * message);
+		void setProgress(const Component cmp, const float completion, const char * message, bool fail = false);
 
 		void systemIsDown();
 		void systemIsUp();
+
+		/// @brief Marks the GUI with "please wait"
+		void systemInTransition();
+
 		/// @}
-		
+
 		bool processView(bool wait = false);
 
 	protected:
@@ -64,7 +68,7 @@ class WiimoteTrackerView {
 		WiimoteTrackerConfigGUI * _config;
 		WiimoteTrackerGUI * _gui;
 		/// @}
-		
+
 		/// Controller pointer
 		WiimoteTracker * _controller;
 };
