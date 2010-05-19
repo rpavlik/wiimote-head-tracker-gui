@@ -24,13 +24,15 @@
 // Standard includes
 #include <string>
 
+const float PROGRESS_EVENT_TIMEOUT = 0.2;
+const float PROGRESS_WINDOW_TIMEOUT = 3.0;
+
 class WiimoteTrackerGUI;
 class WiimoteTrackerConfigGUI;
 class StartupProgress;
 class vrpn_Connection;
 class vrpn_WiiMote;
 class vrpn_Tracker_WiimoteHead;
-
 
 class WiimoteTracker {
 	public:

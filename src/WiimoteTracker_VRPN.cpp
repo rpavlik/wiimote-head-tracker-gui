@@ -40,9 +40,6 @@ const float HAVE_TRACKER = 3.0;
 const char * WIIMOTE_NAME = "WiimoteForHead";
 const char * WIIMOTE_REMOTE_NAME = "*WiimoteForHead";
 
-const float PROGRESS_EVENT_TIMEOUT = 0.2;
-const float PROGRESS_WINDOW_TIMEOUT = 3.0;
-
 bool WiimoteTracker::startConnection() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
@@ -138,15 +135,16 @@ bool WiimoteTracker::startTrackerDevice() {
 	return true;
 }
 
-bool WiimoteTracker::startTrackerDevice() {
+bool WiimoteTracker::startClientDevice() {
 #ifdef VERBOSE
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
 	_gui->setWorking();
-	teardownTrackerDevice();
-	if (!_wiimote || !_connection) {
+	teardownClientDevice();
+	if (!_wiimote || !_connection || !_tracker) {
 		return false;
 	}
+	/*
 	_progress->show();
 	_progress->setTrackerStatus(0.2, "Creating tracker device...");
 	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
@@ -165,7 +163,7 @@ bool WiimoteTracker::startTrackerDevice() {
 	}
 
 	_progress->setTrackerStatus(1, "Running");
-
+	 */
 	return true;
 }
 

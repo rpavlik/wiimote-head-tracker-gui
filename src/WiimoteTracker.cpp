@@ -13,6 +13,8 @@
 // Internal Includes
 #include "WiimoteTracker.h"
 
+#include "SystemComponents.h"
+
 #include <WiimoteTrackerGUI.h>
 
 // Library/third-party includes
@@ -152,7 +154,7 @@ void setProgress(const Component cmp, const float completion, const char * messa
 
 		case CMP_CLIENT:
 
-
+		break;
 	}
 
 }
