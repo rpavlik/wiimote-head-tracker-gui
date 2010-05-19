@@ -217,7 +217,7 @@ void WiimoteTrackerView::setProgress(const StartupStage stg) {
 	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
 }
 
-void WiimoteTrackerView::setProgress(const Component cmp, const float completion, const char * message, bool fail) {
+void WiimoteTrackerView::setProgress(const TrackerComponent cmp, const float completion, const char * message, bool fail) {
 	Fl_Progress * pbar = NULL;
 	Fl_Button * b = NULL;
 	switch (cmp) {

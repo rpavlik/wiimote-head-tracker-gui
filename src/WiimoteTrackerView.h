@@ -49,7 +49,7 @@ class WiimoteTrackerView {
 		void applyNewConfiguration();
 
 		void setProgress(const StartupStage stg);
-		void setProgress(const Component cmp, const float completion, const char * message, bool fail = false);
+		void setProgress(const TrackerComponent cmp, const float completion, const char * message, bool fail = false);
 
 		void systemIsDown();
 		void systemIsUp();

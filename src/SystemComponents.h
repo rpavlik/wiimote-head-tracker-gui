@@ -24,7 +24,7 @@
 // Standard includes
 // - none
 
-enum Component {
+enum TrackerComponent {
 	CMP_CONNECTION,
 	CMP_WIIMOTE,
 	CMP_TRACKER,
