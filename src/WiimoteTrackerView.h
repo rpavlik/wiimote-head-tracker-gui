@@ -30,6 +30,7 @@ const float PROGRESS_WINDOW_TIMEOUT = 3.0;
 class WiimoteTrackerGUI;
 class WiimoteTrackerConfigGUI;
 class StartupProgress;
+class Fl_Native_File_Chooser;
 
 class WiimoteTracker; // forward declaration of controller
 
@@ -57,6 +58,9 @@ class WiimoteTrackerView {
 		void systemInTransition();
 
 		void updateConfigWindow();
+
+		void saveConfig();
+		void openConfig();
 		/// @}
 
 		bool processView(bool wait = false);
@@ -67,6 +71,7 @@ class WiimoteTrackerView {
 		StartupProgress * _progress;
 		WiimoteTrackerConfigGUI * _config;
 		WiimoteTrackerGUI * _gui;
+		Fl_Native_File_Chooser * _fc;
 		/// @}
 
 		/// Controller pointer

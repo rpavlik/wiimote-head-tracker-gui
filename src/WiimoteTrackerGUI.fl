@@ -65,38 +65,44 @@ Function {closeStartupWindow(void* userdata)} {private return_type void
 p->cleanAndClose();} {}
 } 
 
-widget_class WiimoteTrackerConfigGUI {selected
-  xywh {1344 358 350 160} type Double align 80
-  class Fl_Window modal visible
+widget_class WiimoteTrackerConfigGUI {
+  xywh {1316 338 350 160} type Double align 80 hide
+  class Fl_Window modal
 } {
   Fl_Value_Input _ledDistance {
     label {Distance between LEDs (cm)}
+    callback {_apply->activate();
+_save->deactivate();}
     protected xywh {215 35 60 25} maximum 50 step 0.1 value 14.5
   }
   Fl_Input _trackerName {
     label {Tracker Device Name}
-    protected xywh {215 75 125 25}
+    callback {_apply->activate();
+_save->deactivate();}
+    protected xywh {215 75 125 25} when 1
     code0 {o->value("Tracker0");}
   }
-  Fl_Button {} {
+  Fl_Button _apply {
     label {Apply Changes and Restart Tracker}
     callback {_view->applyNewConfiguration();}
-    xywh {60 118 280 32}
+    protected xywh {60 118 280 32} deactivate
   }
-  Fl_Menu_Bar {} {
+  Fl_Menu_Bar {} {open
     xywh {0 0 350 25}
   } {
     Submenu {} {
-      label File
+      label File open
       xywh {15 15 100 20}
     } {
       MenuItem {} {
         label {Open configuration...}
+        callback {_view->openConfig();}
         xywh {15 15 100 20} shortcut 0x4006f
       }
-      MenuItem {} {
+      MenuItem _save {
         label {&Save configuration...}
-        xywh {15 15 100 20} shortcut 0x40073
+        callback {_view->saveConfig();}
+        protected xywh {15 15 100 20} shortcut 0x40073
       }
     }
   }
@@ -116,9 +122,9 @@ widget_class StartupProgress {
   callback {\#ifdef VERBOSE
 	std::cerr << "StartupProgress window callback" << std::endl;
 \#endif
-static_cast<StartupProgress*>(o)->cleanAndClose();}
-  xywh {1324 297 430 360} type Double align 80 hide
-  class Fl_Window modal
+static_cast<StartupProgress*>(o)->cleanAndClose();} open
+  xywh {1324 297 430 360} type Double align 80
+  class Fl_Window modal visible
 } {
   Fl_Box _closeMessage {
     label {Startup successful, this window will close automatically...}
@@ -126,7 +132,7 @@ static_cast<StartupProgress*>(o)->cleanAndClose();}
     code0 {hide();}
   }
   Fl_Group {} {
-    label {VRPN Server Connection}
+    label {VRPN Server Connection} open
     xywh {10 10 410 70} box EMBOSSED_BOX align 145
   } {
     Fl_Progress _connectionProgress {
@@ -135,14 +141,13 @@ static_cast<StartupProgress*>(o)->cleanAndClose();}
     Fl_Button _connectionReset {
       label Reset
       callback {o->deactivate();
-_tracker->startConnection();
-_tracker->startWiimoteDevice();
-_tracker->startTrackerDevice();}
+_tracker->teardownConnection();
+_tracker->startTrackerSystem();}
       protected xywh {290 40 120 30} deactivate
     }
   }
   Fl_Group {} {
-    label {Wiimote Device}
+    label {Wiimote Device} open
     xywh {10 90 410 70} box EMBOSSED_BOX align 145
   } {
     Fl_Progress _wiimoteProgress {
@@ -151,13 +156,13 @@ _tracker->startTrackerDevice();}
     Fl_Button _wiimoteReset {
       label Reset
       callback {o->deactivate();
-_tracker->startWiimoteDevice();
-_tracker->startTrackerDevice();}
+_tracker->teardownWiimoteDevice();
+_tracker->startTrackerSystem();}
       protected xywh {290 120 120 30} deactivate
     }
   }
   Fl_Group {} {
-    label {Tracker Device}
+    label {Tracker Device} open
     xywh {10 170 410 70} box EMBOSSED_BOX align 145
   } {
     Fl_Progress _trackerProgress {
@@ -166,7 +171,8 @@ _tracker->startTrackerDevice();}
     Fl_Button _trackerReset {
       label Reset
       callback {o->deactivate();
-_tracker->startTrackerDevice();}
+_tracker->teardownTrackerDevice();
+_tracker->startTrackerSystem();}
       protected xywh {290 200 120 30} deactivate
     }
     Fl_Box {} {
@@ -174,7 +180,7 @@ _tracker->startTrackerDevice();}
     }
   }
   Fl_Group {} {
-    label {Tracker Client Device}
+    label {Tracker Client Device} open
     xywh {10 250 410 70} box EMBOSSED_BOX align 145
   } {
     Fl_Progress _clientProgress {
@@ -183,7 +189,8 @@ _tracker->startTrackerDevice();}
     Fl_Button _clientReset {
       label Reset
       callback {o->deactivate();
-_tracker->startClientDevice();}
+_tracker->teardownClientDevice();
+_tracker->startTrackerSystem();} selected
       protected xywh {290 280 120 30} deactivate
     }
     Fl_Box {} {
@@ -208,9 +215,9 @@ hide();} {}
 } 
 
 widget_class WiimoteTrackerGUI {
-  label {Wii Remote Head Tracker} open
-  xywh {1945 310 520 560} type Double align 80
-  class Fl_Window modal visible
+  label {Wii Remote Head Tracker}
+  xywh {1945 310 520 560} type Double align 80 hide
+  class Fl_Window modal
 } {
   decl {SoftwareVersions _vers;} {protected
   }

@@ -18,17 +18,20 @@
 #include <WiimoteTrackerGUI.h>
 
 // Library/third-party includes
-// - none
+#include <FL/fl_ask.H>
+#include <FL/Fl_Native_File_Chooser.H>
 
 // Standard includes
 #include <cassert>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 		_progress(new StartupProgress(430,360, "Starting Tracking System...")),
 		_config(new WiimoteTrackerConfigGUI(350, 160, "Tracker Configuration")),
 		_gui(new WiimoteTrackerGUI(520, 560, "Wii Remote Head Tracker")),
+		_fc(NULL),
 		_controller(controller) {
 	assert(_progress);
 	assert(_config);
@@ -37,6 +40,9 @@ WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 }
 
 WiimoteTrackerView::~WiimoteTrackerView() {
+	delete _fc;
+	_fc= NULL;
+
 	delete _progress;
 	_progress = NULL;
 
@@ -82,7 +88,7 @@ void WiimoteTrackerView::run() {
 	_gui->updateVersions();
 
 	// Update the message about the report stride
-	std::stringstream s;
+	std::ostringstream s;
 	s << "Updated every " << REPORT_STRIDE << " reports";
 	_gui->_updateGroup->copy_label(s.str().c_str());
 
@@ -268,7 +274,63 @@ void WiimoteTrackerView::systemInTransition() {
 void WiimoteTrackerView::updateConfigWindow() {
 	_config->_trackerName->value(_controller->_activeConfig.getTrackerName().c_str());
 	_config->_ledDistance->value(_controller->_activeConfig.getLEDDistance() * 100.0);
+	_config->_apply->deactivate();
+	_config->_save->activate();
 	refresh_ui();
+}
+
+void WiimoteTrackerView::saveConfig() {
+	delete _fc;
+	_fc = new Fl_Native_File_Chooser(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+	_fc->title("Save Wii Remote Head Tracker Config File...");
+	_fc->filter("Head Tracker Config Files\t*.headtrackconfig");
+	_fc->preset_file("default.headtrackconfig");
+	int ret = _fc->show();
+	if (ret != 0) {
+		// No file picked, for one reason or another.
+		return;
+	}
+
+	std::ofstream confFile(_fc->filename());
+	if (!confFile.is_open()) {
+		fl_alert("Could not save configuration to file %s - perhaps try another file name or location", _fc->filename());
+		return;
+	}
+	confFile << _controller->_activeConfig;
+	confFile.close();
+}
+
+void WiimoteTrackerView::openConfig() {
+	delete _fc;
+	_fc = new Fl_Native_File_Chooser(Fl_Native_File_Chooser::BROWSE_FILE);
+	_fc->title("Open Wii Remote Head Tracker Config File...");
+	_fc->filter("Head Tracker Config Files\t*.headtrackconfig");
+
+	int ret = _fc->show();
+	if (ret != 0) {
+		// No file picked, for one reason or another.
+		return;
+	}
+
+	std::ifstream confFile(_fc->filename());
+	if (!confFile.is_open()) { return; }
+	TrackerConfiguration newConfig;
+	try {
+		confFile >> newConfig;
+	} catch (std::exception & e) {
+		std::cerr << "Could not load configuration from  " << _fc->filename() << std::endl;
+		std::cerr << "Exception details: " << e.what() << std::endl;
+		fl_alert("Could not load configuration from file %s", _fc->filename());
+		return;
+	}
+	bool controllerRet = _controller->applyNewConfiguration(newConfig);
+	if (!controllerRet) {
+		std::cerr << "Could not apply new configuration from " << _fc->filename() << std::endl;
+		std::cerr << "Controller rejected the change" << std::endl;
+		fl_alert("Could not apply configuration from file %s", _fc->filename());
+		return;
+	}
+	updateConfigWindow();
 }
 
 bool WiimoteTrackerView::processView(bool wait) {

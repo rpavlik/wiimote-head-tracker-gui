@@ -61,6 +61,7 @@ class WiimoteTracker {
 
 		bool isSystemRunning() const;
 
+		bool loadDefaultConfigFile();
 		bool applyNewConfiguration(const TrackerConfiguration & config);
 
 		/// @brief Function used by the VRPN callback to store periodic data

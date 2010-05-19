@@ -1,5 +1,6 @@
 set(FLTK_SOURCES WiimoteTrackerGUI.fl)
 set(SOURCES
+	FromString.h
 	main.cpp
 	SoftwareVersions.h
 	SystemComponents.h

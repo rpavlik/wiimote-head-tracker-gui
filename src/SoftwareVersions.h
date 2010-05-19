@@ -41,7 +41,7 @@ class SoftwareVersions {
 				_wiiuseVer("WiiUse: version "),
 				_fltkVer("FLTK: version " ) {
 			_wiiuseVer += wiiuse_version();
-			std::stringstream s;
+			std::ostringstream s;
 			s << FL_MAJOR_VERSION << "." << FL_MINOR_VERSION << "." << FL_PATCH_VERSION;
 			_fltkVer += s.str();
 		}

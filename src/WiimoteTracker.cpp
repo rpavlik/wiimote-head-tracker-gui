@@ -23,6 +23,7 @@
 #include <cassert>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 #undef VERBOSE
 #undef VERY_VERBOSE
@@ -55,7 +56,7 @@ static void	VRPN_CALLBACK handle_pos(void* userdata, const vrpn_TRACKERCB t) {
 		vrpn_gettimeofday(&now, NULL);
 		const double interval = duration(now, last_display);
 		const double frequency = count / interval;
-		std::stringstream pos, rot;
+		std::ostringstream pos, rot;
 		pos << "(" <<
 			t.pos[0] << ", " <<
 			t.pos[1] << ", " <<
@@ -89,9 +90,45 @@ WiimoteTracker::~WiimoteTracker() {
 	teardownConnection();
 }
 
+bool WiimoteTracker::loadDefaultConfigFile() {
+	if (_connection || _wiimote || _tracker || _client) {
+		std::cerr << "Can't load default config file if system is running!" << std::endl;
+		return false;
+	}
+
+	std::ifstream confFile("default.headtrackconfig");
+	if (confFile.is_open()) {
+		TrackerConfiguration newConfig;
+		try {
+
+			confFile >> newConfig;
+
+			// Can just directly set the _activeConfig since the tracker isn't started yet
+			_activeConfig = newConfig;
+			return true;
+		} catch (std::exception & e) {
+			std::cerr << "Could not load configuration from default.headtrackconfig" << std::endl;
+			std::cerr << "Exception details: " << e.what() << std::endl;
+			return false;
+		}
+	} else {
+
+	}
+
+}
 
 void WiimoteTracker::run() {
+	// Set up view
 	_view->run();
+
+	// Attempt to load default config file
+	bool defaultConfLoaded = loadDefaultConfigFile();
+	if (defaultConfLoaded) {
+		std::cerr << "Loaded default config file default.headtrackconfig" << std::endl;
+	} else {
+		std::cerr << "No valid default config file default.headtrackconfig found - using compiled-in defaults." << std::endl;
+	}
+
 	startTrackerSystem();
 
 	while (_view->processView()) {
@@ -108,38 +145,52 @@ void WiimoteTracker::run() {
 void WiimoteTracker::stopTrackerSystem() {
 	_view->systemInTransition();
 	teardownConnection();
+
+	// Remove old from screen when shutting down tracker
+	_pos = " ";
+	_rot = " ";
+	_rate = 0;
+	_newReport = true;
+
 	_view->systemIsDown();
 }
 
 void WiimoteTracker::startTrackerSystem() {
 	_view->systemInTransition();
-	_view->setProgress(STG_NOT_STARTED);
 
 	bool ret;
 	// Create connection
-	ret = startConnection();
-	if (!ret) {
-		return;
+	if (!_connection) {
+		_view->setProgress(STG_NOT_STARTED);
+		ret = startConnection();
+		if (!ret) {
+			return;
+		}
 	}
 
 	// Start up the wiimote
-	ret = startWiimoteDevice();
-	if (!ret) {
-		return;
+	if (!_wiimote) {
+		ret = startWiimoteDevice();
+		if (!ret) {
+			return;
+		}
 	}
 
 	// Start up the tracker
-	ret = startTrackerDevice();
-	if (!ret) {
-		return;
+	if (!_tracker) {
+		ret = startTrackerDevice();
+		if (!ret) {
+			return;
+		}
 	}
 
 	// Start up the client
-	ret = startClientDevice();
-	if (!ret) {
-		return;
+	if (!_client) {
+		ret = startClientDevice();
+		if (!ret) {
+			return;
+		}
 	}
-
 	_view->systemIsUp();
 }
 

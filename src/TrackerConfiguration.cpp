@@ -12,6 +12,7 @@
 
 // Internal Includes
 #include "TrackerConfiguration.h"
+#include "FromString.h"
 
 // Library/third-party includes
 // - none
@@ -19,6 +20,7 @@
 // Standard includes
 #include <cassert>
 #include <stdexcept>
+#include <algorithm>
 
 static const std::string CONFIG_FIRST_LINE("WIIMOTETRACKERCONFIG");
 static const std::string CONFIG_SECOND_LINE("DONOTEDITBYHAND");
@@ -42,7 +44,7 @@ TrackerConfiguration::TrackerConfiguration(const float ledDistance, const std::s
 		throw InvalidLEDDistance();
 	}
 
-	if (_trackerName.find(" ") != std::string::npos) {
+	if (_trackerName.size() == 0 || _trackerName.find(" ") != std::string::npos) {
 		throw InvalidTrackerName();
 	}
 }
@@ -69,8 +71,17 @@ std::istream & operator>>(std::istream & s, TrackerConfiguration & rhs) {
 	float ledDistance;
 	std::string trackerName;
 
-	s >> ledDistance;
+	std::getline(s, line);
+	//line >> ledDistance;
+	//s >> ledDistance;
+	bool ret = fromString<float>(ledDistance, line);
+	if (!ret) {
+		throw NotAConfig();
+	}
 	std::getline(s, trackerName);
+	std::remove(trackerName.begin(), trackerName.end(), ' ');
+	std::remove(trackerName.begin(), trackerName.end(), '\n');
+	std::remove(trackerName.begin(), trackerName.end(), '\r');
 
 	rhs = TrackerConfiguration(ledDistance, trackerName);
 }
