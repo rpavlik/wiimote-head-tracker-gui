@@ -86,7 +86,28 @@ void WiimoteTrackerView::run() {
 	refresh_ui();
 }
 
-void WiimoteTrackerView::setProgress(const StartupStages cmp, const float completion, const char * message) {
+void WiimoteTrackerView::setProgress(const StartupStages stg) {
+	Component cmp;
+	float completion;
+	const char * message;
+	switch (stg) {
+			case STG_CONNECTION_STARTING:
+			//setProgress(CMP_CONNECTION, 0.0, "Not started");
+			
+			case STG_CONNECTION_FAILED:
+			case STG_WIIMOTE_STARTING,
+	STG_WIIMOTE_ALLOCATE_FAILED,
+	STG_WIIMOTE_CONNECT_FAILED,
+	STG_TRACKER_STARTING,
+	STG_TRACKER_ALLOCATE_FAILED,
+	STG_CLIENT_STARTING,
+	STG_CLIENT_ALLOCATE_FAILED,
+	STG_STARTUP_COMPLETE
+	
+
+}
+
+void WiimoteTrackerView::setProgress(const Component cmp, const float completion, const char * message) {
 	switch (cmp) {
 		case CMP_CONNECTION:
 
