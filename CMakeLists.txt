@@ -28,6 +28,9 @@ set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}-src
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(UseBackportedModules)
 
+# Don't find Fluid.app the Mac single-site browser
+set(CMAKE_FIND_APPBUNDLE NEVER)
+
 find_package(FLTK REQUIRED)
 find_package(VRPN REQUIRED)
 if(NOT APPLE)
