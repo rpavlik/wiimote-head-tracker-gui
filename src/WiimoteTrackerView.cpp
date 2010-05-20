@@ -68,7 +68,7 @@ void WiimoteTrackerView::applyNewConfiguration() {
 	} catch (std::exception & e) {
 		std::cerr << "Could not create new configuration with parameters " << distanceInMeters << " and '" << trackerName << "'" << std::endl;
 		std::cerr << "Exception details: " << e.what() << std::endl;
-		updateConfigWindow();
+		updateConfigDisplay();
 		return;
 	}
 
@@ -79,7 +79,7 @@ void WiimoteTrackerView::applyNewConfiguration() {
 		std::cerr << "Controller rejected the change" << std::endl;
 	}
 
-	updateConfigWindow();
+	updateConfigDisplay();
 	return;
 }
 
@@ -107,7 +107,7 @@ void WiimoteTrackerView::run() {
 
 
 void WiimoteTrackerView::reconfigure() {
-	updateConfigWindow();
+	updateConfigDisplay();
 	_config->show();
 	refresh_ui();
 }
@@ -277,11 +277,18 @@ void WiimoteTrackerView::systemInTransition() {
 	refresh_ui();
 }
 
-void WiimoteTrackerView::updateConfigWindow() {
+void WiimoteTrackerView::updateConfigDisplay() {
+	/// Update config window
 	_config->_trackerName->value(_controller->_activeConfig.getTrackerName().c_str());
 	_config->_ledDistance->value(_controller->_activeConfig.getLEDDistance() * 100.0);
+
 	_config->_apply->deactivate();
 	_config->_save->activate();
+
+	/// Update main window
+	_gui->_trackerName->value(_controller->_activeConfig.getTrackerName().c_str());
+	_gui->_ledDistance->value(_controller->_activeConfig.getLEDDistance() * 100.0);
+	
 	refresh_ui();
 }
 
@@ -336,7 +343,7 @@ void WiimoteTrackerView::openConfig() {
 		fl_alert("Could not apply configuration from file %s", _fc->filename());
 		return;
 	}
-	updateConfigWindow();
+	updateConfigDisplay();
 }
 
 bool WiimoteTrackerView::processView(bool wait) {

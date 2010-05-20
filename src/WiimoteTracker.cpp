@@ -132,6 +132,7 @@ void WiimoteTracker::run() {
 	} else {
 		std::cerr << "No valid default config file default.headtrackconfig found - using compiled-in defaults." << std::endl;
 	}
+	_view->updateConfigDisplay();
 
 	startTrackerSystem();
 

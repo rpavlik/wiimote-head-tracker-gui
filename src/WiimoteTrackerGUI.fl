@@ -221,8 +221,8 @@ hide();} {}
 
 widget_class WiimoteTrackerGUI {
   label {Wii Remote Head Tracker}
-  callback {quitApp();} selected
-  xywh {1152 310 520 560} type Double align 80
+  callback {quitApp();} open
+  xywh {519 293 520 560} type Double align 80
   class Fl_Window visible
 } {
   decl {SoftwareVersions _vers;} {protected
@@ -246,11 +246,11 @@ widget_class WiimoteTrackerGUI {
       }
     }
   }
-  Fl_Tabs {} {
+  Fl_Tabs {} {open
     xywh {10 30 500 520}
   } {
     Fl_Group {} {
-      label {Tracker Status}
+      label {Tracker Status} open
       xywh {10 50 500 490}
     } {
       Fl_Light_Button _trackerButton {
@@ -267,19 +267,32 @@ widget_class WiimoteTrackerGUI {
       }
       Fl_Group _updateGroup {
         label {Updated every N reports} open
-        protected xywh {50 250 420 190} box THIN_DOWN_BOX
+        protected xywh {50 290 420 190} box THIN_DOWN_BOX
       } {
         Fl_Value_Output _rate {
           label {Average Tracker Report Rate (Hz)}
-          protected xywh {340 280 80 30} box ENGRAVED_BOX
+          protected xywh {340 320 80 30} box ENGRAVED_BOX
         }
         Fl_Output _pos {
           label Position
-          protected xywh {250 340 170 30} box ENGRAVED_BOX color 49
+          protected xywh {250 380 170 30} box ENGRAVED_BOX color 49
         }
         Fl_Output _rot {
           label {Rotation (quaternion)}
-          protected xywh {250 370 170 30} box ENGRAVED_BOX color 49
+          protected xywh {250 410 170 30} box ENGRAVED_BOX color 49
+        }
+      }
+      Fl_Group {} {
+        label {Configuration Parameters} open selected
+        xywh {50 145 420 105} box THIN_DOWN_BOX
+      } {
+        Fl_Output _trackerName {
+          label {Tracker Name}
+          protected xywh {245 160 170 30} box ENGRAVED_BOX color 49
+        }
+        Fl_Value_Output _ledDistance {
+          label {LED Distance (cm)}
+          protected xywh {245 195 80 30} box ENGRAVED_BOX
         }
       }
     }
