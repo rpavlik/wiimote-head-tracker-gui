@@ -30,6 +30,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 
 #undef VERBOSE
 #undef VERY_VERBOSE
@@ -63,11 +64,11 @@ static void	VRPN_CALLBACK handle_pos(void* userdata, const vrpn_TRACKERCB t) {
 		const double interval = duration(now, last_display);
 		const double frequency = count / interval;
 		std::ostringstream pos, rot;
-		pos << "(" <<
+		pos << "(" << std::fixed << std::setprecision(4) <<
 			t.pos[0] << ", " <<
 			t.pos[1] << ", " <<
 			t.pos[2] << ")";
-		rot << "(" <<
+		rot << "(" << std::fixed << std::setprecision(3) <<
 			t.quat[0] << ", " <<
 			t.quat[1] << ", " <<
 			t.quat[2] << ", " <<

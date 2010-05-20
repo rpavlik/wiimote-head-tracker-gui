@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0110 
+version 1.0109 
 header_name {.h} 
 code_name {.cpp}
 decl {\#include "WiimoteTrackerView.h"} {global
@@ -250,7 +250,7 @@ widget_class WiimoteTrackerGUI {
     xywh {10 30 500 520}
   } {
     Fl_Group {} {
-      label {Tracker Status} open selected
+      label {Tracker Status} open
       xywh {10 50 500 490}
     } {
       Fl_Light_Button _trackerButton {
@@ -266,7 +266,7 @@ widget_class WiimoteTrackerGUI {
         protected xywh {200 60 120 50} type Normal selection_color 63 labeltype ENGRAVED_LABEL align 176 deactivate
       }
       Fl_Group _updateGroup {
-        label {Updated every N reports} open
+        label {Updated every N reports} open selected
         protected xywh {50 290 420 190} box THIN_DOWN_BOX
       } {
         Fl_Value_Output _rate {
@@ -275,11 +275,11 @@ widget_class WiimoteTrackerGUI {
         }
         Fl_Output _pos {
           label Position
-          protected xywh {250 380 170 30} box ENGRAVED_BOX color 49
+          protected xywh {215 380 220 30} box ENGRAVED_BOX color 49
         }
         Fl_Output _rot {
           label {Rotation (quaternion)}
-          protected xywh {250 410 170 30} box ENGRAVED_BOX color 49
+          protected xywh {215 410 220 30} box ENGRAVED_BOX color 49
         }
       }
       Fl_Group {} {
