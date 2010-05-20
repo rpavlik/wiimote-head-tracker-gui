@@ -7,15 +7,13 @@ cmake_minimum_required(VERSION 2.6)
 # Set package properties
 project(wiimote-head-tracker-gui)
 
-set(CPACK_PACKAGE_NAME "Wii Remote Head Tracker GUI")
-set(CPACK_PACKAGE_VENDOR "Iowa State University")
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
 set(CPACK_PACKAGE_VERSION_MINOR "0")
 set(CPACK_PACKAGE_VERSION_PATCH "0pre")
 set(CPACK_PACKAGE_VERSION
 	"${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}-src")
+
+add_definitions("-DTRACKER_APP_VERSION=\"${CPACK_PACKAGE_VERSION}\"")
 
 ###
 # Perform build configuration of dependencies
@@ -35,9 +33,7 @@ if(NOT APPLE)
 	find_package(WiiUse REQUIRED)
 endif()
 
-# Link these libraries
 set(EXTRA_LIBS ${FLTK_LIBRARIES} ${VRPN_SERVER_LIBRARIES} ${WIIUSE_LIBRARIES})
-
 include_directories(${FLTK_INCLUDE_DIR} ${VRPN_INCLUDE_DIRS})
 
 ###
@@ -49,22 +45,36 @@ add_subdirectory(third-party/Fl_Native_File_Chooser-0.86)
 list(APPEND EXTRA_LIBS ${FNFC_LIBRARY})
 include_directories(${FNFC_INCLUDE_DIRS})
 
-add_definitions("-DTRACKER_APP_VERSION=\"${CPACK_PACKAGE_VERSION}\"")
-
 # The app is in the "src" subdirectory
 add_subdirectory(src)
 
 if(WIN32)
-	# Install the DLL
+	# Install the WiiUse DLL
 	install(FILES ${WIIUSE_RUNTIME_LIBRARY}
 		DESTINATION bin)
 endif()
 
+# Install README and licenses
+install(FILES
+	LICENSE_1_0.txt
+	README.txt
+	DESTINATION
+	doc)
+install(DIRECTORY
+	licenses
+	DESTINATION
+	doc)
+
 ###
 # Set packaging options (for CPack)
 ###
-
-set(CPACK_PACKAGE_EXECUTABLES bin/wiimoteheadtracker "Wii Remote Head Tracker")
+set(CPACK_PACKAGE_NAME "Wii Remote Head Tracker GUI")
+set(CPACK_PACKAGE_VENDOR "Iowa State University Virtual Reality Applications Center")
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}-src")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/all_licenses_for_installer.txt")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
+set(CPACK_PACKAGE_EXECUTABLES wiimoteheadtracker "Wii Remote Head Tracker")
 
 # Choose desired package generators
 if(APPLE)
