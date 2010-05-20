@@ -22,9 +22,23 @@ else()
 		OUTPUT_VARIABLE _platformString
 		OUTPUT_STRIP_TRAILING_WHITESPACE)
 	set(_objdir release-${_platformString})
+	
+	set(PATCHARGS)
+	if(NOT APPLE)
+		# See if we need the patch
+		include(CheckStructHasMember)
+		check_struct_has_member(sockaddr_l2 l2_cid <bluetooth/l2cap.h> SOCKADDRL2_HAS_L2CID)
+		if(SOCKADDRL2_HAS_L2CID)
+			set(PATCHARGS PATCH_COMMAND patch
+			-p0
+			-i ${CMAKE_CURRENT_SOURCE_DIR}/fix-wiiuse-kernel-2.6.30.diff)
+		endif()
+	endif()
+	
 	ExternalProject_Add(wiiuse
 		URL http://iweb.dl.sourceforge.net/project/wiiuse/wiiuse/v0.12/wiiuse_v0.12_src.tar.gz
 		CONFIGURE_COMMAND ""
+		${PATCHARGS}
 		BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} wiiuse
 		BUILD_IN_SOURCE 1
 		INSTALL_DIR ${DEPENDENCY_INSTALL_DIR}
