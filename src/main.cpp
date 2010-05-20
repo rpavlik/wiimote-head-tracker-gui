@@ -24,14 +24,12 @@
 
 #include "WiimoteTracker.h"
 
-#ifdef _WIN32
-#define main WinMain
-#endif
-
-int main (int argc, char* argv[]) {
-
+int main(int argc, char* argv[]) {
+	// Instantiate controller
 	WiimoteTracker tracker;
+
+	// Start run loop - will return when all windows closed.
 	tracker.run();
 
 	return 0;
-}   /* main */
+}
