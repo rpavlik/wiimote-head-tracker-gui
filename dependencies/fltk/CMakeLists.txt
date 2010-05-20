@@ -57,6 +57,9 @@ else()
 			--prefix=<INSTALL_DIR>
 			--enable-xft
 			--enable-xdbe
+			--enable-localjpeg=no
+			--enable-localzlib=no
+			--enable-localpng=no
 		BUILD_IN_SOURCE 1
 		INSTALL_DIR ${DEPENDENCY_INSTALL_DIR}
 	)
