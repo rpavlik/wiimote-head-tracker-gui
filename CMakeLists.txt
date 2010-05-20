@@ -41,7 +41,7 @@ mark_as_advanced(DEPENDENCIES_INSTALL_DIR)
 
 if(INSTALL_WIIUSE_LIBRARY)
 	# Always point to WiiUse, for safety's sake
-	set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+	set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${RUNTIME_LIBRARY_INSTALL_DIR}")
 endif()
 
 # Locally-developed modules dist'ed with this app - always have this first.
