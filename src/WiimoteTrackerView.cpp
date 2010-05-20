@@ -43,6 +43,31 @@ WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 	assert(_config);
 	assert(_gui);
 	assert(_controller);
+
+	// Pick an appropriate scheme
+#if defined(_APPLE)
+	Fl::scheme("plastic");
+	
+#elif defined(_WIN32)
+	#if defined(FL_XP_UP_BOX)
+			// If we were built against an XP scheme patched FLTK
+			Fl::scheme("xp");
+	#elif defined(FL_GLEAM_UP_BOX)
+			// If we were built against an Fl_Gleam-patched FLTK
+			/Fl::scheme("gleam");
+	#endif
+	
+#elif defined(_BUILT_ON_REDHAT)
+	#if defined(FL_XP_UP_BOX)
+		// If we were built against an XP scheme patched FLTK
+		Fl::scheme("xp");
+	#else
+		Fl::scheme("gtk+");
+	#endif
+	
+#elif defined(_BUILT_ON_UBUNTU)
+	Fl::scheme("gtk+");
+#endif
 }
 
 WiimoteTrackerView::~WiimoteTrackerView() {

@@ -51,6 +51,17 @@ endif()
 set(EXTRA_LIBS ${FLTK_LIBRARIES} ${VRPN_SERVER_LIBRARIES} ${WIIUSE_LIBRARIES})
 include_directories(${FLTK_INCLUDE_DIR} ${VRPN_INCLUDE_DIRS})
 
+if(NOT WIN32 AND NOT APPLE)
+	execute_process(COMMAND lsb_release -d -s
+		OUTPUT_VARIABLE _distroID
+		OUTPUT_STRIP_TRAILING_WHITESPACE)
+	if(_distroID MATCHES ".*Red Hat.*")
+		add_definitions(-D_BUILT_ON_REDHAT)
+	elseif(_distroID MATCHES ".*Ubuntu.*")
+		add_definitions(-D_BUILT_ON_UBUNTU)
+	endif()
+endif()
+
 ###
 # Build the project
 ###
