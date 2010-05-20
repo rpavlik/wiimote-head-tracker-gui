@@ -2,6 +2,13 @@
 # http://academic.cleardefinition.com/
 # Iowa State University HCI Graduate Program/VRAC
 
+# Patches included:
+# XP-lookalike scheme
+# - http://svn.easysw.com/public/fltk/applications/trunk/xp_scheme/
+# Fl_Gleam 3.0 scheme
+# - http://www.xentalion.com/projects/fltk_gleam/
+
+
 set(FLTK_DIR "${DEPENDENCY_INSTALL_DIR}")
 set(FLTK_DIR "${FLTK_DIR}" PARENT_SCOPE)
 if(WIN32)

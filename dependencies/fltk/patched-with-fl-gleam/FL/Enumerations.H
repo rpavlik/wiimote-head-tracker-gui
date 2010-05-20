@@ -186,6 +186,11 @@ enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
   _FL_GLEAM_UP_FRAME,	_FL_GLEAM_DOWN_FRAME,
   _FL_GLEAM_THIN_UP_BOX,	_FL_GLEAM_THIN_DOWN_BOX,
   _FL_GLEAM_ROUND_UP_BOX,	_FL_GLEAM_ROUND_DOWN_BOX,
+  _FL_XP_UP_BOX,	_FL_XP_DOWN_BOX,
+  _FL_XP_UP_FRAME,	_FL_XP_DOWN_FRAME,
+  _FL_XP_THIN_UP_BOX,	_FL_XP_THIN_DOWN_BOX,
+  _FL_XP_THIN_UP_FRAME,	_FL_XP_THIN_DOWN_FRAME,
+  _FL_XP_ROUND_UP_BOX,	_FL_XP_ROUND_DOWN_BOX,
   FL_FREE_BOXTYPE
 };
 extern FL_EXPORT Fl_Boxtype fl_define_FL_ROUND_UP_BOX();
@@ -241,6 +246,18 @@ extern FL_EXPORT Fl_Boxtype fl_define_FL_GLEAM_UP_BOX();
 #define FL_GLEAM_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+5)
 #define FL_GLEAM_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+6)
 #define FL_GLEAM_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+7)
+
+extern FL_EXPORT Fl_Boxtype fl_define_FL_XP_UP_BOX();
+#define FL_XP_UP_BOX fl_define_FL_XP_UP_BOX()
+#define FL_XP_DOWN_BOX (Fl_Boxtype)(fl_define_FL_XP_UP_BOX()+1)
+#define FL_XP_UP_FRAME (Fl_Boxtype)(fl_define_FL_XP_UP_BOX()+2)
+#define FL_XP_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_XP_UP_BOX()+3)
+#define FL_XP_THIN_UP_BOX (Fl_Boxtype)(fl_define_FL_XP_UP_BOX()+4)
+#define FL_XP_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_XP_UP_BOX()+5)
+#define FL_XP_THIN_UP_FRAME (Fl_Boxtype)(fl_define_FL_XP_UP_BOX()+6)
+#define FL_XP_THIN_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_XP_UP_BOX()+7)
+#define FL_XP_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_XP_UP_BOX()+8)
+#define FL_XP_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_XP_UP_BOX()+9)
 
 // conversions of box types to other boxtypes:
 inline Fl_Boxtype fl_box(Fl_Boxtype b) {

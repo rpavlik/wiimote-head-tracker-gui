@@ -37,8 +37,7 @@ static void gleam_color(Fl_Color c) {
   if (Fl::draw_box_active()) fl_color(c);
   else fl_color(fl_inactive(c));
 }
-
-static void frame_rect(int x, int y, int w, int h, Fl_Color bc) {
+ static void frame_rect(int x, int y, int w, int h, Fl_Color bc) {
 
     // Draw the outline around the perimeter of the box
     gleam_color(bc);
@@ -49,48 +48,98 @@ static void frame_rect(int x, int y, int w, int h, Fl_Color bc) {
   
 }
 
-static void shade_rect_up(int x, int y, int w, int h, Fl_Color bc) {
+ static void shade_rect_up(int x, int y, int w, int h, Fl_Color bc) {
  // Draws the shiny
   int half = h / 2;
-  gleam_color(bc);
-  fl_rectf(x, y, w, h);
+  //gleam_color(bc);
+  //fl_rectf(x, y, w, h);
 
   gleam_color(fl_color_average(bc, FL_WHITE, .50f));  
   fl_rectf(x, y, w, half + 1);
+
+  float	step_size=0.10;
+  int j = 0;
+  step_size = (1.0 / (float)half);
+	//printf("1 / %i = %f \n", half, (1.0/half));
+
+    /**
+    * This loop generates the nice gradient at the bottom of the
+    * widget
+    **/
+   for (float k = 1; k >= 0; k -= step_size)
+   {
+	j++;
+	gleam_color(fl_color_average(bc, FL_WHITE, k));  
+	fl_line(x, y+j+half-1, x + w -1, y+j+half-1);
+   }
   
 }
 
-static void shade_rect_down(int x, int y, int w, int h, Fl_Color bc) {
- // Draw a rect without the shiny.
-  gleam_color(bc);	
+static void frame_rect_up(int x, int y, int w, int h, Fl_Color bc) {
+
+    // Draw the outline around the perimeter of the box
+    gleam_color(bc);
+    fl_line(x + 1, y, x + w - 1, y); //Go across.
+    fl_line(x, y + (h/2), x, y + 1); //Go to top
+    fl_line(x + w, y + (h/2), x + w, y + 1); //Go to top
+    
+    gleam_color(fl_darker(bc));
+    fl_line(x + 1, y +h, x + w - 1, y + h); //Go across again!
+    fl_line(x, y + (h/2), x, y + h - 1); //Go to top
+    fl_line(x + w, y + (h/2), x + w, y + h  - 1); //Go to top
+  
+}
+
+static void frame_rect_down(int x, int y, int w, int h, Fl_Color bc) {
+
+	// Draw the outline around the perimeter of the box
+	gleam_color(fl_darker(bc));
+	fl_line(x + 1, y, x + w - 1, y); //Go across.
+	fl_line(x, y + (h/2), x, y + 1); //Go to top
+	fl_line(x + w, y + (h/2), x + w, y + 1); //Go to top
+    
+	//gleam_color(bc);
+	fl_line(x + 1, y +h, x + w - 1, y + h); //Go across again!
+	fl_line(x, y + (h/2), x, y + h - 1); //Go to top
+	fl_line(x + w, y + (h/2), x + w, y + h  - 1); //Go to top
+  
+}
+
+
+ static void shade_rect_down(int x, int y, int w, int h, Fl_Color bc) {
+  
+  gleam_color(bc);  
+  Fl_Color color = fl_color();
   fl_rectf(x, y, w, h);
+  gleam_color(fl_color_average(bc, fl_darker(color), 0.65));  
+  fl_line(x, y+1, x + w, y+1);
+  fl_line(x, y+1, x, y+h-2);
+  gleam_color(fl_color_average(bc, fl_darker(color), 0.85));  
+  fl_line(x+1, y+2, x + w, y+2);
+  fl_line(x+1, y+2, x +1, y + h-2);
+
 }
 
 
-static void up_frame(int x, int y, int w, int h, Fl_Color c) {
-  frame_rect(x, y, w - 1, h - 1, fl_darker(c));
+ static void up_frame(int x, int y, int w, int h, Fl_Color c) {
+  frame_rect_up(x, y, w - 1, h - 1, fl_darker(c));
 }
 
 
-static void thin_up_box(int x, int y, int w, int h, Fl_Color c) {
+ static void thin_up_box(int x, int y, int w, int h, Fl_Color c) {
 
-    shade_rect_down(x, y, w - 1, h - 1,  c);
+    shade_rect_up(x + 1, y, w - 2, h - 1,  c);
     frame_rect(x + 1, y + 1, w - 3, h - 3, fl_color_average(c, FL_WHITE, .25f));   	
-    frame_rect(x, y, w - 1, h - 1, fl_darker(c));
+    frame_rect_up(x, y, w - 1, h - 1, fl_darker(c));
  
 }
 
 
-static void thin_down_box(int x, int y, int w, int h, Fl_Color c) {
 
-    shade_rect_down(x, y, w - 1, h - 1,  c);
-    frame_rect(x, y, w - 1, h - 1, fl_color_average(c, FL_BLACK, .34f));
- 
-}
 
-static void up_box(int x, int y, int w, int h, Fl_Color c) {
-    shade_rect_up(x, y, w - 1, h - 1,  c);
-    frame_rect(x, y, w - 1, h - 1, fl_darker(c));
+ static void up_box(int x, int y, int w, int h, Fl_Color c) {
+    shade_rect_up(x + 1, y, w - 2, h - 1,  c);
+    frame_rect_up(x, y, w - 1, h - 1, fl_darker(c));
     //draw the inner rect.
     frame_rect(x + 1, y + 1, w - 3, h - 3, fl_color_average(c, FL_WHITE, .25f));
 
@@ -98,17 +147,21 @@ static void up_box(int x, int y, int w, int h, Fl_Color c) {
 
 
 static void down_frame(int x, int y, int w, int h, Fl_Color c) {
-  frame_rect(x, y, w - 1, h - 1, fl_darker(c));
+  frame_rect_down(x, y, w - 1, h - 1, fl_darker(c));
 }
 
 
-static void down_box(int x, int y, int w, int h, Fl_Color c) {
-    shade_rect_down(x, y, w, h,  c);
+ static void down_box(int x, int y, int w, int h, Fl_Color c) {
+    shade_rect_down(x + 1, y, w - 2, h,  c);
     down_frame(x, y, w, h, fl_darker(c));
     //draw the inner rect.
     //frame_rect(x + 1, y + 1, w - 3, h - 3, fl_color_average(c, FL_BLACK, .65));
+}
+
+ static void thin_down_box(int x, int y, int w, int h, Fl_Color c) {
+
+    down_box(x, y, w, h, c);
  
-  
 }
 
 extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);

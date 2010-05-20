@@ -368,7 +368,29 @@ int Fl::reload_scheme() {
  
      // Use slightly thinner scrollbars...
      Fl::scrollbar_size(12);
+  } else if (scheme_ && !strcasecmp(scheme_, "xp")) {
+    // Use a XP inspired look-n-feel...
+    if (scheme_bg_) {
+      delete scheme_bg_;
+      scheme_bg_ = (Fl_Image *)0;
+    }
 
+    Fl::background(239, 235, 222);
+
+    set_boxtype(FL_UP_FRAME,        FL_XP_UP_FRAME);
+    set_boxtype(FL_DOWN_FRAME,      FL_XP_DOWN_FRAME);
+    set_boxtype(FL_THIN_UP_FRAME,   FL_XP_THIN_UP_FRAME);
+    set_boxtype(FL_THIN_DOWN_FRAME, FL_XP_THIN_DOWN_FRAME);
+
+    set_boxtype(FL_UP_BOX,          FL_XP_UP_BOX);
+    set_boxtype(FL_DOWN_BOX,        FL_XP_DOWN_BOX);
+    set_boxtype(FL_THIN_UP_BOX,     FL_XP_THIN_UP_BOX);
+    set_boxtype(FL_THIN_DOWN_BOX,   FL_XP_THIN_DOWN_BOX);
+    set_boxtype(_FL_ROUND_UP_BOX,   FL_XP_ROUND_UP_BOX);
+    set_boxtype(_FL_ROUND_DOWN_BOX, FL_XP_ROUND_DOWN_BOX);
+
+    // Use slightly thinner scrollbars...
+    Fl::scrollbar_size(15);
   } else {
     // Use the standard FLTK look-n-feel...
     if (scheme_bg_) {

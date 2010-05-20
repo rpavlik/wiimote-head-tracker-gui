@@ -106,6 +106,7 @@ SET(CPPFILES
   fl_font.cxx
   fl_gtk.cxx
   fl_gleam.cxx
+  fl_xp.cxx
   fl_labeltype.cxx
   fl_line_style.cxx
   fl_open_uri.cxx

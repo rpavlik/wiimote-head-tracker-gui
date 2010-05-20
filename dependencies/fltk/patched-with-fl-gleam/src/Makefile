@@ -154,6 +154,7 @@ CPPFILES = \
 	fl_show_colormap.cxx \
 	fl_symbols.cxx \
 	fl_vertex.cxx \
+	fl_xp.cxx \
 	screen_xywh.cxx
 
 FLCPPFILES = \
