@@ -60,6 +60,7 @@ std::ostream & operator<<(std::ostream & s, const TrackerConfiguration & rhs) {
 	s << CONFIG_SECOND_LINE << std::endl;
 	s << rhs.getLEDDistance() << std::endl;
 	s << rhs.getTrackerName() << std::endl;
+	return s;
 }
 std::istream & operator>>(std::istream & s, TrackerConfiguration & rhs) {
 	std::string line;
@@ -90,4 +91,5 @@ std::istream & operator>>(std::istream & s, TrackerConfiguration & rhs) {
 	std::remove(trackerName.begin(), trackerName.end(), '\r');
 
 	rhs = TrackerConfiguration(ledDistance, trackerName);
+	return s;
 }

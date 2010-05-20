@@ -103,24 +103,22 @@ bool WiimoteTracker::loadDefaultConfigFile() {
 	}
 
 	std::ifstream confFile("default.headtrackconfig");
-	if (confFile.is_open()) {
-		TrackerConfiguration newConfig;
-		try {
-
-			confFile >> newConfig;
-
-			// Can just directly set the _activeConfig since the tracker isn't started yet
-			_activeConfig = newConfig;
-			return true;
-		} catch (std::exception & e) {
-			std::cerr << "Could not load configuration from default.headtrackconfig" << std::endl;
-			std::cerr << "Exception details: " << e.what() << std::endl;
-			return false;
-		}
-	} else {
-
+	if (!confFile.is_open()) {
+		return false;
 	}
+	TrackerConfiguration newConfig;
+	try {
+		confFile >> newConfig;
 
+		// Can just directly set the _activeConfig since the tracker isn't started yet
+		_activeConfig = newConfig;
+	} catch (std::exception & e) {
+		std::cerr << "Could not load configuration from default.headtrackconfig" << std::endl;
+		std::cerr << "Exception details: " << e.what() << std::endl;
+		return false;
+	}
+	
+	return true;
 }
 
 void WiimoteTracker::run() {
