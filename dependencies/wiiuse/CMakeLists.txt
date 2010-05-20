@@ -4,18 +4,39 @@
 
 if(WIN32)
 	ExternalProject_Add(wiiuse
-		URL http://github.com/downloads/rpavlik/vrpn/wiiuse_v0.12_win.tar.gz
+		URL http://www.hci.iastate.edu/~rpavlik/downloads/wiiuse/wiiuse_v0.12_win.tar.gz
 		CONFIGURE_COMMAND ""
 		BUILD_COMMAND ""
 		INSTALL_DIR "${DEPENDENCY_INSTALL_DIR}"
-		INSTALL_COMMAND ${CMAKE_COMMAND}
+		INSTALL_COMMAND ""${CMAKE_COMMAND}
 			-E copy_directory ./ "<INSTALL_DIR>/wiiuse"
 	)
-	set(WIIUSE_ROOT_DIR "${DEPENDENCY_INSTALL_DIR}/wiiuse/" PARENT_SCOPE)
-	set(WIIUSE_LIBRARY "${DEPENDENCY_INSTALL_DIR}/wiiuse/wiiuse.lib" PARENT_SCOPE)
+	ExternalProject_Add_Step(wiiuse install_header
+		COMMAND "${CMAKE_COMMAND}"
+			-E copy "<SOURCE_DIR>/wiiuse.h" "<INSTALL_DIR>/include/"
+		DEPENDEES build
+		DEPENDERS install
+		WORKING_DIRECTORY <BINARY_DIR>)
+
+	ExternalProject_Add_Step(wiiuse install_lib
+		COMMAND ${CMAKE_COMMAND}
+			-E copy "<SOURCE_DIR>/wiiuse.lib" "<INSTALL_DIR>/lib/"	
+		DEPENDEES build
+		DEPENDERS install
+		WORKING_DIRECTORY <BINARY_DIR>)
+	
+	ExternalProject_Add_Step(wiiuse install_
+		COMMAND ${CMAKE_COMMAND}
+			-E copy "<SOURCE_DIR>/wiiuse.dll" "<INSTALL_DIR>/bin/"	
+		DEPENDEES build
+		DEPENDERS install
+		WORKING_DIRECTORY <BINARY_DIR>)
+	
+	set(WIIUSE_ROOT_DIR "${DEPENDENCY_INSTALL_DIR}/" PARENT_SCOPE)
+	set(WIIUSE_LIBRARY "${DEPENDENCY_INSTALL_DIR}/lib/wiiuse.lib" PARENT_SCOPE)
 	set(WIIUSE_LIBRARIES "${WIIUSE_LIBRARY}" PARENT_SCOPE)
-	set(WIIUSE_RUNTIME_LIBRARY "${DEPENDENCY_INSTALL_DIR}/wiiuse/wiiuse.dll" PARENT_SCOPE)
-	set(WIIUSE_INCLUDE_DIR "${DEPENDENCY_INSTALL_DIR}/wiiuse" PARENT_SCOPE)
+	set(WIIUSE_RUNTIME_LIBRARY "${DEPENDENCY_INSTALL_DIR}/bin/wiiuse.dll" PARENT_SCOPE)
+	set(WIIUSE_INCLUDE_DIR "${DEPENDENCY_INSTALL_DIR}/include" PARENT_SCOPE)
 else()
 	execute_process(COMMAND sh -c
 		"${CMAKE_C_COMPILER} -v 2>&1|grep ^Target:|cut -d' ' -f2"
