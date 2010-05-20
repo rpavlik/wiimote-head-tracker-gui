@@ -35,7 +35,7 @@
 
 WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 		_progress(new StartupProgress(430,360, "Starting Tracking System...")),
-		_config(new WiimoteTrackerConfigGUI(350, 160, "Tracker Configuration")),
+		_config(new WiimoteTrackerConfigGUI(420, 160, "Tracker Configuration")),
 		_gui(new WiimoteTrackerGUI(520, 560, "Wii Remote Head Tracker")),
 		_fc(NULL),
 		_controller(controller) {

@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 header_name {.h} 
 code_name {.cpp}
 decl {\#include "WiimoteTrackerView.h"} {global
@@ -65,30 +65,30 @@ Function {closeStartupWindow(void* userdata)} {private return_type void
 p->cleanAndClose();} {}
 } 
 
-widget_class WiimoteTrackerConfigGUI {
-  xywh {1316 338 350 160} type Double align 80 hide
-  class Fl_Window modal
+widget_class WiimoteTrackerConfigGUI {open selected
+  xywh {1252 338 420 160} type Double align 80
+  class Fl_Window modal visible
 } {
   Fl_Value_Input _ledDistance {
     label {Distance between LEDs (cm)}
     callback {_apply->activate();
 _save->deactivate();}
-    protected xywh {215 35 60 25} maximum 50 step 0.1 value 14.5
+    protected xywh {280 35 60 25} maximum 50 step 0.1 value 14.5
   }
   Fl_Input _trackerName {
     label {Tracker Device Name}
     callback {_apply->activate();
 _save->deactivate();}
-    protected xywh {215 75 125 25} when 1
+    protected xywh {280 75 125 25} when 1
     code0 {o->value("Tracker0");}
   }
   Fl_Button _apply {
     label {Apply Changes and Restart Tracker}
     callback {_view->applyNewConfiguration();}
-    protected xywh {60 118 280 32} deactivate
+    protected xywh {125 113 280 32} deactivate
   }
   Fl_Menu_Bar {} {open
-    xywh {0 0 350 25}
+    xywh {0 0 420 25}
   } {
     Submenu {} {
       label File open
@@ -115,6 +115,11 @@ _save->deactivate();}
     code {_ledDistance->value(distance * 100.0);} {}
   }
   decl {friend class WiimoteTrackerView;} {}
+  Fl_Button {} {
+    label Close
+    callback {hide();}
+    xywh {40 115 75 30}
+  }
 } 
 
 widget_class StartupProgress {
@@ -122,9 +127,9 @@ widget_class StartupProgress {
   callback {\#ifdef VERBOSE
 	std::cerr << "StartupProgress window callback" << std::endl;
 \#endif
-static_cast<StartupProgress*>(o)->cleanAndClose();} open
-  xywh {1324 297 430 360} type Double align 80
-  class Fl_Window modal visible
+static_cast<StartupProgress*>(o)->cleanAndClose();}
+  xywh {913 371 430 360} type Double align 80 hide
+  class Fl_Window
 } {
   Fl_Box _closeMessage {
     label {Startup successful, this window will close automatically...}
@@ -190,7 +195,7 @@ _tracker->startTrackerSystem();}
       label Reset
       callback {o->deactivate();
 _tracker->teardownClientDevice();
-_tracker->startTrackerSystem();} selected
+_tracker->startTrackerSystem();}
       protected xywh {290 280 120 30} deactivate
     }
     Fl_Box {} {
@@ -216,8 +221,8 @@ hide();} {}
 
 widget_class WiimoteTrackerGUI {
   label {Wii Remote Head Tracker}
-  xywh {1945 310 520 560} type Double align 80 hide
-  class Fl_Window modal
+  xywh {1152 310 520 560} type Double align 80 hide
+  class Fl_Window
 } {
   decl {SoftwareVersions _vers;} {protected
   }
