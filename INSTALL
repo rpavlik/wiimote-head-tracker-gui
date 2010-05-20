@@ -14,6 +14,27 @@ Run CMake with the source dir set to the current directory and the binary
 dir set anywhere else (don't re-use the binary dir from the dependency build
 above).  Just do a build and either an install or a package!
 
+Quickie Command Line Instructions:
+----------------------------------
+You may have to adapt these to your circumstances - they are an example only.
+
+git clone https://rpavlik@github.com/rpavlik/wiimote-head-tracker-gui.git
+cd wiimote-head-tracker-gui
+mkdir build
+mkdir deps-build
+cd deps-build
+cmake ../dependencies
+make
+cd ../build
+cmake -DCMAKE_BUILD_TYPE=Release .. -DCMAKE_INSTALL_PREFIX=~/wiimoteheadtracker -DINSTALL_WIIUSE_LIBRARY=ON
+make
+make install
+
+then to run:
+
+~/wiimoteheadtracker/bin/wiimoteheadtracker
+
 Ubuntu Linux:
+-------------
 To install some dependencies:
 sudo aptitude install fluid libfltk1.1-dev
