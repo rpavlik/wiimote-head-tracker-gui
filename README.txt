@@ -1,7 +1,7 @@
 Wii Remote Head Tracker (with Integrated GUI)
 ---------------------------------------------
 
-http://www.github.com/rpavlik/wiimote-headtracker-gui
+http://www.github.com/rpavlik/wiimote-head-tracker-gui
 
 This application builds on the Wii Remote Head Tracking filter module for VRPN
 by providing an easy-to-use, fully-integrated tracking server.
