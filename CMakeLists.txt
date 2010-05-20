@@ -18,20 +18,21 @@ add_definitions("-DTRACKER_APP_VERSION=\"${CPACK_PACKAGE_VERSION}\"")
 ###
 # Perform build configuration of dependencies
 ###
+if(NOT "${CMAKE_VERSION}" VERSION_LESS 2.8.0)
+	option(BUILD_OWN_DEPENDENCIES "Whether we should build our own dependencies rather than using system-wide ones." ON)
+endif()
 
 # Locally-developed modules dist'ed with this app - always have this first.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(UseBackportedModules)
 
-# Don't find Fluid.app the Mac single-site browser
-# when we want fluid the FLTK GUI designer/pre-compiler
-set(CMAKE_FIND_APPBUNDLE NEVER)
-
-find_package(FLTK REQUIRED)
-find_package(VRPN REQUIRED)
-if(NOT APPLE)
-	find_package(WiiUse REQUIRED)
+# If we are using our own library builds, include
+# the CMake script to build them.
+if(BUILD_OWN_DEPENDENCIES)
+	include(TrackerGUIExternalProjects.cmake)
 endif()
+
+include(TrackerGUISystemLibraries.cmake)
 
 set(EXTRA_LIBS ${FLTK_LIBRARIES} ${VRPN_SERVER_LIBRARIES} ${WIIUSE_LIBRARIES})
 include_directories(${FLTK_INCLUDE_DIR} ${VRPN_INCLUDE_DIRS})

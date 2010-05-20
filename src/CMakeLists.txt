@@ -20,6 +20,9 @@ add_executable(wiimoteheadtracker
 	${SOURCES}
 	${wiimoteheadtracker_FLTK_UI_SRCS})
 target_link_libraries(wiimoteheadtracker ${EXTRA_LIBS})
+if(BUILD_OWN_DEPENDENCIES)
+	add_dependencies(wiimoteheadtracker fltk)
+endif()
 
 if(APPLE)
 	set_target_properties(wiimoteheadtracker
