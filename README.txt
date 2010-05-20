@@ -9,9 +9,10 @@ for VRPN by providing an easy-to-use, fully-integrated tracking server.
 Please acknowledge use of this tracking system in academic papers and 
 publications by citing the following paper:
 
-  Pavlik, R. and Vance, J., 2010, "A Modular Implementation of Wii Remote 
-  Head Tracking for Virtual Reality," ASME Paper No. WINVR2010-3771. Proc. 
-  2010 World Conference on Innovative Virtual Reality. 
+  Pavlik, R.A., and Vance, J.M., 2010, "A Modular Implementation of Wii 
+  Remote Head Tracking for Virtual Reality," ASME Paper No. 
+  WINVR2010-3771. Proc. 2010 World Conference on Innovative Virtual 
+  Reality. 
 
 If you cite this work or use this tracking system, we would appreciate 
 hearing from you. You may contact the main developer, Ryan Pavlik (Iowa 
