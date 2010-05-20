@@ -92,16 +92,24 @@ if(INSTALL_WIIUSE_LIBRARY)
 		DESTINATION ${RUNTIME_LIBRARY_INSTALL_DIR})
 endif()
 
-# Install README and licenses
+# Install README
 install(FILES
 	LICENSE_1_0.txt
 	README.txt
 	DESTINATION
 	doc)
+
+# Install licenses
 install(DIRECTORY
 	licenses
 	DESTINATION
 	doc)
+
+# Install jconfs
+install(DIRECTORY
+	jconfs
+	DESTINATION
+	./)
 
 ###
 # Set packaging options (for CPack)
@@ -113,6 +121,9 @@ set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}-src
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/all_licenses_for_installer.txt")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
 set(CPACK_PACKAGE_EXECUTABLES wiimoteheadtracker "Wii Remote Head Tracker")
+SET(CPACK_NSIS_MENU_LINKS
+    "jconfs/README-jconf.txt" "jconf README"
+    "doc/README.txt" "README")
 
 # Choose desired package generators
 if(APPLE)
