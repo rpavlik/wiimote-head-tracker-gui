@@ -38,6 +38,12 @@ mark_as_advanced(DEPENDENCIES_INSTALL_DIR)
 ###
 # Perform build configuration of dependencies
 ###
+
+if(INSTALL_WIIUSE_LIBRARY)
+	# Always point to WiiUse, for safety's sake
+	set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif()
+
 # Locally-developed modules dist'ed with this app - always have this first.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(UseBackportedModules)
