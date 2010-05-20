@@ -16,19 +16,32 @@ set(CPACK_PACKAGE_VERSION
 add_definitions("-DTRACKER_APP_VERSION=\"${CPACK_PACKAGE_VERSION}\"")
 
 ###
+# Options
+###
+
+option(USE_LOCAL_DEPENDENCIES "Whether we should look first in our local deps dir." ON)
+
+if(WIN32)
+	set(INSTALL_WIIUSE_LIBRARY ON)
+	set(RUNTIME_LIBRARY_INSTALL_DIR bin)
+else()
+	option(INSTALL_WIIUSE_LIBRARY "Whether we should install the WiiUse shared library despite being on a platform that should know better." OFF)
+	set(RUNTIME_LIBRARY_INSTALL_DIR lib)
+endif()
+
+if(NOT DEPENDENCIES_INSTALL_DIR)
+	set(DEPENDENCIES_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/install-prefix")
+endif()
+set(DEPENDENCIES_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}" CACHE PATH "Where the dependencies folder installed to - the default is usually correct.")
+mark_as_advanced(DEPENDENCIES_INSTALL_DIR)
+
+###
 # Perform build configuration of dependencies
 ###
 # Locally-developed modules dist'ed with this app - always have this first.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(UseBackportedModules)
 
-option(USE_LOCAL_DEPENDENCIES "Whether we should look first in our local deps dir." ON)
-
-if(NOT DEPENDENCIES_INSTALL_DIR)
-	set(DEPENDENCIES_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/install-prefix")
-endif()
-
-set(DEPENDENCIES_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}" CACHE PATH "Where the dependencies folder installed to - the default is usually correct.")
 if(USE_LOCAL_DEPENDENCIES)
 	list(APPEND CMAKE_PREFIX_PATH "${DEPENDENCIES_INSTALL_DIR}")
 endif()
@@ -47,10 +60,7 @@ if(NOT APPLE)
 	find_package(WiiUse REQUIRED)
 endif()
 
-
-set(EXTRA_LIBS ${FLTK_LIBRARIES} ${VRPN_SERVER_LIBRARIES} ${WIIUSE_LIBRARIES})
-include_directories(${FLTK_INCLUDE_DIR} ${VRPN_INCLUDE_DIRS})
-
+# Try to detect linux distribution for better theme selection
 if(NOT WIN32 AND NOT APPLE)
 	execute_process(COMMAND lsb_release -d -s
 		OUTPUT_VARIABLE _distroID
@@ -65,6 +75,8 @@ endif()
 ###
 # Build the project
 ###
+set(EXTRA_LIBS ${FLTK_LIBRARIES} ${VRPN_SERVER_LIBRARIES} ${WIIUSE_LIBRARIES})
+include_directories(${FLTK_INCLUDE_DIR} ${VRPN_INCLUDE_DIRS})
 
 # Native file chooser
 add_subdirectory(third-party/Fl_Native_File_Chooser-0.86)
@@ -74,10 +86,10 @@ include_directories(${FNFC_INCLUDE_DIRS})
 # The app is in the "src" subdirectory
 add_subdirectory(src)
 
-if(WIN32)
+if(INSTALL_WIIUSE_LIBRARY)
 	# Install the WiiUse DLL
 	install(FILES ${WIIUSE_RUNTIME_LIBRARY}
-		DESTINATION bin)
+		DESTINATION ${RUNTIME_LIBRARY_INSTALL_DIR})
 endif()
 
 # Install README and licenses
