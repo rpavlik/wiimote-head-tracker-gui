@@ -14,5 +14,19 @@ set(SOURCES
 fltk_wrap_ui(wiimoteheadtracker ${FLTK_SOURCES})
 
 include_directories(.)
-add_executable(wiimoteheadtracker ${SOURCES} ${wiimoteheadtracker_FLTK_UI_SRCS})
+add_executable(wiimoteheadtracker
+	WIN32
+	MACOSX_BUNDLE
+	${SOURCES}
+	${wiimoteheadtracker_FLTK_UI_SRCS})
 target_link_libraries(wiimoteheadtracker ${EXTRA_LIBS})
+
+if(APPLE)
+	set_target_properties(wiimoteheadtracker
+		PROPERTIES
+		OUTPUT_NAME "Wii Remote Head Tracker")
+endif()
+
+install(TARGETS wiimoteheadtracker
+		RUNTIME DESTINATION bin
+		BUNDLE DESTINATION ./)

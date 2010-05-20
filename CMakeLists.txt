@@ -7,18 +7,15 @@ cmake_minimum_required(VERSION 2.6)
 # Set package properties
 project(wiimote-head-tracker-gui)
 
+set(CPACK_PACKAGE_NAME "Wii Remote Head Tracker GUI")
 set(CPACK_PACKAGE_VENDOR "Iowa State University")
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
 set(CPACK_PACKAGE_VERSION_MINOR "0")
-set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0pre")
 set(CPACK_PACKAGE_VERSION
 	"${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}-src")
-
-###
-# Set up options
-###
 
 ###
 # Perform build configuration of dependencies
@@ -29,6 +26,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(UseBackportedModules)
 
 # Don't find Fluid.app the Mac single-site browser
+# when we want fluid the FLTK GUI designer/pre-compiler
 set(CMAKE_FIND_APPBUNDLE NEVER)
 
 find_package(FLTK REQUIRED)
@@ -65,6 +63,8 @@ endif()
 ###
 # Set packaging options (for CPack)
 ###
+
+set(CPACK_PACKAGE_EXECUTABLES bin/wiimoteheadtracker "Wii Remote Head Tracker")
 
 # Choose desired package generators
 if(APPLE)
