@@ -6,7 +6,7 @@ Build Directions:
 Run CMake with the source directory set to ./dependencies and the binary
 dir set wherever you like, then do a build.  This will download/build all
 required dependencies (vrpn, wiiuse, fltk) and install them into
-./built-dependencies
+./dependencies/install-prefix
 
 - Build the system
 
