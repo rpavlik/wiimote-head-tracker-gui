@@ -65,7 +65,7 @@ Function {closeStartupWindow(void* userdata)} {private return_type void
 p->cleanAndClose();} {}
 } 
 
-widget_class WiimoteTrackerConfigGUI {open selected
+widget_class WiimoteTrackerConfigGUI {open
   xywh {1252 338 420 160} type Double align 80
   class Fl_Window modal visible
 } {
@@ -221,8 +221,9 @@ hide();} {}
 
 widget_class WiimoteTrackerGUI {
   label {Wii Remote Head Tracker}
-  xywh {1152 310 520 560} type Double align 80 hide
-  class Fl_Window
+  callback {quitApp();} selected
+  xywh {1152 310 520 560} type Double align 80
+  class Fl_Window visible
 } {
   decl {SoftwareVersions _vers;} {protected
   }
