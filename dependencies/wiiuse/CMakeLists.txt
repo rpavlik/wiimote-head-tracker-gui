@@ -8,27 +8,39 @@ if(WIN32)
 		CONFIGURE_COMMAND ""
 		BUILD_COMMAND ""
 		INSTALL_DIR "${DEPENDENCY_INSTALL_DIR}"
-		INSTALL_COMMAND ""${CMAKE_COMMAND}
-			-E copy_directory ./ "<INSTALL_DIR>/wiiuse"
+		INSTALL_COMMAND ""
 	)
+	
+	ExternalProject_Add_Step(wiiuse mkdir_header
+		COMMAND "${CMAKE_COMMAND}"
+			-E make_directory "<INSTALL_DIR>/include/")
+
+	ExternalProject_Add_Step(wiiuse mkdir_lib
+		COMMAND "${CMAKE_COMMAND}"
+			-E make_directory "<INSTALL_DIR>/lib/")
+			
+	ExternalProject_Add_Step(wiiuse mkdir_dll
+		COMMAND "${CMAKE_COMMAND}"
+			-E make_directory "<INSTALL_DIR>/bin/")
+	
 	ExternalProject_Add_Step(wiiuse install_header
 		COMMAND "${CMAKE_COMMAND}"
 			-E copy "<SOURCE_DIR>/wiiuse.h" "<INSTALL_DIR>/include/"
-		DEPENDEES build
+		DEPENDEES build mkdir_header
 		DEPENDERS install
 		WORKING_DIRECTORY <BINARY_DIR>)
 
 	ExternalProject_Add_Step(wiiuse install_lib
 		COMMAND ${CMAKE_COMMAND}
 			-E copy "<SOURCE_DIR>/wiiuse.lib" "<INSTALL_DIR>/lib/"	
-		DEPENDEES build
+		DEPENDEES build mkdir_lib
 		DEPENDERS install
 		WORKING_DIRECTORY <BINARY_DIR>)
 	
-	ExternalProject_Add_Step(wiiuse install_
+	ExternalProject_Add_Step(wiiuse install_dll
 		COMMAND ${CMAKE_COMMAND}
 			-E copy "<SOURCE_DIR>/wiiuse.dll" "<INSTALL_DIR>/bin/"	
-		DEPENDEES build
+		DEPENDEES build mkdir_dll
 		DEPENDERS install
 		WORKING_DIRECTORY <BINARY_DIR>)
 	

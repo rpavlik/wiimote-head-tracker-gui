@@ -50,6 +50,7 @@ include(UseBackportedModules)
 
 if(USE_LOCAL_DEPENDENCIES)
 	list(APPEND CMAKE_PREFIX_PATH "${DEPENDENCIES_INSTALL_DIR}")
+	set(FLTK_DIR "${DEPENDENCIES_INSTALL_DIR}")
 endif()
 
 # Don't find Fluid.app the Mac single-site browser
@@ -129,7 +130,11 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
 set(CPACK_PACKAGE_EXECUTABLES wiimoteheadtracker "Wii Remote Head Tracker")
 SET(CPACK_NSIS_MENU_LINKS
     "jconfs/README-jconf.txt" "jconf README"
-    "doc/README.txt" "README")
+	"jconfs/" "jconf folder"
+    "doc/README.txt" "README"
+	"http://www.github.com/rpavlik/wiimote-head-tracker-gui/" "Project homepage"
+	"http://academic.cleardefinition.com/" "Creator's homepage"
+	"http://www.vrac.iastate.edu/" "Iowa State University Virtual Reality Applications Center")
 
 # Choose desired package generators
 if(APPLE)
