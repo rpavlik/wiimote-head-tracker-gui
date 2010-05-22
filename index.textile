@@ -18,6 +18,14 @@ Documentation:
 * "Configuring the Tracker":docs/configuring.html
 * "Running your VR Applications":docs/vr-applications.html
 
+h2. News
+
+"Archive":archive.html
+
+h3. "{{site.posts.first.title}}":{{site.posts.first.url}}
+
+(postcontent){{ site.posts.first.content }}
+
 h2. Screenshots
 
 There are also screenshots in the "Running on Windows":docs/running-win.html section that illustrate how to start up the system.
