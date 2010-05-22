@@ -32,7 +32,7 @@ h2. Screenshots
 There are also screenshots in the "Running on Windows":docs/running-win.html section that illustrate how to start up the system.
 
 !images/about-tab-win7.jpg!
-!images/tracker-status-not-running-win7.jpg!
+!images/tracker-status-running-win7.jpg!
 !images/tracker-config-dialog-win7.jpg!
 
 h2. About
