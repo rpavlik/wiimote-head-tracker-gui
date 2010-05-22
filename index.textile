@@ -24,7 +24,7 @@ h2. News
 
 h3. "{{site.posts.first.title}}":{{site.posts.first.url}}
 
-(postcontent){{ site.posts.first.content }}
+{{ site.posts.first.content }}
 
 h2. Screenshots
 
