@@ -4,10 +4,12 @@ layout: default
 ---
 h1. News Archive
 
----
-layout: master
-title: Archive
----
 {% for post in site.posts %}
-h2. "{{ post.title }}":{{ post.url }}<abbr>{{ post.date | date_to_string }}</abbr></li>
+h2. "{{ post.title }}":{{ post.url }}
+
+__{{ post.date | date_to_string }}_
+
+{{ post.content }}
+
+
 {% endfor %}

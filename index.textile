@@ -20,11 +20,12 @@ Documentation:
 
 h2. News
 
-"Archive":archive.html
-
 h3. "{{site.posts.first.title}}":{{site.posts.first.url}}
 
 {{ site.posts.first.content }}
+
+
+"All News":archive.html
 
 h2. Screenshots
 
