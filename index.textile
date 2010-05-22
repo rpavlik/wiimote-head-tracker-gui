@@ -1,0 +1,16 @@
+h1.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Download</a> and install now!
+* "Installing on Windows":docs/install-win.html
+* Installing on Linux - docs coming soon!
+
+h1. Getting Started
+
+* "Running on Windows":docs/running-win.html
+* Running on Linux - docs coming soon!
+
+h1. Screenshots
+
+There are also screenshots in the "Running on Windows":docs/running-win.html section that illustrate how to start up the system.
+
+!images/about-tab-win7.jpg!
+!images/tracker-status-not-running-win7.jpg!
+!images/tracker-config-dialog-win7.jpg!
