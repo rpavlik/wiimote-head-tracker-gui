@@ -1,3 +1,7 @@
+---
+title: Home
+layout: home
+---
 h1.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Download</a> and install now!
 * "Installing on Windows":docs/install-win.html
 * Installing on Linux - docs coming soon!
