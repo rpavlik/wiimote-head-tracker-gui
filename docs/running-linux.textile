@@ -1,6 +1,6 @@
 ---
 title: Running on Linux
-layout: docs
+layout: default
 ---
 h1. Running on Linux
 
