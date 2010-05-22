@@ -1,0 +1,9 @@
+---
+title: Using With Virtual Reality Applications
+layout: default
+---
+h1. Using With Virtual Reality Applications
+
+The server provides a VRPN7 tracker device, by default named "Tracker0@localhost" from the perspective of a VR application running on the same computer.
+
+* If you're using VR Juggler 2.2.x, you can use the jconf files included with the server to run a full-screen head-tracked environment.

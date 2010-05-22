@@ -1,0 +1,65 @@
+---
+title: Running on Windows
+layout: default
+---
+h1. Running on Windows
+
+h2. Startup Steps
+
+h3. Connect Wii Remote to the computer.
+
+This process will vary between Windows versions, and even between Bluetooth hardware.  This example shows Windows 7 using a device with the WIDCOMM driver, but the process is very similar for at least the Microsoft driver, and the same basic steps will take place.
+
+Usually, this process must be completed every time the Wii Remote loses its connection to the computer. This seems to be specific to the windows Bluetooth driver stacks - no such issue occurs in Linux.
+
+h4. Open the Bluetooth Devices window.
+
+h5. Click on the arrow by the clock, in Windows 7, to reveal the system tray icons.
+
+!../images/bluetooth-systray-win7.jpg!
+
+h5. Choose "Show Bluetooth Devices."
+
+!../images/bluetooth-show-bt-devices-win7.jpg!
+
+h4. If your Wii Remote ("Nintendo RVL-CNT-01") is already listed, right-click it and choose "Remove"
+
+!../images/remove-device-win7.jpg!
+
+h4. Press the 1 and 2 buttons on the remote, and click "Add Device"
+
+From here, this is apparently somewhat time-sensitive - the Wii Remote stays visible only while the lights are blinking.
+
+!../images/add-device-win7.jpg!
+
+h4. Choose the "Input Device" (eventually "Nintendo RVL-CNT-01") and choose to pair without a code.
+
+The Win7 wizard takes a few steps for this process.  Other drivers might take different amounts of steps, or might not offer a "pair without a code" option - at least some versions of WIDCOMM on Windows XP are like this.  If your system doesn't show a no-code pair option, you might try a different version of the driver.
+
+!../images/bt-wizard-win7-step1.jpg!
+
+!../images/bt-wizard-win7-step2.jpg!
+
+!../images/bt-wizard-win7-step3.jpg!
+
+h3. Start the tracker server
+
+If you used the installer, you have a start menu shortcut for it.  If you used the portable ZIP version, it's in the "bin" folder.
+
+!../images/start-menu-win7.jpg!
+
+If all components start successfully, the status window will close itself automatically. If there are issues, see the "troubleshooting" section below.
+
+h3. Allow the server through your firewall, if prompted.
+
+Windows 7, Vista, and possibly XP may pop up a dialog box asking for permission to allow the tracking server to use the network.  In order for it to work correctly, you should allow this.
+
+!../images/firewall-dialog-win7.jpg!
+
+h2. On to "Configuring the Tracker":configuring.html
+
+h2. Troubleshooting
+
+* If the tracking server stops with an error message of "Could not connect to Wiimote", the first thing to try is exit the tracking app and start it again (without adding/removing the device).  Due to the way the Windows Bluetooth support works, the "Reset" button won't necessarily be as helpful as you might hope.
+
+* As suggested above, if that doesn't work and the the tracker still won't connect to the Wii Remote, you may have to close it and try the full remove device and add device process again.  Be sure to move quickly - it works best if the lights on the Wii Remote stay blinking throughout the process of pairing.

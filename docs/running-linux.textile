@@ -1,0 +1,15 @@
+---
+title: Running on Linux
+layout: docs
+---
+h1. Running on Linux
+
+h2.  Start the Tracking Server
+
+If you installed it to ~/headtracker, the command to run will be ~/headtracker/bin/wiimoteheadtracker 
+
+h2. Press 1 and 2 on the Wiimote when prompted
+
+Unlike those poor souls on Windows, you can run the tracker without having to do any kind of Bluetooth pairing with the Wiimote - the application handles everything smoothly for you.
+
+h1. On to "Configuring the Tracker":configuring.html

@@ -4,14 +4,19 @@ layout: home
 ---
 h1. Wii Remote Head Tracking Server for Virtual Reality
 
-h2.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Download</a> and install now!
-* "Installing on Windows":docs/install-win.html
-* Installing on Linux - docs coming soon!
+h2.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Download</a> and get started now!
 
-h2. Getting Started
+Documentation:
+* Installing - on
+** "Windows":docs/install-win.html
+** "Linux":docs/install-linux.html
 
-* "Running on Windows":docs/running-win.html
-* Running on Linux - docs coming soon!
+* Running - on
+** "Windows":docs/running-win.html
+** "Linux":docs/running-linux.html
+
+* "Configuring the Tracker":docs/configuring.html
+* "Running your VR Applications":docs/vr-applications.html
 
 h2. Screenshots
 
@@ -20,3 +25,28 @@ There are also screenshots in the "Running on Windows":docs/running-win.html sec
 !images/about-tab-win7.jpg!
 !images/tracker-status-not-running-win7.jpg!
 !images/tracker-config-dialog-win7.jpg!
+
+h2. About
+This application builds on the Wii Remote Head Tracking filter module 
+for VRPN by providing an easy-to-use, fully-integrated tracking server. 
+
+Please acknowledge use of this tracking system in academic papers and 
+publications by citing the following paper:
+
+bc.  Pavlik, R.A., and Vance, J.M., 2010, "A Modular Implementation of Wii 
+  Remote Head Tracking for Virtual Reality," ASME Paper No. 
+  WINVR2010-3771. Proc. 2010 World Conference on Innovative Virtual 
+  Reality. 
+
+If you cite this work or use this tracking system, we would appreciate 
+hearing from you. You may contact the main developer, Ryan Pavlik (Iowa 
+State University), by email at <rpavlik@iastate.edu> or 
+<abiryan@ryand.net>.
+
+Paper materials and copies of publications may be mailed to:
+
+bc.Ryan Pavlik
+Virtual Reality Applications Center
+1620 Howe Hall
+Ames, Iowa 50011-2274
+USA

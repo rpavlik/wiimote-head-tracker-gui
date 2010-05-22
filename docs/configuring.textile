@@ -1,0 +1,11 @@
+---
+title: Configuring the Tracking Server
+layout: default
+---
+h1. Configuring the Tracking Server
+
+Most of the time, the only configuration you might need to adjust is the distance between the LEDs, based on your particular glasses.
+
+* Note: If you save a configuration called "default" (with the extension, "default.headtrackconfig") in the "bin" folder alongside the tracker server, it should be loaded automatically at startup.
+
+h1. On to "Running your VR Application":vr-applications.html
