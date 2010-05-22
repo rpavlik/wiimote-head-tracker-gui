@@ -2,16 +2,17 @@
 title: Home
 layout: home
 ---
-h1.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Download</a> and install now!
+h1. Wii Remote Head Tracking Server for Virtual Reality
+h2.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Download</a> and install now!
 * "Installing on Windows":docs/install-win.html
 * Installing on Linux - docs coming soon!
 
-h1. Getting Started
+h2. Getting Started
 
 * "Running on Windows":docs/running-win.html
 * Running on Linux - docs coming soon!
 
-h1. Screenshots
+h2. Screenshots
 
 There are also screenshots in the "Running on Windows":docs/running-win.html section that illustrate how to start up the system.
 
