@@ -147,18 +147,20 @@ a:hover {
 	letter-spacing:-1px;
 	line-height:175%;
 	margin:0 auto;
-	padding:10px 235px 10px 10px;
+	padding:10px 235px 10px 20px;
 	width:550px;
 }
 #content_inside_main h1 {
 	border-bottom:1px solid #ccc;
 	font-size:125%;
 	padding:0 0 2px;
+	margin-top: 1em;
 }
 #content_inside_main h2 {
-	color:#ccc;
+	color:#444;
 	font-size:115%;
-	text-align:right;
+	text-align:left;
+	margin-top: .5em;
 }
 #content_inside_main p {
 	padding:0 0 10px;
