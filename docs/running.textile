@@ -4,7 +4,9 @@ layout: default
 nav: running-tracker
 toc: ["Running on Linux", "Running on Windows", "Troubleshooting on Windows"]
 ---
-h1. Running on Linux <a name="Linux"></a>
+<a name="Linux"></a>
+
+h1. Running on Linux 
 
 h2.  Start the Tracking Server
 
@@ -16,7 +18,9 @@ Unlike those poor souls on Windows, you can run the tracker without having to do
 
 h2. On to "Changing the Configuration":configuring.html
 
-h1. Running on Windows <a name="Windows"></a>
+<a name="Windows"></a>
+
+h1. Running on Windows 
 
 This process will vary between Windows versions, and even between Bluetooth hardware.  This example shows Windows 7 using a device with the WIDCOMM driver, but the process is very similar for at least the Microsoft driver, and the same basic steps will take place.
 
@@ -69,7 +73,9 @@ Windows 7, Vista, and possibly XP may pop up a dialog box asking for permission 
 !{{site.url}}/images/firewall-dialog-win7.jpg!
 
 h2. On to "Changing the Configuration":configuring.html
+
 <a name="Troubleshooting on Windows"></a>
+
 h2. Troubleshooting on Windows
 
 * If the tracking server stops with an error message of "Could not connect to Wiimote", the first thing to try is exit the tracking app and start it again (without adding/removing the device).  Due to the way the Windows Bluetooth support works, the "Reset" button won't necessarily be as helpful as you might hope.
