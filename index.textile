@@ -7,18 +7,6 @@ h1. Wii Remote Head Tracking Server for Virtual Reality
 
 h2.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Download</a> and get started now!
 
-Documentation:
-* Installing - on
-** "Windows":docs/install-win.html
-** "Linux":docs/install-linux.html
-
-* Running - on
-** "Windows":docs/running-win.html
-** "Linux":docs/running-linux.html
-
-* "Configuring the Tracker":docs/configuring.html
-* "Running your VR Applications":docs/vr-applications.html
-
 h2. News
 
 h3. "{{site.posts.first.title}}":{{site.posts.first.url}}
