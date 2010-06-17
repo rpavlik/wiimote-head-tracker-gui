@@ -166,6 +166,12 @@ a:hover {
 #content_inside_main p {
 	padding:0 0 10px;
 }
+#content_inside_main ul {
+	margin-left: 10px;
+}
+#content_inside_main ol {
+	margin-left: 10px;
+}
 
 /* footer */
 #footer {
