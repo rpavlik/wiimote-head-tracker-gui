@@ -1,3 +1,8 @@
+/*
+	Author	:	Christopher Robinson
+	Email		:	christopher@edg3.co.uk
+	Website	:	http://www.edg3.co.uk/
+*/
 * {
 	border:0;
 	margin:0;
@@ -141,9 +146,8 @@ a:hover {
 	background:#fff;
 	letter-spacing:-1px;
 	line-height:175%;
-	margin-left: auto;
-	margin-right: auto;
-	padding:10px 25px 10px;
+	margin:0 auto;
+	padding:10px 235px 10px 10px;
 	width:550px;
 }
 #content_inside_main h1 {
