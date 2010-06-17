@@ -5,4 +5,4 @@ layout: post
 
 We released today v1.0.1 of the tracking server for public availability.  We have provided an installer and a zipped "portable" copy of the server for Windows, as well as full source code compatible with Windows and Linux.
 
-External "documentation for Linux":/docs/installing-linux.textile is slim at the moment, but "documentation for Windows":{{site.url}}/docs/installing-win.textile is full of screen shots and helpful information!
+External documentation for Linux is slim at the moment, but "documentation for Windows":{{site.url}}/docs/installing.textile is full of screen shots and helpful information!
