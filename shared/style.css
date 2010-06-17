@@ -161,7 +161,9 @@ a:hover {
 	color:#555;
 	font-size:115%;
 	text-align:left;
-	margin-top: .5em;
+	margin-top: 1em;
+	border-bottom:1px solid #ddd;
+	margin-bottom: .3em;
 }
 #content_inside_main p {
 	padding:0 0 10px;
