@@ -1,6 +1,7 @@
 ---
 title: Home
 layout: home
+nav: home
 ---
 h1. Wii Remote Head Tracking Server for Virtual Reality
 
