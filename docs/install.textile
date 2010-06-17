@@ -4,15 +4,13 @@ layout: default
 nav: installing
 toc: ["Linux", "Windows"]
 ---
-h1. Installing on Linux
-==<a name="Linux"></a>==
+h1. Installing on Linux <a name="Linux"></a>
 
 h2.  Build from source
 
 If you download a source tarball or clone the git repository, you can look at the build instructions.  Right now no Linux binaries are available - sorry!
 
-h1. Installing on Windows
-==<a name="Windows"></a>==
+h1. Installing on Windows <a name="Windows"></a>
 
 h2. Pre-built downloads
 

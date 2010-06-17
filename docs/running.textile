@@ -4,8 +4,7 @@ layout: default
 nav: running-program
 toc: ["Linux", "Windows"]
 ---
-h1. Running on Linux
-==<a name="Linux"></a>==
+h1. Running on Linux <a name="Linux"></a>
 
 h2.  Start the Tracking Server
 
@@ -15,8 +14,7 @@ h2. Press 1 and 2 on the Wiimote when prompted
 
 Unlike those poor souls on Windows, you can run the tracker without having to do any kind of Bluetooth pairing with the Wiimote - the application handles everything smoothly for you.
 
-h1. Running on Windows
-==<a name="Windows"></a>==
+h1. Running on Windows <a name="Windows"></a>
 
 h2. Startup Steps
 
