@@ -5,13 +5,18 @@ nav: running-apps
 toc: ["VRPN", "VR Juggler", "Vizard"]
 ---
 h1. Using With Virtual Reality Applications
+
 ==<a name="VRPN"></a>==
 
 The server provides a VRPN7 tracker device, by default named "Tracker0@localhost" from the perspective of a VR application running on the same computer.
 
 h2. VR Juggler
+
 ==<a name="VR Juggler"></a>==
+
 * If you're using VR Juggler 2.2.x, you can use the jconf files included with the server to run a full-screen head-tracked environment.
 
 h2. Vizard
+
 ==<a name="Vizard"></a>==
+
