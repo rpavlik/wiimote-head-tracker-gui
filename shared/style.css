@@ -165,6 +165,11 @@ a:hover {
 	border-bottom:1px solid #ddd;
 	margin-bottom: .3em;
 }
+
+#content_inside_main h3 {
+	font-size:110%;
+}
+
 #content_inside_main p {
 	padding:0 0 10px;
 }
