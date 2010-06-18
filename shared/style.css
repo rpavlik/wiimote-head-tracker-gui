@@ -113,8 +113,14 @@ pre {
 /* content */
 #content {
 	background:#fff url('image/background_content.jpg') center repeat-y;
-	clear:both;
 	width:100%;
+}
+#content:after {
+	clear:both;
+	content:'.';
+	display:block;
+	height:0;
+	visibility:hidden;
 }
 #content_inside {
 	border-left:1px solid #bbb;
@@ -160,7 +166,6 @@ pre {
 }
 #content_inside_main {
 	background:#fff;
-	float:left;
 	letter-spacing:-1px;
 	line-height:175%;
 	margin:0 auto;
@@ -198,7 +203,6 @@ pre {
 /* footer */
 #footer {
 	background:#323232 url('image/background_footer.jpg') center repeat-y;
-	clear:both;
 	height:170px;
 	width:100%;
 	font-size:80%;
