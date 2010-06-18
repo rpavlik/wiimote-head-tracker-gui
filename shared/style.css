@@ -233,3 +233,7 @@ pre {
 	margin-left: 25%;
 	text-align: left;
 }
+#footer_inside a {
+	color: #999;
+	text-decoration: underline;
+}
