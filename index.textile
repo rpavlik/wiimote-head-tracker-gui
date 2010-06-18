@@ -21,7 +21,6 @@ h2. Screenshots
 
 For more screenshots, see the documentation on installing and using the system.
 
-!images/about-tab-win7.jpg!
 !images/tracker-status-running-win7.jpg!
 
 h2. About
