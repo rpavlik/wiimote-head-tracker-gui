@@ -198,7 +198,7 @@ a:hover {
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
 	height:200px;
-	margin-left: 10px;
+	padding-left: 10px;
 	width:800px;
 
 }
