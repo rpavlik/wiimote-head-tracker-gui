@@ -33,13 +33,17 @@ a:hover {
 }
 
 .highlight {
-	width: 60%
-	padding-left: 20%;
 	margin-bottom: 1em;
 	
 	background: #eee;
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
+	font: 1em;
+}
+
+.highlight pre {
+	margin: .5em;
+
 }
 
 /* header */
