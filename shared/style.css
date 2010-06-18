@@ -183,7 +183,7 @@ a:hover {
 /* footer */
 #footer {
 	background:#323232 url('image/background_footer.jpg') center repeat-y;
-	height:200px;
+	height:180px;
 	width:100%;
 	font-size:80%;
 }
@@ -197,9 +197,8 @@ a:hover {
 #footer_inside {
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
-	height:200px;
+	height:180px;
 	margin:0 auto;
-	padding-left: 20px;
 	width:800px;
 
 }
