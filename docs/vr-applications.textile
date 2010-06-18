@@ -51,7 +51,7 @@ If you are using a newer version of vizard that has a __createCustomComposite fu
 
 {% highlight python %}
 def createCustomComposite(id=0):
-	viz.logNotice('Executing manually defined createCustomComposite() tracker function for Wii Remote Head Tracking')
+	viz.logNotice('Setting up to use Wii Remote Head Tracking')
 
 	vrpn = viz.add('vrpn7.dle')
 
