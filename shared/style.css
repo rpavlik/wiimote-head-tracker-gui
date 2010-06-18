@@ -86,6 +86,8 @@ a:hover {
 #header_inside ul li.active {
 	background:#fff;
 	color:#111;
+	
+	text-align:center;
 }
 
 /* content */
