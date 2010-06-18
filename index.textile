@@ -2,10 +2,15 @@
 title: Home
 layout: home
 nav: home
+toc: ["Screenshots", "About and Contact"]
 ---
 h1. Wii Remote Head Tracking Server for Virtual Reality
 
 h2.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Download</a> and get started now!
+
+The links at the top of the site can walk you through the entire process.
+
+If you're interested in contributing, "contact us":#About%20and%20Contact and/or see our "project page on GitHub":{{ site.github-url }} .
 
 h2. News
 
@@ -17,11 +22,15 @@ h3. {{site.posts.first.title}}
 
 "All News":archive.html
 
+<a name="Screenshots"> </a>
+
 h2. Screenshots
 
 For more screenshots, see the documentation on installing and using the system.
 
 !images/tracker-status-running-win7.jpg!
+
+<a name="About and Contact"> </a>
 
 h2. About
 

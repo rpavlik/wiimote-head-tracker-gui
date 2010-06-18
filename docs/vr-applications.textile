@@ -2,15 +2,15 @@
 title: Using With Virtual Reality Applications
 layout: default
 nav: running-apps
-toc: ["VRPN", "VR Juggler", "Vizard"]
+toc: ["VR Juggler", "Vizard"]
 ---
-h1. Using With Virtual Reality Applications <a name="VRPN"></a>
+h1. Using With Virtual Reality Applications
 
-The server provides a VRPN7 tracker device, by default named "Tracker0@localhost" from the perspective of a VR application running on the same computer.
+The server provides a VRPN7 tracker device, by default named "Tracker0@localhost" from the perspective of a VR application running on the same computer. If you're using any virtual reality framework with support for VRPN (which is most of them), you can use this software to provide head tracking!  Details for using selected VR systems follow.
 
 h2. VR Juggler <a name="VR Juggler"></a>
 
-If you're using VR Juggler 2.2.x, you can use the jconf files included with the server to run a full-screen head-tracked environment.
+If you're using VR Juggler 2.2.x, you can use the jconf files included with the Wii Remote Head Tracking server to run a full-screen head-tracked environment, in a "fishtank VR" mode where your monitor is virtually a one-meter-wide window into the virtual world.
 
 h2. Vizard <a name="Vizard"></a>
 
@@ -20,7 +20,7 @@ Please see the "Vizard documentation":http://www.worldviz.com/vizhelp/View_basic
 
 Some untested code that might help is below:
 
-To hardcode your app to use Wiimote head tracking:
+h3. To hardcode your app to use Wiimote head tracking:
 
 {% highlight python %}
 PORT_VRPN = 'Tracker0@localhost'
@@ -28,7 +28,9 @@ wiimoteHeadTracker = viz.add('vrpn.dls')
 viz.link(wiimoteHeadTracker.viz.MainView)
 {% endhighlight %}
 
-If you are using "viztracker.py":http://www.worldviz.com/vizhelp/Configuring_viztracker.htm that has an _addTracker() function, you will want to replace the contents of def _addTracker(): with these lines:
+h3. If you are using "viztracker.py":http://www.worldviz.com/vizhelp/Configuring_viztracker.htm that has an _addTracker() function:
+
+You will want to replace the contents of def _addTracker(): with these lines:
 
 {% highlight python %}
 def _addTracker():
@@ -47,7 +49,9 @@ viz.link(track, viz.MainView)
 
 (See "the help page":http://www.worldviz.com/vizhelp/Applying_automatic_tracking.htm used to create this code)
 
-If you are using a newer version of vizard that has a __createCustomComposite function in viztracker.py, you'll want to create a vizsetupcfg.py file on your desktop that contains the following:
+h3. If you are using a newer version of Vizard that has a __createCustomComposite function in viztracker.py:
+
+You'll want to create a vizsetupcfg.py file on your desktop that contains the following:
 
 {% highlight python %}
 def createCustomComposite(id=0):
@@ -77,3 +81,8 @@ def createCustomComposite(id=0):
 	comp.finishTrackers()
 	return comp
 {% endhighlight %}
+
+h2. Others
+
+If you have used this tracker with another system, we'd be interested in adding instructions to this page!  Please "contact us":{{site.url}}
+
