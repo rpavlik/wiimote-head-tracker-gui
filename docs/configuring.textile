@@ -9,6 +9,6 @@ Most of the time, the only configuration you might need to adjust is the distanc
 
 * Note: If you save a configuration called "default" (with the extension, "default.headtrackconfig") in the "bin" folder alongside the tracker server, it should be loaded automatically at startup.
 
-!images/tracker-config-dialog-win7.jpg!
+!{{site.url}}/images/tracker-config-dialog-win7.jpg!
 
 h1. On to "Running your VR Application...":vr-applications.html

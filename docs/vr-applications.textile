@@ -6,7 +6,9 @@ toc: ["VR Juggler", "Vizard", "Others"]
 ---
 h1. Using With Virtual Reality Applications
 
-The server provides a VRPN7 tracker device, by default named "Tracker0@localhost" from the perspective of a VR application running on the same computer. If you're using any virtual reality framework with support for VRPN (which is most of them), you can use this software to provide head tracking!  Details for using selected VR systems follow.
+No matter what framework you use, before starting your application, you will need to start the tracker server and leave it running while you are using the VR application.
+
+The server provides a VRPN7 tracker device, by default named "Tracker0@localhost" from the perspective of a VR application running on the same computer. If you're using any virtual reality framework with support for VRPN (which is most of them), you can use this software to provide head tracking.  Details for using selected VR systems follow.
 
 h2. VR Juggler <a name="VR Juggler"></a>
 
@@ -84,5 +86,5 @@ def createCustomComposite(id=0):
 
 h2. Others <a name="Others"></a>
 
-If you have used this tracker with another system, we'd be interested in adding instructions to this page!  Please "contact us":{{site.url}}
+If you have used this tracker with another system, we'd be interested in adding instructions to this page!  Please "contact us":{{site.url}} and we'll see what we can do!
 
