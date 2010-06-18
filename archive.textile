@@ -4,8 +4,6 @@ layout: default
 ---
 h1. News Archive
 
-"back home":{{site.url}}
-
 {% for post in site.posts %}
 h2. "{{ post.title }}":{{ post.url }}
 
