@@ -2,7 +2,7 @@
 title: Using With Virtual Reality Applications
 layout: default
 nav: running-apps
-toc: ["VR Juggler", "Vizard"]
+toc: ["VR Juggler", "Vizard", "Others"]
 ---
 h1. Using With Virtual Reality Applications
 
@@ -82,7 +82,7 @@ def createCustomComposite(id=0):
 	return comp
 {% endhighlight %}
 
-h2. Others
+h2. Others <a name="Others"></a>
 
 If you have used this tracker with another system, we'd be interested in adding instructions to this page!  Please "contact us":{{site.url}}
 
