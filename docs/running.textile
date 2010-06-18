@@ -30,15 +30,15 @@ Usually, this process must be completed every time the Wii Remote loses its conn
 
 h3. Open the Bluetooth Devices window.
 
-h4. Click on the arrow by the clock, in Windows 7, to reveal the system tray icons.
+Click on the arrow by the clock, in Windows 7, to reveal the system tray icons.
 
 !{{site.url}}/images/bluetooth-systray-win7.jpg!
 
-h4. Choose "Show Bluetooth Devices."
+Choose "Show Bluetooth Devices."
 
 !{{site.url}}/images/bluetooth-show-bt-devices-win7.jpg!
 
-h4. If your Wii Remote ("Nintendo RVL-CNT-01") is already listed, right-click it and choose "Remove"
+If your Wii Remote ("Nintendo RVL-CNT-01") is already listed, right-click it and choose "Remove"
 
 !{{site.url}}/images/remove-device-win7.jpg!
 
