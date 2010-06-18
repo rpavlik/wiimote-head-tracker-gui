@@ -198,9 +198,10 @@ a:hover {
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
 	height:200px;
-	margin:0 auto;
+	margin-left: 10px;
+	margin-right: 10px;
 	width:800px;
-	padding:0px 10px 0 px;
+
 }
 #footer_inside p {
 	color:#fff;
