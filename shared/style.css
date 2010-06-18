@@ -198,7 +198,8 @@ a:hover {
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
 	height:200px;
-	padding-left: 10px;
+	margin:0 auto;
+	padding-left: 20px;
 	width:800px;
 
 }
