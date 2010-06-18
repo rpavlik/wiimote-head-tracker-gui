@@ -185,7 +185,7 @@ a:hover {
 	background:#323232 url('image/background_footer.jpg') center repeat-y;
 	height:200px;
 	width:100%;
-	text-size:50%;
+	font-size:50%;
 }
 #footer:after {
 	clear:both;
