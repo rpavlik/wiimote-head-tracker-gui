@@ -186,7 +186,6 @@ a:hover {
 	height:200px;
 	width:100%;
 	font-size:80%;
-	margin-left: 10px;
 }
 #footer:after {
 	clear:both;
@@ -199,7 +198,7 @@ a:hover {
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
 	height:200px;
-	margin:0 auto;
+	margin-left: 10px;
 	width:800px;
 
 }
