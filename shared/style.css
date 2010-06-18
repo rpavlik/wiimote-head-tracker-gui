@@ -38,11 +38,12 @@ a:hover {
 	background: #eee;
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
-	font: 110%;
 }
 
 .highlight pre {
 	margin: .5em;
+	
+	font: 110%;
 	line-height: normal;
 }
 
