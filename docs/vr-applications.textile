@@ -42,7 +42,7 @@ then include this code in your application
 {% highlight python %}
 import viztracker
 track = viztracker.add()
-viz.link(track, viz.MainView
+viz.link(track, viz.MainView)
 {% endhighlight %}
 
 (See "the help page":http://www.worldviz.com/vizhelp/Applying_automatic_tracking.htm used to create this code)
