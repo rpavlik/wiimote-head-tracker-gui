@@ -11,7 +11,7 @@ h2. News
 
 h3. {{site.posts.first.title}}
 
-<em>Posted {{ post.date | date_to_string }}</em>
+<em>Posted {{ site.posts.first.date | date_to_string }}</em>
 
 {{ site.posts.first.content }}
 
