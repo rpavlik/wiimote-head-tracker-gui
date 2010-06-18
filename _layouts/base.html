@@ -23,45 +23,35 @@
 			<h1><span>Wiimote</span> Head-Tracking</h1>
 			<ul>
 			
-				<li {% if page.nav == "running-apps" %} class="active" {% endif %}>
-					{% if page.nav != "running-apps" %}
-					<a href="{{site.url}}/docs/vr-applications.html">
-					{% endif %}
+				<!-- TODO: Don't link to the current page - the initial attempt
+					did not succeed because the "active" class is applied to
+					the a tag -->
+				<li>
+					<a href="{{site.url}}/docs/vr-applications.html" {% if page.nav == "configuring" %} class="active" {% endif %}>
 					Running VR Apps
-					{% if page.nav != "running-apps" %}</a>{% endif %}
+					</a>
 				</li>
 					
-				<li {% if page.nav == "configuring" %} class="active" {% endif %}>
-					{% if page.nav != "configuring" %}
-					<a href="{{site.url}}/docs/configuring.html">
-					{% endif %}
+				<li >
+					<a href="{{site.url}}/docs/configuring.html" {% if page.nav == "configuring" %} class="active" {% endif %}>
 					Changing the Config
-					{% if page.nav != "configuring" %}</a>{% endif %}
+					</a>
 				</li>
 				
 								
-				<li {% if page.nav == "running-tracker" %} class="active" {% endif %}>
-					{% if page.nav != "running-tracker" %}
-					<a href="{{site.url}}/docs/running.html">
-					{% endif %}
-					Running the Tracker
-					{% if page.nav != "running-tracker" %}</a>{% endif %}
+				<li>
+					<a href="{{site.url}}/docs/running.html" {% if page.nav == "running-tracker" %} class="active" {% endif %}>
+					Running the Tracker</a>
 				</li>
 				
-				<li {% if page.nav == "installing" %} class="active" {% endif %}>
-					{% if page.nav != "installing" %}
-					<a href="{{site.url}}/docs/install.html">
-					{% endif %}
-					Installation
-					{% if page.nav != "installing" %}</a>{% endif %}
+				<li>
+					<a href="{{site.url}}/docs/install.html" {% if page.nav == "installing" %} class="active" {% endif %}>
+					Installation</a>
 				</li>				
 
-				<li {% if page.nav == "home" %} class="active" {% endif %}>
-					{% if page.nav != "home" %}
-					<a href="{{site.url}}">
-					{% endif %}
-					Home
-					{% if page.nav != "home" %}</a>{% endif %}
+				<li>
+					<a href="{{site.url}}" {% if page.nav == "home" %} class="active" {% endif %}>
+					Home</a>
 				</li>
 
 			</ul>		
