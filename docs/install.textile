@@ -22,4 +22,4 @@ Most users will want the .exe download. It produces Start Menu shortcuts and all
 
 The .zip is a "portable" version - it contains the same files as the installer, but with no install system, so you can run it from a network share or a USB drive.
 
-h2. On to "Running the Tracker":running.html
+h2. On to "Running the Tracker...":running.html

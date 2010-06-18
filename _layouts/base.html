@@ -22,25 +22,48 @@
 		<div id="header_inside">
 			<h1><span>Wiimote</span> Head-Tracking</h1>
 			<ul>
+			
 				<li {% if page.nav == "running-apps" %} class="active" {% endif %}>
 					{% if page.nav != "running-apps" %}
 					<a href="{{site.url}}/docs/vr-applications.html">
 					{% endif %}
 					Running VR Apps
 					{% if page.nav != "running-apps" %}</a>{% endif %}
-					</li>
-				<li><a 
-					{% if page.nav == "configuring" %} class="active" {% endif %}				
-				href="{{site.url}}/docs/configuring.html">Changing the Config.</a></li>
-				<li><a
-					{% if page.nav == "running-tracker" %} class="active" {% endif %}
-				href="{{site.url}}/docs/running.html">Running the Tracker</a></li>
-				<li><a
-					{% if page.nav == "installing" %} class="active" {% endif %}
-				href="{{site.url}}/docs/install.html">Installation</a></li>
-				<li><a
-					{% if page.nav == "home" %} class="active" {% endif %}
-				href="{{site.url}}/index.html">Home</a></li>
+				</li>
+					
+				<li {% if page.nav == "configuring" %} class="active" {% endif %}>
+					{% if page.nav != "configuring" %}
+					<a href="{{site.url}}/docs/configuring.html">
+					{% endif %}
+					Changing the Config.
+					{% if page.nav != "configuring" %}</a>{% endif %}
+				</li>
+				
+								
+				<li {% if page.nav == "running-tracker" %} class="active" {% endif %}>
+					{% if page.nav != "running-tracker" %}
+					<a href="{{site.url}}/docs/running.html">
+					{% endif %}
+					Running the Tracker
+					{% if page.nav != "running-tracker" %}</a>{% endif %}
+				</li>
+				
+				<li {% if page.nav == "installing" %} class="active" {% endif %}>
+					{% if page.nav != "installing" %}
+					<a href="{{site.url}}/docs/install.html">
+					{% endif %}
+					Installation
+					{% if page.nav != "installing" %}</a>{% endif %}
+				</li>				
+
+				<li {% if page.nav == "home" %} class="active" {% endif %}>
+					{% if page.nav != "home" %}
+					<a href="{{site.url}}/docs/index.html">
+					{% endif %}
+					Home
+					{% if page.nav != "home" %}</a>{% endif %}
+				</li>
+
 			</ul>		
 		</div>
 	</div>

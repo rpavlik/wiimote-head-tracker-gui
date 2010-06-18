@@ -72,7 +72,7 @@ Windows 7, Vista, and possibly XP may pop up a dialog box asking for permission 
 
 !{{site.url}}/images/firewall-dialog-win7.jpg!
 
-h2. On to "Changing the Configuration":configuring.html
+h2. On to "Changing the Configuration...":configuring.html
 
 <a name="Troubleshooting on Windows"></a>
 
