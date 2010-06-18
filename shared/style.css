@@ -185,7 +185,7 @@ a:hover {
 	background:#323232 url('image/background_footer.jpg') center repeat-y;
 	height:200px;
 	width:100%;
-	font-size:50%;
+	font-size:80%;
 }
 #footer:after {
 	clear:both;
@@ -200,6 +200,7 @@ a:hover {
 	height:200px;
 	margin:0 auto;
 	width:800px;
+	padding:0px 10px 0 px
 }
 #footer_inside p {
 	color:#fff;
