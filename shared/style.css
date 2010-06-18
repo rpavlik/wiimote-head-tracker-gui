@@ -27,15 +27,17 @@ a:hover {
 	text-decoration:none;
 }
 
-p.citation {
+.citation {
 	width: 60%;
 	margin-left: 20%;
 }
 
 .highlight {
-	width: 80%
-	margin-left: 10%;
-	background: #ddd;
+	width: 60%
+	margin-left: 20%;
+	margin-bottom: 1em;
+	
+	background: #eee;
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
 }
