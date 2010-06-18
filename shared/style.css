@@ -29,7 +29,7 @@ a:hover {
 
 p.citation {
 	width: 60%;
-	padding-left: 20%;
+	margin-left: 20%;
 }
 
 /* header */
@@ -202,10 +202,16 @@ p.citation {
 	border-right:1px solid #bbb;
 	height:170px;
 	margin:0 auto;
-	padding: 0 10% auto;
 	width:800px;
 }
 #footer_inside p {
 	text-align:center;
 	width: 80%;
+	margin-left: 10%;
+}
+#footer_inside p.citation {
+	color: #ccc;
+	width: 50%;
+	margin-left: 25%;
+	text-align: left;
 }
