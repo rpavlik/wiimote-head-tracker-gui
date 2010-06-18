@@ -201,9 +201,11 @@ p.citation {
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
 	height:170px;
-	margin:100px auto;
-	width:600px;
+	margin:0 auto;
+	padding: 0 10% auto;
+	width:800px;
 }
 #footer_inside p {
 	text-align:center;
+	width: 80%;
 }
