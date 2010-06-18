@@ -27,6 +27,11 @@ a:hover {
 	text-decoration:none;
 }
 
+p.citation {
+	width: 60%;
+	padding-left: 20%;
+}
+
 /* header */
 #header {
 	background:#323232 url('image/background_header.jpg') center repeat-y;
@@ -196,10 +201,9 @@ a:hover {
 	border-left:1px solid #bbb;
 	border-right:1px solid #bbb;
 	height:170px;
-	margin:0 auto;
-	width:800px;
+	margin:100px auto;
+	width:600px;
 }
 #footer_inside p {
-	color:#fff;
 	text-align:center;
 }
