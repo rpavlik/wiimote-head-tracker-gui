@@ -14,3 +14,66 @@ If you're using VR Juggler 2.2.x, you can use the jconf files included with the 
 
 h2. Vizard <a name="Vizard"></a>
 
+You will want to configure your view to be connected to a VRPN7 device (whatever you named it, by default "Tracker0@localhost").
+
+Please see the "Vizard documentation":http://www.worldviz.com/vizhelp/View_basics.htm for more information.
+
+Some untested code that might help is below:
+
+To hardcode your app to use Wiimote head tracking:
+
+{% highlight python %}
+PORT_VRPN = 'Tracker0@localhost'
+wiimoteHeadTracker = viz.add('vrpn.dls')
+viz.link(wiimoteHeadTracker.viz.MainView)
+{% endhighlight %}
+
+If you are using "viztracker.py":http://www.worldviz.com/vizhelp/Configuring_viztracker.htm that has an _addTracker() function, you will want to replace the contents of def _addTracker(): with these lines:
+
+{% highlight python %}
+def _addTracker():
+	__main__.PORT_VRPN = 'Tracker0@localhost'
+	vrpn = viz.add('vrpn.dls')
+	yield vrpn
+{% endhighlight %}
+
+then include this code in your application
+
+{% highlight python %}
+import viztracker
+track = viztracker.add()
+viz.link(track, viz.MainView
+{% endhighlight %}
+
+(See "the help page":http://www.worldviz.com/vizhelp/Applying_automatic_tracking.htm used to create this code)
+
+If you are using a newer version of vizard that has a __createCustomComposite function in viztracker.py, you'll want to create a vizsetupcfg.py file on your desktop that contains the following:
+
+{% highlight python %}
+def createCustomComposite(id=0):
+	viz.logNotice('Executing manually defined createCustomComposite() tracker function for Wii Remote Head Tracking')
+
+	vrpn = viz.add('vrpn7.dle')
+
+	# Modify these two lines if needed
+	head = vrpn.addTracker('Tracker0@localhost')
+	wiimoteBaseHeight = 1.8 # Simulated height of the Wiimote, in meters
+
+	# Set up Vizard for full screen mode, only on the first monitor or span
+	viz.setOption ('viz.fullscreen', 1)
+	viz.setOption ('viz.fullscreen.monitor', 1)
+
+	headfinal = viz.addGroup()
+	headlink = viz.link (head, headfinal, enabled=False)
+	import vizact
+	vizact.onupdate (viz.PRIORITY_PLUGINS+1, headlink.update)
+	headlink.postTrans([0,wiimoteBaseHeight,0]) # Apply translation in Y axis
+
+	comp = VU.VUCompositeTrackers()
+	comp.storeTracker(comp.HEAD, headfinal)
+
+	comp.createAvatarNone()
+	comp.defineViewpoint()
+	comp.finishTrackers()
+	return comp
+{% endhighlight %}
