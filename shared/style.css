@@ -48,7 +48,7 @@ a:hover {
 #header_inside h1 {
 	color:#fff;
 	float:left;
-	font:2.8em 'Trebuchet MS', Verdana, sans-serif;
+	font:2.6em 'Trebuchet MS', Verdana, sans-serif;
 	height:100px;
 	line-height:100px;
 	margin:0 0 0 10px;
@@ -83,7 +83,7 @@ a:hover {
 	background:#fff;
 	color:#111;
 }
-#header_inside ul li a.active {
+#header_inside ul li.active {
 	background:#fff;
 	color:#111;
 }

@@ -22,30 +22,24 @@
 		<div id="header_inside">
 			<h1><span>Wiimote</span> Head-Tracking</h1>
 			<ul>
-				<li><a 
-					{% if page.nav == "running-apps" %}
-					class="active"
+				<li {% if page.nav == "running-apps" %} class="active" {% endif %}>
+					{% if page.nav != "running-apps" %}
+					<a href="{{site.url}}/docs/vr-applications.html">
 					{% endif %}
-					href="{{site.url}}/docs/vr-applications.html">Running VR Apps</a></li>
+					Running VR Apps
+					{% if page.nav != "running-apps" %}</a>{% endif %}
+					</li>
 				<li><a 
-					{% if page.nav == "configuring" %}
-					class="active"
-					{% endif %}				
-				href="{{site.url}}/docs/configuring.html">Changing the Configuration</a></li>
+					{% if page.nav == "configuring" %} class="active" {% endif %}				
+				href="{{site.url}}/docs/configuring.html">Changing the Config.</a></li>
 				<li><a
-					{% if page.nav == "running-tracker" %}
-					class="active"
-					{% endif %}
+					{% if page.nav == "running-tracker" %} class="active" {% endif %}
 				href="{{site.url}}/docs/running.html">Running the Tracker</a></li>
 				<li><a
-					{% if page.nav == "installing" %}
-					class="active"
-					{% endif %}
+					{% if page.nav == "installing" %} class="active" {% endif %}
 				href="{{site.url}}/docs/install.html">Installation</a></li>
 				<li><a
-					{% if page.nav == "home" %}
-					class="active"
-					{% endif %}
+					{% if page.nav == "home" %} class="active" {% endif %}
 				href="{{site.url}}/index.html">Home</a></li>
 			</ul>		
 		</div>
@@ -74,11 +68,11 @@
 
 	<div id="footer">
 		<div id="footer_inside">
-			<p>Please acknowledge use of this tracking system in academic papers and publications by citing the following paper:</p>
+			<p>Please acknowledge use of this tracking system in academic papers and publications by citing the following paper:<br/>
 			<blockquote>Pavlik, R.A., and Vance, J.M., 2010, “A Modular Implementation of Wii Remote Head Tracking for Virtual Reality,” ASME Paper No. WINVR2010-3771. Proc. 2010 World Conference on Innovative Virtual Reality.</blockquote>
-			<p>See the <a href="{{site.url}}">home page</a> for more information on attribution.</p>
-			<p>All trademarks are property of their respective owners.</p>
-			<p>Web site template based on a design by <a href="http://www.edg3.co.uk/">edg3.co.uk</a>, used under the <a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5</a> license.</p>
+			<br/>See the <a href="{{site.url}}">home page</a> for more information on attribution.
+			<br/>All trademarks are property of their respective owners.
+			<br/>Web site template based on a design by <a href="http://www.edg3.co.uk/">edg3.co.uk</a>, used under the <a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5</a> license.</p>
 		</div>
 	</div>
 </body>
