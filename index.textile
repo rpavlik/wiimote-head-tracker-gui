@@ -9,16 +9,17 @@ h2.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Down
 
 h2. News
 
-h3. "{{site.posts.first.title}}":{{site.posts.first.url}}
+h3. {{site.posts.first.title}}
+
+<em>Posted {{ site.posts.first.date | date_to_string }}</em>
 
 {{ site.posts.first.content }}
-
 
 "All News":archive.html
 
 h2. Screenshots
 
-There are also screenshots in the "Running on Windows":docs/running.html section that illustrate how to start up the system.
+For more screenshots, see the documentation on installing and using the system.
 
 !images/about-tab-win7.jpg!
 !images/tracker-status-running-win7.jpg!

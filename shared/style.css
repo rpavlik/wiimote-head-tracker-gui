@@ -27,6 +27,11 @@ a:hover {
 	text-decoration:none;
 }
 
+p.citation {
+	width: 60%;
+	margin-left: 20%;
+}
+
 /* header */
 #header {
 	background:#323232 url('image/background_header.jpg') center repeat-y;
@@ -83,7 +88,7 @@ a:hover {
 	background:#fff;
 	color:#111;
 }
-#header_inside ul li.active {
+#header_inside ul li a.active {
 	background:#fff;
 	color:#111;
 }
@@ -165,11 +170,9 @@ a:hover {
 	border-bottom:1px solid #ddd;
 	margin-bottom: .3em;
 }
-
 #content_inside_main h3 {
 	font-size:110%;
 }
-
 #content_inside_main p {
 	padding:0 0 10px;
 }
@@ -199,11 +202,17 @@ a:hover {
 	border-right:1px solid #bbb;
 	height:170px;
 	margin:0 auto;
+	padding-top: 10px;
 	width:800px;
-
 }
 #footer_inside p {
-	color:#fff;
-	line-height:100px;
 	text-align:center;
+	width: 80%;
+	margin-left: 10%;
+}
+#footer_inside p.citation {
+	color: #aaa;
+	width: 50%;
+	margin-left: 25%;
+	text-align: left;
 }
