@@ -32,6 +32,14 @@ p.citation {
 	margin-left: 20%;
 }
 
+.highlight {
+	width: 80%
+	margin-left: 10%;
+	background: #ddd;
+	border-left:1px solid #bbb;
+	border-right:1px solid #bbb;
+}
+
 /* header */
 #header {
 	background:#323232 url('image/background_header.jpg') center repeat-y;
