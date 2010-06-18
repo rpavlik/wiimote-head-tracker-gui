@@ -83,9 +83,14 @@ a:hover {
 	background:#fff;
 	color:#111;
 }
-#header_inside ul li a.active {
+#header_inside ul li.active {
 	background:#fff;
 	color:#111;
+	border-right:1px solid #555;
+	float:right;
+	height:100px;
+	list-style:none;
+	width:75px;
 }
 
 /* content */
@@ -165,11 +170,9 @@ a:hover {
 	border-bottom:1px solid #ddd;
 	margin-bottom: .3em;
 }
-
 #content_inside_main h3 {
 	font-size:110%;
 }
-
 #content_inside_main p {
 	padding:0 0 10px;
 }
