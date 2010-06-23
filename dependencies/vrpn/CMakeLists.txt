@@ -4,7 +4,6 @@
 
 if("${CMAKE_VERSION}" VERSION_LESS 2.8.2)
 	# Buggy tar support doesn't like github tarballs
-	#set(_url http://github.com/downloads/rpavlik/vrpn/vrpn-wiimote-pre2-07.27-wiimote.tar.gz)
 	set(_url http://www.hci.iastate.edu/~rpavlik/downloads/vrpn-wiimote-pre2-07.27-wiimote.tar.gz)
 else()
 	# Do the github dance.

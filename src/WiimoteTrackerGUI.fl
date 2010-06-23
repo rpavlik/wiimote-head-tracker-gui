@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 header_name {.h} 
 code_name {.cpp}
 decl {\#include "WiimoteTrackerView.h"} {global
@@ -267,7 +267,7 @@ widget_class WiimoteTrackerGUI {
       }
       Fl_Group _updateGroup {
         label {Updated every N reports} open selected
-        protected xywh {50 290 420 190} box THIN_DOWN_BOX
+        protected xywh {50 290 420 210} box THIN_DOWN_BOX
       } {
         Fl_Value_Output _rate {
           label {Average Tracker Report Rate (Hz)}
@@ -275,11 +275,15 @@ widget_class WiimoteTrackerGUI {
         }
         Fl_Output _pos {
           label Position
-          protected xywh {215 380 220 30} box ENGRAVED_BOX color 49
+          protected xywh {215 370 220 30} box ENGRAVED_BOX color 49
         }
         Fl_Output _rot {
           label {Rotation (quaternion)}
-          protected xywh {215 410 220 30} box ENGRAVED_BOX color 49
+          protected xywh {215 400 220 30} box ENGRAVED_BOX color 49
+        }
+        Fl_Output _bat {
+          label {Wii Remote Battery Level}
+          protected xywh {215 455 220 30} box ENGRAVED_BOX color 49
         }
       }
       Fl_Group {} {
