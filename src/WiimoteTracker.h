@@ -38,7 +38,7 @@ class vrpn_Tracker_Remote;
 
 class WiimoteTrackerView;
 
-#define REPORT_STRIDE 300
+#define REPORT_STRIDE 30
 
 class WiimoteTracker {
 	public:
