@@ -55,7 +55,7 @@ class WiimoteTrackerView {
 		/// @name System status signals
 		/// @{
 		void setProgress(const StartupStage stg);
-		void setProgress(const TrackerComponent cmp, const float completion, const char * message, bool fail = false);
+		void setProgress(const TrackerComponent cmp, const double completion, const char * message, bool fail = false);
 
 		void systemIsDown();
 		void systemIsUp();

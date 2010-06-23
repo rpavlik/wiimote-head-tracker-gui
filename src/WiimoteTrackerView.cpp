@@ -248,7 +248,7 @@ void WiimoteTrackerView::setProgress(const StartupStage stg) {
 	mainloop_ui(PROGRESS_EVENT_TIMEOUT);
 }
 
-void WiimoteTrackerView::setProgress(const TrackerComponent cmp, const float completion, const char * message, bool fail) {
+void WiimoteTrackerView::setProgress(const TrackerComponent cmp, const double completion, const char * message, bool fail) {
 	Fl_Progress * pbar = NULL;
 	Fl_Button * b = NULL;
 	switch (cmp) {
@@ -373,6 +373,7 @@ void WiimoteTrackerView::openConfig() {
 
 bool WiimoteTrackerView::processView(bool wait) {
 	if (_controller->_newReport) {
+		_gui->_bat->value(_controller->_batLevel.c_str());
 		_gui->_pos->value(_controller->_pos.c_str());
 		_gui->_rot->value(_controller->_rot.c_str());
 		_gui->_rate->value(_controller->_rate);

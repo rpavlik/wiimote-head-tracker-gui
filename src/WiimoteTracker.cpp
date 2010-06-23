@@ -78,6 +78,10 @@ static void	VRPN_CALLBACK handle_pos(void* userdata, const vrpn_TRACKERCB t) {
 		last_display = now;
 	}
 }
+
+static void VRPN_CALLBACK handle_wiimote(void* userdata, const vrpn_ANALOGCB a) {
+	static_cast<WiimoteTracker*>(userdata)->setBattery(a.channel[0]);
+}
 /// @}
 
 WiimoteTracker::WiimoteTracker() :
@@ -86,11 +90,14 @@ WiimoteTracker::WiimoteTracker() :
 		_wiimote(NULL),
 		_tracker(NULL),
 		_client(NULL),
+		_wiimoteClient(NULL),
 		_view(new WiimoteTrackerView(this)),
 		_newReport(true),
 		_pos("Report not yet received."),
 		_rot("Report not yet received."),
-		_rate(0) {
+		_rate(0),
+		_grabBattery(false),
+		_batLevel("Report not yet received.") {
 }
 
 WiimoteTracker::~WiimoteTracker() {
@@ -156,6 +163,7 @@ void WiimoteTracker::stopTrackerSystem() {
 	_pos = " ";
 	_rot = " ";
 	_rate = 0;
+	_batLevel = " ";
 	_newReport = true;
 
 	_view->systemIsDown();
@@ -295,6 +303,16 @@ bool WiimoteTracker::startClientDevice() {
 
 	_client->register_change_handler(this, handle_pos);
 
+	_wiimoteClient = new vrpn_Analog_Remote(WIIMOTE_NAME,
+			_connection);
+
+	if (!_wiimoteClient) {
+		// error condition creating client device
+		_view->setProgress(STG_CLIENT_ALLOCATE_FAILED);
+		return false;
+	}
+	_wiimoteClient->register_change_handler(this, handle_wiimote);
+
 	_view->setProgress(STG_CLIENT_RUNNING);
 	return true;
 }
@@ -340,6 +358,10 @@ void WiimoteTracker::teardownClientDevice() {
 		delete _client;
 		_client = NULL;
 	}
+	if (_wiimoteClient) {
+		delete _wiimoteClient;
+		_wiimoteClient = NULL;
+	}
 }
 
 bool WiimoteTracker::applyNewConfiguration(const TrackerConfiguration & config) {
@@ -373,9 +395,20 @@ bool WiimoteTracker::isSystemRunning() const {
 	return (_connection && _wiimote && _tracker && _client);
 }
 
-void WiimoteTracker::setReport(const std::string & pos, const std::string & rot, const float rate) {
+void WiimoteTracker::setReport(const std::string & pos, const std::string & rot, const double rate) {
 	_pos = pos;
 	_rot = rot;
 	_rate = rate;
 	_newReport = true;
+	_grabBattery = true;
+}
+
+void WiimoteTracker::setBattery(const double batLevel) {
+	if (_grabBattery) {
+		_grabBattery = false;
+		std::ostringstream bat;
+		bat << std::fixed << std::setprecision(1) <<
+			batLevel * 100.0 << "%";
+		_batLevel = bat.str();
+	}
 }

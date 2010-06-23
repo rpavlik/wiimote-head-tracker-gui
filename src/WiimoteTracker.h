@@ -35,6 +35,7 @@ class vrpn_Connection;
 class vrpn_WiiMote;
 class vrpn_Tracker_WiimoteHead;
 class vrpn_Tracker_Remote;
+class vrpn_Analog_Remote;
 
 class WiimoteTrackerView;
 
@@ -71,7 +72,10 @@ class WiimoteTracker {
 		bool applyNewConfiguration(const TrackerConfiguration & config);
 
 		/// @brief Function used by the VRPN callback to store periodic data
-		void setReport(const std::string & pos, const std::string & rot, const float rate);
+		void setReport(const std::string & pos, const std::string & rot, const double rate);
+
+		/// @brief Function used by the VRPN callback to store periodic data
+		void setBattery(const double batLevel);
 
 	protected:
 		/// @name Configuration data
@@ -85,6 +89,7 @@ class WiimoteTracker {
 		vrpn_WiiMote * _wiimote;
 		vrpn_Tracker_WiimoteHead * _tracker;
 		vrpn_Tracker_Remote * _client;
+		vrpn_Analog_Remote * _wiimoteClient;
 		/// @}
 
 		/// @brief Pointer to view
@@ -96,6 +101,9 @@ class WiimoteTracker {
 		std::string _pos;
 		std::string _rot;
 		float _rate;
+
+		bool _grabBattery;
+		std::string _batLevel;
 		/// @}
 
 		/// @todo Remove this once configuration adjustment is improved.
