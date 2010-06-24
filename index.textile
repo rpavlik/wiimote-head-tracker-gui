@@ -28,7 +28,7 @@ h2. Screenshots
 
 For more screenshots, see the documentation on installing and using the system.
 
-!images/tracker-status-running-win7.jpg!
+!images/tracker-status-running-v1.0.2-win7.jpg!
 
 <a name="About and Contact"> </a>
 
