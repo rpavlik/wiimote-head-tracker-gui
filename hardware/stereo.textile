@@ -1,5 +1,6 @@
 ---
 title: IR Modification for Stereo Glasses
+nav: hardware
 layout: hardware
 ---
 

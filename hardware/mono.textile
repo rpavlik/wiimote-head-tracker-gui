@@ -1,5 +1,6 @@
 ---
 title: IR Glasses for Mono Displays
+nav: hardware
 layout: hardware
 ---
 

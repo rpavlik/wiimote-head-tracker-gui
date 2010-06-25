@@ -1,7 +1,7 @@
 ---
 title: Using With Virtual Reality Applications
 layout: docs
-nav: running-apps
+nav: software
 toc: ["VR Juggler", "Vizard", "Others"]
 ---
 h1. Using With Virtual Reality Applications
