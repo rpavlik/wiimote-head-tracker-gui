@@ -56,14 +56,27 @@
 
 	<div id="content">
 		<div id="content_inside">
-			{% if page.toc %}
+			{% if page.sectionNav or page.toc %}
 			<div id="content_inside_sidebar">
+			{% endif %}
+			{% if page.sectionNav %}
+				<h2>In This Section:</h2>
+				<ul>
+					{% for section in page.sectionNav %}
+					<li><a href="{{ site.url }}{{section | last }}">{{section | first}}</a></li>
+					{% endfor %}
+				</ul>
+			
+			{% endif %}
+			{% if page.toc %}
 				<h2>On This Page:</h2>
 				<ul>
 					{% for section in page.toc %}
 					<li><a href="#{{section}}">{{section}}</a></li>
 					{% endfor %}
 				</ul>
+			{% endif %}
+			{% if page.sectionNav or page.toc %}
 			</div>
 			{% endif %}
 

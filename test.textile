@@ -1,0 +1,20 @@
+---
+title: Section nav test
+layout: docs
+---
+
+h2. About
+
+This application builds on the Wii Remote Head Tracking filter module for VRPN(Virtual Reality Peripheral Network) by providing an easy-to-use, fully-integrated tracking server. 
+
+If you cite this work or use this tracking system, we would appreciate hearing from you. You may contact the main developer, Ryan Pavlik (Iowa State University), via his "web site":http://academic.cleardefinition.com/ 
+
+Paper materials and copies of publications may be mailed to:
+
+bq.. Ryan Pavlik
+Virtual Reality Applications Center
+1620 Howe Hall
+Ames, Iowa 50011-2274
+USA
+
+p. Thanks for your interest!
