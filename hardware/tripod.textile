@@ -13,6 +13,7 @@ For this project you&#39;ll need:
 * Adhesive backed Velcro/felt
 * Tripod
 
+
 Start off by cutting a rectangular piece of steel into a piece that is approximately 1.25 inches wide and about 5 inches long. A .25 inch hole now needs to be drilled in the center of this bar to accommodate the mounting bolt. Once this is done the bar can be bent into a right-angled &#39;&#39;U&#39;&#39; shape that is wide enough to accommodate a Wiimote and have a little extra side-to-side clearance.
 
 Insert the bolt through the hole so that it sticks out from the bottom of the &#39;&#39;U&#39;&#39; shape. Attach the coupling nut and tighten. The other end of this nut is what will be used to attach the mount to any 20 tpi tripod.
