@@ -1,0 +1,18 @@
+---
+title: Wii Remote Tripod Mount
+layout: hardware
+---
+
+h2. Wiimote Mount
+
+A tripod mount can be made for convenience and to ensure that that the Wii remote is pointed in the proper direction. 
+For this project you’ll need:
+•	1/8” thick x 1.25” wide steel stock
+•	¼” - 20 x 1” bolt
+•	¼” – 20 x 1” coupling nut
+•	Adhesive backed Velcro/felt
+•	Tripod
+Start off by cutting a rectangular piece of steel into a piece that is approximately 1.25 inches wide and about 5 inches long. A .25 inch hole now needs to be drilled in the center of this bar to accommodate the mounting bolt. Once this is done the bar can be bent into a right-angled “U” shape that is wide enough to accommodate a Wiimote and have a little extra side-to-side clearance.
+Insert the bolt through the hole so that it sticks out from the bottom of the “U” shape. Attach the coupling nut and tighten. The other end of this nut is what will be used to attach the mount to any 20 tpi tripod.
+Felt or Velcro can now be attached to the inside of this mount so as to pad it. If using Velcro, some should also be adhered to the Wiimote so it will stay in place. If felt is used, enough needs to be wrapped around the metal mount so as to create a friction fit with the remote. The metal can also be bent to some degree so as to finely adjust the fit.
+
