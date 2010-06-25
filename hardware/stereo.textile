@@ -14,7 +14,7 @@ If a stereo vision setup is being used then similar IR tracking is still needed 
 
 The process is quite similar to that of the one used for the illuminated safety glasses conversion. Instead of using converted glasses LED key chains are used instead because of their small size and relatively small price. Make sure that the key chains aren&#39;t only push button/pressure activated, but have an on/off switch.
 
-!{{site.url}}/images/ledbefore.jpg! !{{site.url}}/images/ledafter.jpg!
+!{{site.url}}/images/ledbefore.JPG! !{{site.url}}/images/ledafter.JPG!
 
 As with the safety glasses swap, open the housing of the key chain using a jeweler&#39;s screw driver.  Using the original LED cathode as a reference carefully cut the IR LED cathode to the same length. Insert the IR LED into the housing, replace the batteries, and reinsert the screws. Repeat this process one more time so that you have two LED key chains.
 
@@ -22,4 +22,4 @@ To test whether the conversion was successful a cell phone camera can be used. T
 
 The last step of the process is to attach the key chains to the stereo glasses. Simply attach adhesive backed Velcro to the bows of the glasses and the backs of the key chains. Make sure that the switch is facing out so that they can easily be turned on and off. Also, try to place them as far forward on the bows as possible to ensure the maximum field of view.
 
-!{{site.url}}/images/stereoglasses.jpg!
+!{{site.url}}/images/stereoglasses.JPG!
