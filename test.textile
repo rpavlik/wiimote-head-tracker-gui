@@ -1,6 +1,7 @@
 ---
 title: Section nav test
 layout: docs
+toc: ["VR Juggler", "Vizard", "Others"]
 ---
 
 h2. About
