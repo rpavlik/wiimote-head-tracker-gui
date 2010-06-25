@@ -1,6 +1,6 @@
 ---
 title: Using With Virtual Reality Applications
-layout: default
+layout: docs
 nav: running-apps
 toc: ["VR Juggler", "Vizard", "Others"]
 ---

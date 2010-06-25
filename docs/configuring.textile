@@ -1,6 +1,6 @@
 ---
 title: Configuring the Tracking Server
-layout: default
+layout: docs
 nav: configuring
 ---
 h1. Configuring the Tracking Server
