@@ -1,6 +1,5 @@
 ---
 title: Wii Remote Tripod Mount
-nav: hardware
 layout: hardware
 ---
 

@@ -1,7 +1,6 @@
 ---
 title: Running the Tracker
 layout: docs
-nav: software
 toc: ["Running on Linux", "Running on Windows", "Troubleshooting on Windows"]
 ---
 <a name="Linux"></a>

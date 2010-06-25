@@ -1,7 +1,6 @@
 ---
 title: Configuring the Tracking Server
 layout: docs
-nav: software
 ---
 h1. Configuring the Tracking Server
 
