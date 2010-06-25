@@ -3,7 +3,7 @@ title: IR Modification for Stereo Glasses
 layout: hardware
 ---
 
-h2. IR Modification - Stereo Glasses
+h2. IR Modification for Stereo Glasses
 
 If a stereo vision setup is being used then similar IR tracking is still needed for the setup. You will need:
 * 2X LED key chains with an on/off switch

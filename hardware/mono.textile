@@ -3,7 +3,7 @@ title: IR Glasses for Mono Displays
 layout: hardware
 ---
 
-h2. IR Glasses - Mono
+h2. IR Glasses for Mono Displays
 
 To use Wiimote head tracking a simple pair of IR glasses is needed. Any pair of glasses could be used, but in this situation a pair AO Safety Light Vision V2 glasses were chosen because they already have LED&#39;s attached to the sides. A simple LED swap is the only task required for the setup. You will need:
 * Pair of LED illuminated glasses
@@ -17,3 +17,4 @@ Loosen the remaining screw that attached the external switch to the slider mecha
 
 To test whether the conversion was successful a cell phone camera can be used. Turn the switch for the glasses on and look at the LED with the phone&#39;s camera. If the conversion was successful the LED should appear illuminated on the screen of the phone. Likewise, test the LED when the switch is in the off position to ensure that your batteries won&#39;t be wasted while the glasses aren&#39;t in use.
 
+!images/monoglasses.jpg!
