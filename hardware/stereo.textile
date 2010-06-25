@@ -15,7 +15,7 @@ If a stereo vision setup is being used then similar IR tracking is still needed 
 The process is quite similar to that of the one used for the illuminated safety glasses conversion. Instead of using converted glasses LED key chains are used instead because of their small size and relatively small price. Make sure that the key chains aren&#39;t only push button/pressure activated, but have an on/off switch.
 
 |!{{site.url}}/images/ledbefore.JPG!|!{{site.url}}/images/ledafter.JPG!|
-table{=}.
+table{=center}.
 |Before trimming|After trimming|
 
 <br/>
