@@ -17,4 +17,4 @@ Loosen the remaining screw that attached the external switch to the slider mecha
 
 To test whether the conversion was successful a cell phone camera can be used. Turn the switch for the glasses on and look at the LED with the phone&#39;s camera. If the conversion was successful the LED should appear illuminated on the screen of the phone. Likewise, test the LED when the switch is in the off position to ensure that your batteries won&#39;t be wasted while the glasses aren&#39;t in use.
 
-!images/monoglasses.jpg!
+!{{site.url}}/images/monoglasses.jpg!
