@@ -3,4 +3,4 @@ title: Updated public release of tracking server - v1.0.2
 layout: post
 ---
 
-v1.0.2 was released to the public today.  The new version includes a Wii Remote battery life indicatior and refreshes the tracking position coordinates once every half second as opposed to once every five seconds.
+v1.0.2 was released to the public today.  The new version includes a Wii Remote battery life indicator and refreshes the tracking position coordinates once every half second as opposed to once every five seconds.
