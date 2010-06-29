@@ -23,4 +23,3 @@ Insert the bolt through the hole so that it sticks out from the bottom of the &a
 Felt or Velcro can now be attached to the inside of this mount so as to pad it. If using Velcro, some should also be adhered to the Wiimote so it will stay in place. If felt is used, enough needs to be wrapped around the metal mount so as to create a friction fit with the remote. The metal can also be bent to some degree so as to finely adjust the fit.
 
 !{{site.url}}/images/tripod.JPG!
-
