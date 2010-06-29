@@ -74,7 +74,7 @@ pre {
 	height:100px;
 	line-height:100px;
 	margin:0 0 0 10px;
-	width:392px;
+	width:400px;
 }
 #header_inside h1 span {
 	color:#9c0;
@@ -83,14 +83,14 @@ pre {
 	float:right;
 	height:100px;
 	list-style:none;
-	width:388px;
+	width:380px;
 }
 #header_inside ul li {
 	border-right:1px solid #555;
 	float:right;
 	height:100px;
 	list-style:none;
-	width:77px;
+	width:75px;
 }
 #header_inside ul li a {
 	color:#fff;
@@ -99,7 +99,7 @@ pre {
 	line-height:15px;
 	padding:50px 0 0;
 	text-align:center;
-	width:77px;
+	width:75px;
 }
 #header_inside ul li a:hover {
 	background:#fff;
