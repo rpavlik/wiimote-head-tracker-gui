@@ -6,7 +6,7 @@ toc: ["Screenshots", "About and Contact"]
 ---
 h1. Wii Remote Head Tracking Server for Virtual Reality
 
-h2.  <a href="http://github.com/rpavlik/wiimote-head-tracker-gui/downloads">Download</a> and get started now!
+h2.  <a href="{{ site.github-url }}/downloads">Download</a> and get started now!
 
 The links at the top of the site can walk you through the entire process.
 
