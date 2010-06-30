@@ -6,19 +6,19 @@ layout: hardware
 h2. Wii Remote Tripod Mount
 
 A tripod mount can be made for convenience and to ensure that that the Wii remote is pointed in the proper direction. 
-For this project you&apos;ll need:
+For this project you&#39;ll need:
 
-* 1/8&apos;&apos; thick x 1.25&apos;&apos; wide steel stock
-* 1/4&apos;&apos; - 20 x 1&apos;&apos; bolt
-* 1/4&apos;&apos; - 20 x 1&apos;&apos; coupling nut
+* 1/8&#39;&#39; thick x 1.25&#39;&#39; wide steel stock
+* 1/4&#39;&#39; - 20 x 1&#39;&#39; bolt
+* 1/4&#39;&#39; - 20 x 1&#39;&#39; coupling nut
 * Adhesive backed Velcro/felt
 * Tripod
 
-Start off by cutting a rectangular piece of steel into a piece that is approximately 1.25 inches wide and about 5 inches long. A .25 inch hole now needs to be drilled in the center of this bar to accommodate the mounting bolt. Once this is done the bar can be bent into a right-angled &apos;&apos;U&apos;&apos; shape that is wide enough to accommodate a Wiimote and have a little extra side-to-side clearance.
+Start off by cutting a rectangular piece of steel into a piece that is approximately 1.25 inches wide and about 5 inches long. A .25 inch hole now needs to be drilled in the center of this bar to accommodate the mounting bolt. Once this is done the bar can be bent into a right-angled &#39;&#39;U&#39;&#39; shape that is wide enough to accommodate a Wiimote and have a little extra side-to-side clearance.
 
 !{{site.url}}/images/tripodassembly.JPG!
 
-Insert the bolt through the hole so that it sticks out from the bottom of the &apos;&apos;U&apos;&apos; shape. Attach the coupling nut and tighten. The other end of this nut is what will be used to attach the mount to any 20 tpi tripod.
+Insert the bolt through the hole so that it sticks out from the bottom of the &#39;&#39;U&#39;&#39; shape. Attach the coupling nut and tighten. The other end of this nut is what will be used to attach the mount to any 20 tpi tripod.
 
 Felt or Velcro can now be attached to the inside of this mount so as to pad it. If using Velcro, some should also be adhered to the Wiimote so it will stay in place. If felt is used, enough needs to be wrapped around the metal mount so as to create a friction fit with the remote. The metal can also be bent to some degree so as to finely adjust the fit.
 

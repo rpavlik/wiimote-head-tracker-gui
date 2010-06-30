@@ -5,18 +5,18 @@ layout: hardware
 
 h2. IR Glasses for Mono Displays
 
-To use Wiimote head tracking a simple pair of IR glasses is needed. Any pair of glasses could be used, but in this situation a pair of AO Safety Light Vision V2 glasses were chosen because they already have LED&apos;s attached to the sides. A simple LED swap is the only task required for the setup. You will need:
+To use Wiimote head tracking a simple pair of IR glasses is needed. Any pair of glasses could be used, but in this situation a pair of AO Safety Light Vision V2 glasses were chosen because they already have LED&#39;s attached to the sides. A simple LED swap is the only task required for the setup. You will need:
 
 * Pair of LED illuminated glasses
 * 2X Wide angle IR LEDs (940 nm will work the best)
 
 
-Using a jeweler&apos;s screw driver, open the LED housing. Remove the batteries and the LED, being careful not to lose any of the small internal pieces. The stock LED can be used as a guide when trimming the cathode length of the IR LED. It is important to be as exact as possible because if cut too short the cathode will fail to make contact with the battery when the switch is moved. 
+Using a jeweler&#39;s screw driver, open the LED housing. Remove the batteries and the LED, being careful not to lose any of the small internal pieces. The stock LED can be used as a guide when trimming the cathode length of the IR LED. It is important to be as exact as possible because if cut too short the cathode will fail to make contact with the battery when the switch is moved. 
 
 Loosen the remaining screw that attached the external switch to the slider mechanism on the inside. Simply insert the cathode into the slider and place back into the housing while being careful not to bend it. Refasten the slider and switch, put the batteries back in, and put the housing back together. Repeat for the other side. 
 
 *Note-It is not necessary to trim or bend the anode as the stock LED is.
 
-To test whether the conversion was successful a cell phone camera can be used. Turn the switch for the glasses on and look at the LED with the phone&apos;s camera. If the conversion was successful the LED should appear illuminated on the screen of the phone. Likewise, test the LED when the switch is in the off position to ensure that your batteries won&apos;t be wasted while the glasses aren&apos;t in use.
+To test whether the conversion was successful a cell phone camera can be used. Turn the switch for the glasses on and look at the LED with the phone&#39;s camera. If the conversion was successful the LED should appear illuminated on the screen of the phone. Likewise, test the LED when the switch is in the off position to ensure that your batteries won&#39;t be wasted while the glasses aren&#39;t in use.
 
 !{{site.url}}/images/monoglasses.JPG!
