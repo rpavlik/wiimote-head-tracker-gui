@@ -21,14 +21,6 @@ Please see the "Vizard documentation":http://www.worldviz.com/vizhelp/View_basic
 
 Some untested code that might help is below:
 
-h3. To hardcode your app to use Wiimote head tracking:
-
-{% highlight python %}
-PORT_VRPN = 'Tracker0@localhost'
-wiimoteHeadTracker = viz.add('vrpn.dls')
-viz.link(wiimoteHeadTracker.viz.MainView)
-{% endhighlight %}
-
 h3. If you are using "viztracker.py":http://www.worldviz.com/vizhelp/Configuring_viztracker.htm that has an _addTracker() function:
 
 You will want to replace the contents of def _addTracker(): with these lines:
