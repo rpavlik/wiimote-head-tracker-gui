@@ -65,15 +65,15 @@ Function {closeStartupWindow(void* userdata)} {private return_type void
 p->cleanAndClose();} {}
 } 
 
-widget_class WiimoteTrackerConfigGUI {
-  xywh {1252 338 420 160} type Double align 80 hide
-  class Fl_Window modal
+widget_class WiimoteTrackerConfigGUI {open
+  xywh {1252 338 420 160} type Double align 80
+  class Fl_Window modal visible
 } {
   Fl_Value_Input _ledDistance {
     label {Distance between LEDs (cm)}
     callback {_apply->activate();
-_save->deactivate();}
-    protected xywh {280 35 60 25} maximum 50 step 0.1 value 14.5
+_save->deactivate();} selected
+    protected xywh {280 35 60 25} maximum 50 step 0.1 value 20.5
   }
   Fl_Input _trackerName {
     label {Tracker Device Name}
@@ -221,7 +221,7 @@ hide();} {}
 
 widget_class WiimoteTrackerGUI {
   label {Wii Remote Head Tracker}
-  callback {quitApp();} open
+  callback {quitApp();}
   xywh {519 293 520 560} type Double align 80
   class Fl_Window visible
 } {
@@ -266,7 +266,7 @@ widget_class WiimoteTrackerGUI {
         protected xywh {200 60 120 50} type Normal selection_color 63 labeltype ENGRAVED_LABEL align 176 deactivate
       }
       Fl_Group _updateGroup {
-        label {Updated every N reports} open selected
+        label {Updated every N reports} open
         protected xywh {50 290 420 210} box THIN_DOWN_BOX
       } {
         Fl_Value_Output _rate {

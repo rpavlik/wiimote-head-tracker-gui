@@ -33,7 +33,7 @@
 
 class TrackerConfiguration {
 	public:
-		TrackerConfiguration(const float ledDistance = .145, const std::string & trackerName = "Tracker0");
+		TrackerConfiguration(const float ledDistance = .205, const std::string & trackerName = "Tracker0");
 
 		const float getLEDDistance() const;
 		const std::string & getTrackerName() const;
