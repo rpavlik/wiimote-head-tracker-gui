@@ -2,15 +2,16 @@
 # http://academic.cleardefinition.com/
 # Iowa State University HCI Graduate Program/VRAC
 
-if("${CMAKE_VERSION}" VERSION_LESS 2.8.2)
+#if("${CMAKE_VERSION}" VERSION_LESS 2.8.2)
 	# Buggy tar support doesn't like github tarballs
 	set(_url http://www.hci.iastate.edu/~rpavlik/downloads/vrpn-wiimote-pre2-07.27-wiimote.tar.gz)
-else()
+#else()
 	# Do the github dance.
-	include(DownloadFollowing302)
-	download_following_302("${CMAKE_CURRENT_BINARY_DIR}/vrpn-wiimote.tar.gz" http://github.com/rpavlik/vrpn/tarball/wii-head-tracker)
-	set(_url "${CMAKE_CURRENT_BINARY_DIR}/vrpn-wiimote.tar.gz")
-endif()
+	#include(DownloadFollowing302)
+	#download_following_302("${CMAKE_CURRENT_BINARY_DIR}/vrpn-wiimote.tar.gz" http://github.com/rpavlik/vrpn/tarball/wii-head-tracker)
+	#set(_url "${CMAKE_CURRENT_BINARY_DIR}/vrpn-wiimote.tar.gz")
+#	set(_url http://github.com/rpavlik/vrpn/tarball/wii-head-tracker)
+#endif()
 
 # Disable everything except just what we need
 set(_args)
