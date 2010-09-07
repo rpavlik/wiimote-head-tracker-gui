@@ -3,6 +3,7 @@
 #  VRJUGGLER22_INCLUDE_DIRS, include search paths
 #  VRJUGGLER22_LIBRARIES, the libraries to link against
 #  VRJUGGLER22_ENVIRONMENT
+#  VRJUGGLER22_RUNTIME_LIBRARY_DIRS
 #  VRJUGGLER22_CXX_FLAGS
 #  VRJUGGLER22_DEFINITIONS
 #  VRJUGGLER22_FOUND, If false, do not try to use VR Juggler 2.2.
@@ -123,15 +124,25 @@ if(VRJUGGLER22_COMPONENTS_FOUND)
 endif()
 
 if(CMAKE_SIZEOF_VOID_P MATCHES "8")
-	set(_VRJ_LIBSUFFIXES /lib64 /lib)
+	set(_VRJ_LIBSUFFIXES lib64 lib)
 	set(_VRJ_LIBDSUFFIXES
-		/lib64/x86_64/debug
-		/lib64
-		/lib/x86_64/debug
-		/lib)
+		debug
+		lib64/x86_64/debug
+		lib64/debug
+		lib64
+		lib/x86_64/debug
+		lib/debug
+		lib)
+	set(_VRJ_LIBDSUFFIXES_ONLY
+		debug
+		lib64/x86_64/debug
+		lib64/debug
+		lib/x86_64/debug
+		lib/debug)
 else()
-	set(_VRJ_LIBSUFFIXES /lib)
-	set(_VRJ_LIBDSUFFIXES /lib/i686/debug /lib)
+	set(_VRJ_LIBSUFFIXES lib)
+	set(_VRJ_LIBDSUFFIXES debug lib/i686/debug lib/debug lib)
+	set(_VRJ_LIBDSUFFIXES_ONLY debug lib/i686/debug lib/debug)
 endif()
 
 if(NOT VRJuggler22_FIND_QUIETLY
@@ -197,17 +208,17 @@ if(VRJUGGLER22_FOUND)
 		list(APPEND _vjbase "${_abspath}")
 	endforeach()
 
-	#foreach(_inc ${VRJUGGLER22_INCLUDE_DIRS})
-	#	get_filename_component(_abspath "${_inc}/.." ABSOLUTE)
-	#	list(APPEND _vjbase "${_abspath}")
-	#endforeach()
-
 	clean_directory_list(_vjbase)
 
+	set(_vrj22_have_base_dir NO)
 	list(LENGTH _vjbase _vjbaselen)
 	if("${_vjbaselen}" EQUAL 1 AND NOT VRJUGGLER22_VJ_BASE_DIR)
 		list(GET _vjbase 0 VRJUGGLER22_VJ_BASE_DIR)
 		mark_as_advanced(VRJUGGLER22_VJ_BASE_DIR)
+		if(NOT VRJUGGLER22_VJ_BASE_DIR STREQUAL _vrj22_base_dir)
+			unset(VRJUGGLER22_VJ_CFG_DIR)
+		endif()
+		set(_vrj22_have_base_dir YES)
 	else()
 		list(GET _vjbase 0 _calculated_base_dir)
 		if(NOT
@@ -217,8 +228,27 @@ if(VRJUGGLER22_FOUND)
 			message("It looks like you might be mixing VR Juggler versions... ${_vjbaselen} ${_vjbase}")
 			message("If you are, fix your libraries then remove the VRJUGGLER22_VJ_BASE_DIR variable in CMake, then configure again")
 			message("If you aren't, set the VRJUGGLER22_VJ_BASE_DIR variable to the desired VJ_BASE_DIR to use when running")
+		else()
+			if(NOT VRJUGGLER22_VJ_BASE_DIR STREQUAL _vrj22_base_dir)
+				unset(VRJUGGLER22_VJ_CFG_DIR)
+			endif()
+			set(_vrj22_have_base_dir YES)
 		endif()
 	endif()
+	
+	set(_vrj22_base_dir "${VRJUGGLER22_VJ_BASE_DIR}")
+	set(_vrj22_base_dir "${_vrj22_base_dir}" CACHE INTERNAL "" FORCE)
+	
+	if(_vrj22_have_base_dir)
+		file(GLOB _poss_dirs ${VRJUGGLER22_VJ_BASE_DIR}/share/vrjuggler*/data/configFiles)
+		find_path(VRJUGGLER22_VJ_CFG_DIR
+			standalone.jconf
+			PATHS
+			${_poss_dirs}
+			NO_DEFAULT_PATH)
+		mark_as_advanced(VRJUGGLER22_VJ_CFG_DIR)
+	endif()
+		
 	set(VRJUGGLER22_VJ_BASE_DIR
 		"${VRJUGGLER22_VJ_BASE_DIR}"
 		CACHE
@@ -229,15 +259,26 @@ if(VRJUGGLER22_FOUND)
 		"VJ_BASE_DIR=${VRJUGGLER22_VJ_BASE_DIR}"
 		"JCCL_BASE_DIR=${VRJUGGLER22_VJ_BASE_DIR}"
 		"SONIX_BASE_DIR=${VRJUGGLER22_VJ_BASE_DIR}"
-		"TWEEK_BASE_DIR=${VRJUGGLER22_VJ_BASE_DIR}")
+		"TWEEK_BASE_DIR=${VRJUGGLER22_VJ_BASE_DIR}"
+		"VJ_CFG_DIR=${VRJUGGLER22_VJ_CFG_DIR}")
 
+    include(GetDirectoryList)
+    
+    get_directory_list(VRJUGGLER22_RUNTIME_LIBRARY_DIRS ${VRJUGGLER22_LIBRARIES})
+    
 	if(MSVC)
 		# Needed to make linking against boost work with 2.2.1 binaries - rp20091022
 		# BOOST_ALL_DYN_LINK
-		set(VRJUGGLER22_DEFINITIONS "-DBOOST_ALL_DYN_LINK")
+		set(VRJUGGLER22_DEFINITIONS "-DBOOST_ALL_DYN_LINK" "-DCPPDOM_DYN_LINK" "-DCPPDOM_AUTO_LINK")
 
 		# Disable these annoying warnings
-		set(VRJUGGLER22_CXX_FLAGS "/wd4275 /wd4251 /wd4127 /wd4100 /wd4512")
+		# 4275: non dll-interface class used as base for dll-interface class
+		# 4251: needs to have dll-interface to be used by clients of class
+		# 4100: unused parameter
+		# 4512: assignment operator could not be generated
+		# 4127: (Not currently disabled) conditional expression in loop evaluates to constant
+		
+		set(VRJUGGLER22_CXX_FLAGS "/wd4275 /wd4251 /wd4100 /wd4512")
 	elseif(CMAKE_COMPILER_IS_GNUCXX)
 		# Silence annoying warnings about deprecated hash_map.
 		set(VRJUGGLER22_CXX_FLAGS "-Wno-deprecated")
@@ -248,7 +289,7 @@ if(VRJUGGLER22_FOUND)
 		"${VRJUGGLER22_CXX_FLAGS} ${CPPDOM_CXX_FLAGS}")
 
 	set(VRJUGGLER22_DEFINITIONS
-		"${VRJUGGLER22_DEFINITIONS} -DJUGGLER_DEBUG")
+		"${VRJUGGLER22_DEFINITIONS}" "-DJUGGLER_DEBUG")
 
 	set(_VRJUGGLER22_SEARCH_COMPONENTS
 		"${VRJUGGLER22_REQUESTED_COMPONENTS}"
