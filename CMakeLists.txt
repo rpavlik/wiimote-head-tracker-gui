@@ -130,11 +130,11 @@ set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}-src
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/all_licenses_for_installer.txt")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
 set(CPACK_PACKAGE_EXECUTABLES wiimoteheadtracker "Wii Remote Head Tracker")
-SET(CPACK_NSIS_MENU_LINKS
+set(CPACK_NSIS_MENU_LINKS
     "jconfs/README-jconf.txt" "jconf README"
 	"jconfs/" "jconf folder"
     "doc/README.txt" "README"
-	"http://www.github.com/rpavlik/wiimote-head-tracker-gui/" "Project homepage"
+	"http://rpavlik.github.com/wiimote-head-tracker-gui/" "Project homepage"
 	"http://academic.cleardefinition.com/" "Creator's homepage"
 	"http://www.vrac.iastate.edu/" "Iowa State University Virtual Reality Applications Center")
 
