@@ -41,6 +41,13 @@ For updates:
 
 	git subtree pull --squash --prefix=cmake git://github.com/rpavlik/cmake-modules.git master
 
+If you use some other version control, you can export a copy of this directory
+without the git metadata by calling:
+
+    ./export-to-directory.sh yourprojectdir/cmake
+
+You might also consider exporting to a temp directory and merging changes, since
+this will not overwrite by default.  You can pass -f to overwrite existing files.
 
 How to Use
 ----------
@@ -65,15 +72,15 @@ The modules that I wrote myself are all subject to this license:
 >
 > Distributed under the Boost Software License, Version 1.0.
 >
->    (See accompanying file `LICENSE_1_0.txt` or copy at
->          <http://www.boost.org/LICENSE_1_0.txt>)
+> (See accompanying file `LICENSE_1_0.txt` or copy at
+> <http://www.boost.org/LICENSE_1_0.txt>)
 
 Modules based on those included with CMake are under the OSI-approved
 BSD license, which is included in each of those modules.  A few other modules
 are modified from other sources - when in doubt, look at the .cmake.
 
-Important License Note
-----------------------
+Important License Note!
+-----------------------
 
 If you find this file inside of another project, rather at the top-level
 directory, you're in a separate project that is making use of these modules.
