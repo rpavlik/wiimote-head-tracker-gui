@@ -18,7 +18,7 @@ Quickie Command Line Instructions:
 ----------------------------------
 You may have to adapt these to your circumstances - they are an example only.
 
-git clone https://rpavlik@github.com/rpavlik/wiimote-head-tracker-gui.git
+git clone https://github.com/rpavlik/wiimote-head-tracker-gui.git
 cd wiimote-head-tracker-gui
 mkdir build
 mkdir deps-build
@@ -34,7 +34,8 @@ then to run:
 
 ~/wiimoteheadtracker/bin/wiimoteheadtracker
 
-Ubuntu Linux:
+Dependencies:
 -------------
-To install some dependencies:
-sudo aptitude install fluid libfltk1.1-dev
+It can build most of the dependencies automatically: so you just need a standard
+compiler setup, cmake, and optionally git (if you don't download a tarball).
+
