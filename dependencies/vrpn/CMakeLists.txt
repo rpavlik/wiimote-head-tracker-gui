@@ -4,7 +4,7 @@
 
 #if("${CMAKE_VERSION}" VERSION_LESS 2.8.2)
 	# Buggy tar support doesn't like github tarballs
-	set(_url http://www.hci.iastate.edu/~rpavlik/downloads/vrpn-wiimote-pre2-07.27-wiimote.tar.gz)
+	set(_url http://www.hci.iastate.edu/~rpavlik/downloads/vrpn/rpavlik-vrpn-wmhtgui-initial-requirements-280-g1c9ddf7.tar.gz)
 #else()
 	# Do the github dance.
 	#include(DownloadFollowing302)
@@ -55,7 +55,7 @@ ExternalProject_Add(vrpn
 		"-DWIIUSE_LIBRARY=${WIIUSE_LIBRARY}"
 		"-DWIIUSE_RUNTIME_LIBRARY=${WIIUSE_RUNTIME_LIBRARY}"
 		"-DWIIUSE_INCLUDE_DIR=${WIIUSE_INCLUDE_DIR}"
-		<SOURCE_DIR>/vrpn
+		<SOURCE_DIR>
 	INSTALL_DIR ${DEPENDENCY_INSTALL_DIR}
 )
 
