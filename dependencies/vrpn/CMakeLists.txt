@@ -4,7 +4,7 @@
 
 #if("${CMAKE_VERSION}" VERSION_LESS 2.8.2)
 	# Buggy tar support doesn't like github tarballs
-	set(_url http://www.hci.iastate.edu/~rpavlik/downloads/vrpn/rpavlik-vrpn-wmhtgui-initial-requirements-280-g1c9ddf7.tar.gz)
+	set(_url http://www.hci.iastate.edu/~rpavlik/downloads/vrpn/rpavlik-vrpn-wmhtgui-initial-requirements-283-g40d4af0.tar.gz)
 #else()
 	# Do the github dance.
 	#include(DownloadFollowing302)
