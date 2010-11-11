@@ -4,7 +4,7 @@
 
 if(WIN32)
 	ExternalProject_Add(wiiuse
-		URL http://www.hci.iastate.edu/~rpavlik/downloads/wiiuse/wiiuse_v0.12_win.tar.gz
+		URL http://www.hci.iastate.edu/~rpavlik/downloads/wiiuse/WiiUse-0.13.0-vs9.tar.gz
 		CONFIGURE_COMMAND ""
 		BUILD_COMMAND ""
 		INSTALL_DIR "${DEPENDENCY_INSTALL_DIR}"
@@ -25,21 +25,21 @@ if(WIN32)
 	
 	ExternalProject_Add_Step(wiiuse install_header
 		COMMAND "${CMAKE_COMMAND}"
-			-E copy "<SOURCE_DIR>/wiiuse.h" "<INSTALL_DIR>/include/"
+			-E copy_directory "<SOURCE_DIR>/include" "<INSTALL_DIR>/include/"
 		DEPENDEES build mkdir_header
 		DEPENDERS install
 		WORKING_DIRECTORY <BINARY_DIR>)
 
 	ExternalProject_Add_Step(wiiuse install_lib
 		COMMAND ${CMAKE_COMMAND}
-			-E copy "<SOURCE_DIR>/wiiuse.lib" "<INSTALL_DIR>/lib/"	
+			-E copy "<SOURCE_DIR>/lib/wiiuse.lib" "<INSTALL_DIR>/lib/"	
 		DEPENDEES build mkdir_lib
 		DEPENDERS install
 		WORKING_DIRECTORY <BINARY_DIR>)
 	
 	ExternalProject_Add_Step(wiiuse install_dll
 		COMMAND ${CMAKE_COMMAND}
-			-E copy "<SOURCE_DIR>/wiiuse.dll" "<INSTALL_DIR>/bin/"	
+			-E copy "<SOURCE_DIR>/bin/wiiuse.dll" "<INSTALL_DIR>/bin/"	
 		DEPENDEES build mkdir_dll
 		DEPENDERS install
 		WORKING_DIRECTORY <BINARY_DIR>)
@@ -49,49 +49,13 @@ if(WIN32)
 	set(WIIUSE_LIBRARIES "${WIIUSE_LIBRARY}" PARENT_SCOPE)
 	set(WIIUSE_RUNTIME_LIBRARY "${DEPENDENCY_INSTALL_DIR}/bin/wiiuse.dll" PARENT_SCOPE)
 	set(WIIUSE_INCLUDE_DIR "${DEPENDENCY_INSTALL_DIR}/include" PARENT_SCOPE)
-else()
-	execute_process(COMMAND sh -c
-		"${CMAKE_C_COMPILER} -v 2>&1|grep ^Target:|cut -d' ' -f2"
-		OUTPUT_VARIABLE _platformString
-		OUTPUT_STRIP_TRAILING_WHITESPACE)
-	set(_objdir release-${_platformString})
-	
-	set(PATCHARGS)
-	if(NOT APPLE)
-		# See if we need the patch
-		include(CheckStructHasMember)
-		check_struct_has_member(sockaddr_l2 l2_cid <bluetooth/l2cap.h> SOCKADDRL2_HAS_L2CID)
-		if(SOCKADDRL2_HAS_L2CID)
-			set(PATCHARGS PATCH_COMMAND patch
-			-p0
-			-i ${CMAKE_CURRENT_SOURCE_DIR}/fix-wiiuse-kernel-2.6.30.diff)
-		endif()
-	endif()
-	
+else()	
 	ExternalProject_Add(wiiuse
-		URL http://iweb.dl.sourceforge.net/project/wiiuse/wiiuse/v0.12/wiiuse_v0.12_src.tar.gz
-		CONFIGURE_COMMAND ""
-		${PATCHARGS}
-		BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} wiiuse
-		BUILD_IN_SOURCE 1
+		URL http://www.hci.iastate.edu/~rpavlik/downloads/wiiuse/wiiuse-0.13.tar.gz
+		CMAKE_COMMAND "${CMAKE_COMMAND}" <SOURCE_DIR> -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DBUILD_EXAMPLE=NO -DBUILD_EXAMPLE_SDL=NO -DINSTALL_EXAMPLES=NO -DCMAKE_BUILD_TYPE=Release
 		INSTALL_DIR ${DEPENDENCY_INSTALL_DIR}
-		INSTALL_COMMAND ""	
 	)
 
-	ExternalProject_Add_Step(wiiuse install_header
-		COMMAND "${CMAKE_COMMAND}"
-			-E copy "<SOURCE_DIR>/src/wiiuse.h" "<INSTALL_DIR>/include/"
-		DEPENDEES build
-		DEPENDERS install
-		WORKING_DIRECTORY <BINARY_DIR>)
-
-	ExternalProject_Add_Step(wiiuse install_lib
-		COMMAND ${CMAKE_COMMAND}
-			-E copy "<SOURCE_DIR>/src/${_objdir}/libwiiuse.so" "<INSTALL_DIR>/lib/"	
-		DEPENDEES build
-		DEPENDERS install
-		WORKING_DIRECTORY <BINARY_DIR>)
-		
 	set(WIIUSE_ROOT_DIR "${DEPENDENCY_INSTALL_DIR}" PARENT_SCOPE)
 	set(WIIUSE_LIBRARY "${DEPENDENCY_INSTALL_DIR}/lib/libwiiuse.so" PARENT_SCOPE)
 	set(WIIUSE_LIBRARIES "${WIIUSE_LIBRARY}" PARENT_SCOPE)
