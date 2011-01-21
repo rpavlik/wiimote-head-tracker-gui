@@ -20,10 +20,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 set(WIISCAAT_ROOT_DIR
 	"${WIISCAAT_ROOT_DIR}"
@@ -71,7 +71,9 @@ find_package_handle_standard_args(WiiSCAAT
 	TOONTAG_FOUND)
 
 if(WIISCAAT_FOUND)
-	set(WIISCAAT_INCLUDE_DIRS "${WIISCAAT_INCLUDE_DIR}" ${TOONTAG_INCLUDE_DIRS})
+	set(WIISCAAT_INCLUDE_DIRS
+		"${WIISCAAT_INCLUDE_DIR}"
+		${TOONTAG_INCLUDE_DIRS})
 	set(WIISCAAT_LIBRARIES "${WIISCAAT_LIBRARY}" ${TOONTAG_LIBRARIES})
 	mark_as_advanced(WIISCAAT_ROOT_DIR)
 endif()

@@ -23,10 +23,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 file(TO_CMAKE_PATH "${CPPCHECK_ROOT_DIR}" CPPCHECK_ROOT_DIR)
 set(CPPCHECK_ROOT_DIR
@@ -97,7 +97,8 @@ if(CPPCHECK_EXECUTABLE)
 			set(CPPCHECK_FAIL_REGULAR_EXPRESSION " error: ")
 			set(CPPCHECK_WARN_REGULAR_EXPRESSION " style: ")
 		else()
-			message(STATUS "Warning: FindCppcheck doesn't know how to format error messages for your compiler!")
+			message(STATUS
+				"Warning: FindCppcheck doesn't know how to format error messages for your compiler!")
 			set(CPPCHECK_TEMPLATE_ARG --template gcc)
 			set(CPPCHECK_FAIL_REGULAR_EXPRESSION " error: ")
 			set(CPPCHECK_WARN_REGULAR_EXPRESSION " style: ")

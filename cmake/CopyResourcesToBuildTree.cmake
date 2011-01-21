@@ -9,10 +9,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 if(__copy_resources_to_build_tree)
 	return()
@@ -23,7 +23,8 @@ function(copy_resources_to_build_tree _target)
 	get_target_property(_resources ${_target} RESOURCE)
 	if(NOT _resources)
 		# Bail if no resources
-		message(STATUS "Told to copy resources for target ${_target}, but "
+		message(STATUS
+			"Told to copy resources for target ${_target}, but "
 			"no resources are set!")
 		return()
 	endif()

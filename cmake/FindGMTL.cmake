@@ -28,10 +28,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 set(_HUMAN "GMTL")
 set(_HEADER gmtl/gmtl.h)
@@ -50,10 +50,10 @@ set(GMTL_VERSIONS
 	0.5.1)
 set(GMTL_DIRS)
 foreach(_version ${GMTL_VERSIONS})
-    check_version(_ver_ok GMTL ${_version})
-    if(_ver_ok)
-    	list(APPEND GMTL_DIRS gmtl-${_version})
-    	list(APPEND GMTL_HEADER_DIRS include/gmtl-${_version})
+	check_version(_ver_ok GMTL ${_version})
+	if(_ver_ok)
+		list(APPEND GMTL_DIRS gmtl-${_version})
+		list(APPEND GMTL_HEADER_DIRS include/gmtl-${_version})
 	endif()
 endforeach()
 

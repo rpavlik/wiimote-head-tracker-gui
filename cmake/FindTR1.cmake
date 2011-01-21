@@ -15,10 +15,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 # If we were sought quietly, any dependencies should be quiet as well
 if(TR1_FIND_QUIETLY)
@@ -56,7 +56,11 @@ if(WIN32)
 		set(PLATFORM "Visual Studio older than Visual Studio 2008")
 		list(APPEND _check Boost_FOUND)
 		find_package(Boost COMPONENTS math_c99 math_tr1 ${_findflags})
-		list(APPEND TR1_INCLUDE_DIRS "${Boost_INCLUDE_DIR}/boost/tr1/tr1" "${Boost_INCLUDE_DIR}/boost/tr1" "${Boost_INCLUDE_DIR}")
+		list(APPEND
+			TR1_INCLUDE_DIRS
+			"${Boost_INCLUDE_DIR}/boost/tr1/tr1"
+			"${Boost_INCLUDE_DIR}/boost/tr1"
+			"${Boost_INCLUDE_DIR}")
 		list(APPEND TR1_LIBRARY_DIRS ${Boost_LIBRARY_DIRS})
 	endif()
 else()
