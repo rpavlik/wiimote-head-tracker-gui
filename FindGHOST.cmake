@@ -12,10 +12,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 set(GHOST_ROOT_DIR
 	"${GHOST_ROOT_DIR}"
@@ -74,7 +74,9 @@ find_package_handle_standard_args(GHOST
 
 if(GHOST_FOUND)
 	set(GHOST_LIBRARIES "${GHOST_LIBRARY}")
-	set(GHOST_INCLUDE_DIRS "${GHOST_STL_INCLUDE_DIR}" "${GHOST_INCLUDE_DIR}")
+	set(GHOST_INCLUDE_DIRS
+		"${GHOST_STL_INCLUDE_DIR}"
+		"${GHOST_INCLUDE_DIR}")
 
 	mark_as_advanced(GHOST_ROOT_DIR)
 endif()

@@ -34,10 +34,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 if(__create_launchers)
 	return()
@@ -82,8 +82,17 @@ macro(_launcher_system_settings)
 		set(_pathdelim ":")
 		set(USERFILE_PLATFORM ${CMAKE_SYSTEM_NAME}${BITS})
 		set(_suffix "sh")
+		find_package(GDB QUIET)
+		if(GDB_FOUND)
+			set(LAUNCHERS_GOT_GDB YES)
+			if(GDB_HAS_RETURN_CHILD_RESULT)
+				set(LAUNCHERS_GDB_ARG --return-child-result)
+			endif()				
+		else()
+			set(LAUNCHERS_GOT_GDB)
+		endif()
 	endif()
-	
+
 	if(WIN32 AND NOT USERFILE_REMOTE_MACHINE)
 		site_name(USERFILE_REMOTE_MACHINE)
 		mark_as_advanced(USERFILE_REMOTE_MACHINE)
@@ -116,7 +125,8 @@ macro(_launcher_process_args)
 	endforeach()
 
 	if(_nowhere)
-		message(FATAL_ERROR "Syntax error in use of a function in CreateLaunchers!")
+		message(FATAL_ERROR
+			"Syntax error in use of a function in CreateLaunchers!")
 	endif()
 
 	# Turn into a list of native paths
@@ -125,11 +135,11 @@ macro(_launcher_process_args)
 		file(TO_NATIVE_PATH "${_dlldir}" _path)
 		set(_runtime_lib_dirs "${_runtime_lib_dirs}${_path}${_pathdelim}")
 	endforeach()
-	
+
 	if(NOT WORKING_DIRECTORY)
 		set(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 	endif()
-	
+
 	if(FORWARD_ARGS)
 		if(WIN32)
 			set(FWD_ARGS %*)
@@ -139,11 +149,11 @@ macro(_launcher_process_args)
 	else()
 		set(FWD_ARGS)
 	endif()
-	
+
 	set(USERFILE_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
 	set(USERFILE_COMMAND_ARGUMENTS "${ARGS}")
 	set(LAUNCHERSCRIPT_COMMAND_ARGUMENTS "${ARGS} ${FWD_ARGS}")
-	
+
 	if(WIN32)
 		set(RUNTIME_LIBRARIES_ENVIRONMENT "PATH=${_runtime_lib_dirs};%PATH%")
 		file(READ
@@ -151,9 +161,11 @@ macro(_launcher_process_args)
 			_cmdenv)
 	else()
 		if(APPLE)
-			set(RUNTIME_LIBRARIES_ENVIRONMENT "DYLD_LIBRARY_PATH=${_runtime_lib_dirs}:$DYLD_LIBRARY_PATH")
+			set(RUNTIME_LIBRARIES_ENVIRONMENT
+				"DYLD_LIBRARY_PATH=${_runtime_lib_dirs}:$DYLD_LIBRARY_PATH")
 		else()
-			set(RUNTIME_LIBRARIES_ENVIRONMENT "LD_LIBRARY_PATH=${_runtime_lib_dirs}:$LD_LIBRARY_PATH")
+			set(RUNTIME_LIBRARIES_ENVIRONMENT
+				"LD_LIBRARY_PATH=${_runtime_lib_dirs}:$LD_LIBRARY_PATH")
 		endif()
 		file(READ
 			"${_launchermoddir}/launcher.env.sh.in"
@@ -228,32 +240,33 @@ endmacro()
 function(create_default_target_launcher _targetname)
 	_launcher_system_settings()
 	_launcher_process_args(${ARGN})
-	
+
 	set(VCPROJNAME "${CMAKE_BINARY_DIR}/ALL_BUILD")
 	_launcher_produce_vcproj_user()
-	
+
 	set(VCPROJNAME "${CMAKE_CURRENT_BINARY_DIR}/${_targetname}")
 	_launcher_produce_vcproj_user()
-	
-	_launcher_create_target_launcher()	
+
+	_launcher_create_target_launcher()
 endfunction()
 
 function(create_target_launcher _targetname)
 	_launcher_system_settings()
 	_launcher_process_args(${ARGN})
-	
+
 	set(VCPROJNAME "${CMAKE_CURRENT_BINARY_DIR}/${_targetname}")
 	_launcher_produce_vcproj_user()
-	
-	_launcher_create_target_launcher()	
+
+	_launcher_create_target_launcher()
 endfunction()
 
 function(create_generic_launcher _launchername)
 	_launcher_system_settings()
 	_launcher_process_args(${ARGN})
-	
+
 	if(NOT IS_ABSOLUTE _launchername)
-		set(_launchername "${CMAKE_CURRENT_BINARY_DIR}/${_launchername}.${_suffix}")
+		set(_launchername
+			"${CMAKE_CURRENT_BINARY_DIR}/${_launchername}.${_suffix}")
 	else()
 		set(_launchername "${_launchername}.${_suffix}")
 	endif()
@@ -263,9 +276,9 @@ function(create_generic_launcher _launchername)
 	else()
 		set(GENERIC_LAUNCHER_COMMAND sh "${_launchername}" PARENT_SCOPE)
 		set(GENERIC_LAUNCHER_FAIL_REGULAR_EXPRESSION
-		    "Program terminated with signal")
+			"Program terminated with signal")
 	endif()
-	
+
 	configure_file("${_launchermoddir}/genericlauncher.${_suffix}.in"
 		"${_launchername}"
 		@ONLY)
