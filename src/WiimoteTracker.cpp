@@ -238,7 +238,7 @@ bool WiimoteTracker::startWiimoteDevice() {
 	}
 
 	_view->setProgress(STG_WIIMOTE_STARTING);
-	_wiimote = new vrpn_WiiMote(WIIMOTE_NAME, _connection, 0);
+	_wiimote = new vrpn_WiiMote(WIIMOTE_NAME, _connection, 0, 1, 1, 1);
 
 	if (!_wiimote) {
 		// error condition creating wiimote
