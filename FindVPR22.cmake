@@ -40,8 +40,8 @@
 # Brandon Newendorp <brandon@newendorp.com>
 
 set(_HUMAN "VPR 2.2")
-set(_RELEASE_NAMES vpr-2_2 libvpr-2_2)
-set(_DEBUG_NAMES vpr_d-2_2 libvpr_d-2_2)
+set(_RELEASE_NAMES vpr-2_2 libvpr-2_2 vpr-2_2_0)
+set(_DEBUG_NAMES vpr_d-2_2 libvpr_d-2_2 vpr_d-2_2_0)
 set(_DIR vpr-2.2)
 set(_HEADER vpr/vpr.h)
 set(_FP_PKG_NAME vpr)
@@ -128,7 +128,9 @@ if((NOT Boost_FOUND)
 	OR (NOT Boost_FILESYSTEM_FOUND)
 	OR (NOT Boost_SIGNALS_FOUND)
 	OR (NOT Boost_SYSTEM_FOUND)
-	OR (NOT Boost_PROGRAM_OPTIONS_FOUND))
+	OR (NOT Boost_PROGRAM_OPTIONS_FOUND)
+	OR (NOT Boost_DATE_TIME_FOUND)
+	OR (NOT Boost_REGEX_FOUND))
 	if(VPR22_LIBRARY_RELEASE)
 		# Find Boost in the same place as VPR
 		get_filename_component(VPR22_LIBRARY_DIR
@@ -143,7 +145,9 @@ if((NOT Boost_FOUND)
 			filesystem
 			system
 			signals
-			program_options)
+			program_options
+			date_time
+			regex)
 
 		mark_as_advanced(Boost_LIB_DIAGNOSTIC_DEFINITIONS)
 
@@ -156,7 +160,9 @@ list(APPEND
 	${Boost_FILESYSTEM_LIBRARY}
 	${Boost_SYSTEM_LIBRARY}
 	${Boost_SIGNALS_LIBRARY}
-	${Boost_PROGRAM_OPTIONS_LIBRARY})
+	${Boost_PROGRAM_OPTIONS_LIBRARY}
+	${Boost_DATE_TIME_LIBRARY}
+	${Boost_REGEX_LIBRARY})
 list(APPEND _deps_includes ${Boost_INCLUDE_DIRS})
 list(APPEND
 	_deps_check
@@ -164,6 +170,8 @@ list(APPEND
 	Boost_SYSTEM_LIBRARY
 	Boost_SIGNALS_LIBRARY
 	Boost_PROGRAM_OPTIONS_LIBRARY
+	Boost_DATE_TIME_LIBRARY
+	Boost_REGEX_LIBRARY
 	Boost_INCLUDE_DIRS)
 
 if(NOT CPPDOM_FOUND)
