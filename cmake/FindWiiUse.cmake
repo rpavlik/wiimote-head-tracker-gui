@@ -19,10 +19,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 set(WIIUSE_ROOT_DIR
 	"${WIIUSE_ROOT_DIR}"
@@ -74,6 +74,8 @@ if(WIN32)
 		PATH)
 	list(APPEND _deps_check WIIUSE_RUNTIME_LIBRARY)
 else()
+	set(WIIUSE_RUNTIME_LIBRARY "${WIIUSE_LIBRARY}")
+	set(WIIUSE_RUNTIME_LIBRARIES "${WIIUSE_RUNTIME_LIBRARY}")
 	get_filename_component(WIIUSE_RUNTIME_LIBRARY_DIRS
 		"${WIIUSE_LIBRARY}"
 		PATH)

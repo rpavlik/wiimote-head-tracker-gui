@@ -20,7 +20,7 @@
 #    [RUNTIME_LIBRARY_DIRS <dir...>]
 #    [WORKING_DIRECTORY <dir>]
 #    [ENVIRONMENT <VAR=value> [<VAR=value>...]])
-#    - sets GENERIC_LAUNCHER_COMMAND amd GENERIC_LAUNCHER_FAIL_REGULAR_EXPRESSION
+#    - sets GENERIC_LAUNCHER_COMMAND and GENERIC_LAUNCHER_FAIL_REGULAR_EXPRESSION
 #
 # Requires these CMake modules:
 #  ListFilter
@@ -34,10 +34,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 if(__create_launchers)
 	return()
@@ -64,24 +64,43 @@ macro(_launcher_system_settings)
 		# Find user and system name
 		set(SYSTEM_NAME $ENV{USERDOMAIN})
 		set(USER_NAME $ENV{USERNAME})
-
-		if(MSVC100)
+		set(VCPROJ_TYPE vcproj)
+		set(USERFILE_EXTENSION ${SYSTEM_NAME}.${USER_NAME}.user)
+		set(LAUNCHER_LINESEP "&#x0A;")
+		if(MSVC10)
+			set(LAUNCHER_LINESEP "\n")
 			set(USERFILE_VC_VERSION 10.00)
+			set(USERFILE_EXTENSION user)
+			set(VCPROJ_TYPE vcxproj)
 		elseif(MSVC90)
 			set(USERFILE_VC_VERSION 9.00)
 		elseif(MSVC80)
 			set(USERFILE_VC_VERSION 8.00)
 		elseif(MSVC71)
 			set(USERFILE_VC_VERSION 7.10)
+		elseif(MSVC)
+			message(STATUS "MSVC but unrecognized version!")
 		endif()
-
-		set(USERFILE_PLATFORM Win${BITS})
+		if(BITS EQUAL 64)
+			set(USERFILE_PLATFORM x64)
+		else()
+			set(USERFILE_PLATFORM Win${BITS})
+		endif()
 		set(_pathdelim ";")
 		set(_suffix "cmd")
 	else()
 		set(_pathdelim ":")
 		set(USERFILE_PLATFORM ${CMAKE_SYSTEM_NAME}${BITS})
 		set(_suffix "sh")
+		find_package(GDB QUIET)
+		if(GDB_FOUND)
+			set(LAUNCHERS_GOT_GDB YES)
+			if(GDB_HAS_RETURN_CHILD_RESULT)
+				set(LAUNCHERS_GDB_ARG --return-child-result)
+			endif()				
+		else()
+			set(LAUNCHERS_GOT_GDB)
+		endif()
 	endif()
 
 	if(WIN32 AND NOT USERFILE_REMOTE_MACHINE)
@@ -167,7 +186,7 @@ macro(_launcher_process_args)
 	set(USERFILE_ENV_COMMANDS)
 	foreach(_arg "${RUNTIME_LIBRARIES_ENVIRONMENT}" ${ENVIRONMENT})
 		string(CONFIGURE
-			"@USERFILE_ENVIRONMENT@&#x0A;@_arg@"
+			"@USERFILE_ENVIRONMENT@@LAUNCHER_LINESEP@@_arg@"
 			USERFILE_ENVIRONMENT
 			@ONLY)
 		string(CONFIGURE
@@ -180,7 +199,7 @@ endmacro()
 macro(_launcher_produce_vcproj_user)
 	if(MSVC)
 		file(READ
-			"${_launchermoddir}/perconfig.vcproj.user.in"
+			"${_launchermoddir}/perconfig.${VCPROJ_TYPE}.user.in"
 			_perconfig)
 		set(USERFILE_CONFIGSECTIONS)
 		foreach(USERFILE_CONFIGNAME ${CMAKE_CONFIGURATION_TYPES})
@@ -198,8 +217,8 @@ macro(_launcher_produce_vcproj_user)
 		endforeach()
 
 
-		configure_file("${_launchermoddir}/vcproj.user.in"
-			${VCPROJNAME}.vcproj.${SYSTEM_NAME}.${USER_NAME}.user
+		configure_file("${_launchermoddir}/${VCPROJ_TYPE}.user.in"
+			${VCPROJNAME}.${VCPROJ_TYPE}.${USERFILE_EXTENSION}
 			@ONLY)
 	endif()
 
@@ -209,7 +228,12 @@ macro(_launcher_create_target_launcher)
 	if(CMAKE_CONFIGURATION_TYPES)
 		# Multi-config generator - multiple launchers
 		foreach(_config ${CMAKE_CONFIGURATION_TYPES})
-			set(USERFILE_COMMAND "${USERFILE_${_config}_COMMAND}")
+			get_target_property(USERFILE_${_config}_COMMAND
+				${_targetname}
+				LOCATION_${_config})
+			file(TO_NATIVE_PATH
+				"${USERFILE_${_config}_COMMAND}"
+				USERFILE_COMMAND)
 			configure_file("${_launchermoddir}/targetlauncher.${_suffix}.in"
 				"${CMAKE_CURRENT_BINARY_DIR}/launch-${_targetname}-${_config}.${_suffix}"
 				@ONLY)
@@ -233,9 +257,6 @@ function(create_default_target_launcher _targetname)
 	_launcher_process_args(${ARGN})
 
 	set(VCPROJNAME "${CMAKE_BINARY_DIR}/ALL_BUILD")
-	_launcher_produce_vcproj_user()
-
-	set(VCPROJNAME "${CMAKE_CURRENT_BINARY_DIR}/${_targetname}")
 	_launcher_produce_vcproj_user()
 
 	_launcher_create_target_launcher()

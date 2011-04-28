@@ -20,10 +20,10 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 if(NOT WIN32)
 	find_package_handle_standard_args(WinHID
@@ -78,7 +78,10 @@ find_path(WINHID_INCLUDE_DIR
 	PATHS
 	"${WINHID_ROOT_DIR}"
 	PATH_SUFFIXES
-	inc/api)
+	inc/api
+	inc/w2k
+	inc/wxp
+	inc/wnet)
 
 find_path(WINHID_CRT_INCLUDE_DIR # otherwise you get weird compile errors
 	NAMES

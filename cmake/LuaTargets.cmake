@@ -1,4 +1,4 @@
-# - Copy lua source files as a custom target
+# - Copy/parse lua source files as a custom target
 #
 #  include(LuaTargets)
 #  add_lua_target(<target_name> <directory to copy to> [<luafile> <luafile>])
@@ -7,6 +7,8 @@
 #
 #  install_lua_target(<target_name> [arguments to INSTALL(PROGRAMS ...) ])
 #
+# Set this variable to specify location of luac, if it is not a target:
+#  LUA_TARGET_LUAC_EXECUTABLE
 #
 # Requires CMake 2.6 or newer (uses the 'function' command)
 #
@@ -15,74 +17,86 @@
 # http://academic.cleardefinition.com
 # Iowa State University HCI Graduate Program/VRAC
 #
-#          Copyright Iowa State University 2009-2010
+# Copyright Iowa State University 2009-2010.
 # Distributed under the Boost Software License, Version 1.0.
-#    (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 
 if(__add_lua)
 	return()
 endif()
 set(__add_lua YES)
 
-define_property(TARGET
-	PROPERTY
-	LUA_TARGET
-	BRIEF_DOCS
-	"Lua target"
-	FULL_DOCS
-	"Is this a Lua target created by add_lua_target?")
+include(FileCopyTargets)
 
 function(add_lua_target _target _dest)
+
 	if(NOT ARGN)
 		message(WARNING
-			"In add_lua_target call for target ${_target}, no Lua files were specified!")
+			"In add_lua_target call for target ${_target}, no source files were specified!")
 		return()
 	endif()
+
+	if(NOT LUA_TARGET_LUAC_EXECUTABLE)
+		if(TARGET luac)
+			set(LUA_TARGET_LUAC_EXECUTABLE luac)
+		else()
+			find_program(LUA_TARGET_LUAC_EXECUTABLE
+				NAMES
+				luac)
+		endif()
+	endif()
+
+	if(NOT LUA_TARGET_LUAC_EXECUTABLE)
+		message(FATAL_ERROR "Can't find luac: please give LUA_TARGET_LUAC_EXECUTABLE a useful value - currently ${LUA_TARGET_LUAC_EXECUTABLE}")
+	endif()
+	mark_as_advanced(LUA_TARGET_LUAC_EXECUTABLE)
 
 	set(ALLFILES)
-	foreach(luafile ${ARGN})
-		if(IS_ABSOLUTE "${luafile}")
-			set(luapath "${luafile}")
-			get_filename_component(luafile "${luafile}" NAME)
+	set(SOURCES)
+	foreach(fn ${ARGN})
+		# Produce an absolute path to the input file
+		if(IS_ABSOLUTE "${fn}")
+			get_filename_component(fullpath "${fn}" ABSOLUTE)
+			get_filename_component(fn "${fn}" NAME)
 		else()
-			set(luapath "${CMAKE_CURRENT_SOURCE_DIR}/${luafile}")
+			get_filename_component(fullpath "${CMAKE_CURRENT_SOURCE_DIR}/${fn}" ABSOLUTE)
 		endif()
-		add_custom_command(OUTPUT "${_dest}/${luafile}"
-				COMMAND
-				${CMAKE_COMMAND}
-				ARGS -E make_directory "${_dest}"
-				COMMAND
-				${CMAKE_COMMAND}
-				ARGS -E copy "${luapath}" "${_dest}"
-				WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-				DEPENDS "${luapath}"
-				COMMENT "Copying ${luapath} to ${_dest}/${luafile}")
-		list(APPEND ALLFILES "${_dest}/${luafile}")
+
+		# Clean up output file name
+		get_filename_component(absout "${_dest}/${fn}" ABSOLUTE)
+
+		add_custom_command(OUTPUT "${absout}"
+			COMMAND
+			${CMAKE_COMMAND}
+			ARGS -E make_directory "${_dest}"
+			COMMAND
+			${CMAKE_COMMAND}
+			ARGS -E copy "${fullpath}" "${_dest}"
+			COMMAND
+			"${LUA_TARGET_LUAC_EXECUTABLE}"
+			ARGS -p "${fullpath}"
+			MAIN_DEPENDENCY "${fullpath}"
+			VERBATIM
+			COMMENT "Copying ${fn} to ${absout} and parsing...")
+		list(APPEND SOURCES "${fullpath}")
+		list(APPEND ALLFILES "${absout}")
 	endforeach()
 
-	# Custom target depending on all the lua file commands
+	# Custom target depending on all the file copy commands
 	add_custom_target(${_target}
-		SOURCES ${ARGN}
+		SOURCES ${SOURCES}
 		DEPENDS ${ALLFILES})
-
-	set_property(TARGET ${_target} PROPERTY LUA_TARGET YES)
-endfunction()
-
-function(install_lua_target _target)
-	get_target_property(_isLua ${_target} LUA_TARGET)
-	if(NOT _isLua)
-		message(WARNING
-			"install_lua_target called on a target not created with add_lua_target!")
-		return()
+	if(TARGET "${LUA_TARGET_LUAC_EXECUTABLE}")
+		get_property(_luac_imported TARGET "${LUA_TARGET_LUAC_EXECUTABLE}" PROPERTY IMPORTED)
+		if(NOT _luac_imported)
+			add_dependencies(${_target} ${LUA_TARGET_LUAC_EXECUTABLE})
+		endif()
 	endif()
 
-	# Get sources
-	get_target_property(_srcs ${_target} SOURCES)
+	set_property(TARGET ${_target} PROPERTY FILE_COPY_TARGET YES)
+endfunction()
 
-	# Remove the "fake" file forcing build
-	list(REMOVE_AT _srcs 0)
-
-	# Forward the call to install
-	install(PROGRAMS ${_srcs} ${ARGN})
+function(install_lua_target)
+	install_file_copy_target(${ARGN})
 endfunction()

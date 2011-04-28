@@ -39,8 +39,8 @@
 const int	CONNECTION_PORT = vrpn_DEFAULT_LISTEN_PORT_NO;  // Port for connection to listen on
 const int	TRACKER_FREQUENCY = 60;
 
-const char * WIIMOTE_NAME = "WiimoteForHead";
-const char * WIIMOTE_REMOTE_NAME = "*WiimoteForHead";
+const char * WIIMOTE_NAME = "WiiMote0";
+const char * WIIMOTE_REMOTE_NAME = "*WiiMote0";
 
 /// @name VRPN utility function and callback
 /// @{
@@ -238,7 +238,7 @@ bool WiimoteTracker::startWiimoteDevice() {
 	}
 
 	_view->setProgress(STG_WIIMOTE_STARTING);
-	_wiimote = new vrpn_WiiMote(WIIMOTE_NAME, _connection, 0);
+	_wiimote = new vrpn_WiiMote(WIIMOTE_NAME, _connection, 0, 1, 1, 1);
 
 	if (!_wiimote) {
 		// error condition creating wiimote
