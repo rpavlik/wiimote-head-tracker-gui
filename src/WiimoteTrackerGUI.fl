@@ -17,6 +17,9 @@ decl {\#include <string>} {global
 decl {\#include <iostream>} {global
 } 
 
+decl {\#include "launchByAssociation.h"} {global
+} 
+
 decl {\#undef VERBOSE} {global
 } 
 
@@ -250,7 +253,7 @@ widget_class WiimoteTrackerGUI {
     xywh {10 30 500 520}
   } {
     Fl_Group {} {
-      label {Tracker Status} open
+      label {Tracker Status} open selected
       xywh {10 50 500 490}
     } {
       Fl_Light_Button _trackerButton {
@@ -304,13 +307,13 @@ widget_class WiimoteTrackerGUI {
         }
         Fl_Slider _sensitivity {
           label {Camera Sensitivity}
-          callback {_tracker->setSensitivity(o->value());} selected
+          callback {_tracker->setSensitivity(o->value());}
           protected xywh {244 225 150 30} type Horizontal align 4 minimum 1 maximum 5 step 1 value 3 deactivate
         }
       }
     }
     Fl_Group {} {
-      label About
+      label About open
       xywh {10 50 500 500} hide
     } {
       Fl_Box {} {
@@ -323,50 +326,50 @@ widget_class WiimoteTrackerGUI {
       }
       Fl_Group {} {
         label {Original Author: Ryan Pavlik} open
-        xywh {20 120 480 105} box EMBOSSED_BOX labelfont 1 align 17
+        xywh {20 152 480 90} box EMBOSSED_BOX labelfont 1 align 17
       } {
         Fl_Box {} {
           label {<rpavlik@@iastate.edu> <abiryan@@ryand.net> http://academic.cleardefinition.com}
-          xywh {20 154 480 29} labelsize 12 align 128
+          xywh {20 174 480 29} labelsize 12 align 128
         }
         Fl_Box {} {
           label {Developed at the Virtual Reality Applications Center at Iowa State University}
-          xywh {20 186 480 14} labelsize 12 align 128
+          xywh {20 205 480 14} labelsize 12 align 128
         }
         Fl_Box {} {
           label {Funded by NSF Award CMMI-0928774}
-          xywh {20 204 480 16} labelsize 12 align 128
+          xywh {20 221 480 16} labelsize 12 align 128
         }
       }
       Fl_Group {} {
         label {Compiled Against} open
-        xywh {20 300 480 80} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
+        xywh {20 317 480 80} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
       } {
         Fl_Box _vrpnVer {
           label {vrpn: ver. XX.XX}
-          xywh {30 322 460 20} labelsize 12 align 128
+          xywh {30 339 460 20} labelsize 12 align 128
         }
         Fl_Box _wiiuseVer {
           label {WiiUse version X.XX}
-          xywh {30 342 460 18} labelsize 12 align 128
+          xywh {30 359 460 18} labelsize 12 align 128
         }
         Fl_Box _fltkVer {
           label {FLTK version X.XX}
-          xywh {30 358 460 22} labelsize 12 align 128
+          xywh {30 375 460 22} labelsize 12 align 128
         }
       }
       Fl_Group {} {
         label {Academic Citation} open
-        xywh {20 225 480 75} box EMBOSSED_BOX labelfont 1 align 17
+        xywh {20 242 480 75} box EMBOSSED_BOX labelfont 1 align 17
       } {
         Fl_Box {} {
           label {Pavlik, R.A., and Vance, J.M., 2010, "A Modular Implementation of Wii Remote Head Tracking for Virtual Reality," ASME Paper No. WINVR2010-3771. Proc. 2010 World Conference on Innovative Virtual Reality.}
-          xywh {30 245 460 50} labelsize 12 align 128
+          xywh {30 262 460 50} labelsize 12 align 128
         }
       }
       Fl_Group {} {
         label {Copyright and Licenses} open
-        xywh {20 380 480 160} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
+        xywh {20 397 480 140} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
       } {
         Fl_Button {} {
           label {Show Copyright and License Details}
@@ -375,16 +378,21 @@ widget_class WiimoteTrackerGUI {
         }
         Fl_Box {} {
           label {Based in part on the work of the FLTK project (http://www.fltk.org).}
-          xywh {40 412 440 18} labelsize 10 align 128
+          xywh {40 418 440 18} labelsize 10 align 128
         }
         Fl_Box {} {
           label {Based in part on Fl_Native_File_Chooser (http://seriss.com/people/erco/fltk/Fl_Native_File_Chooser/).}
-          xywh {40 428 440 32} labelsize 10 align 128
+          xywh {40 436 440 32} labelsize 10 align 128
         }
         Fl_Box {} {
-          label {Based in part on the work of the WiiUse project (http://wiiuse.net/).}
-          xywh {40 462 440 18} labelsize 10 align 128
+          label {Based in part on the WiiUse project (http://github.com/rpavlik/wiiuse http://wiiuse.net/).}
+          xywh {40 471 440 18} labelsize 10 align 128
         }
+      }
+      Fl_Button {} {
+        label {http://rpavlik.github.com/wiimote-head-tracker-gui/}
+        callback {util::launchByAssociation("http://rpavlik.github.com/wiimote-head-tracker-gui/");}
+        xywh {20 120 480 30} labelsize 12 labelcolor 4
       }
     }
   }
