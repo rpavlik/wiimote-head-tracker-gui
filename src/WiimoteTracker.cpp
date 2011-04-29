@@ -98,7 +98,7 @@ WiimoteTracker::WiimoteTracker() :
 		_rot("Report not yet received."),
 		_rate(0),
 		_grabBattery(false),
-		_batLevel("Report not yet received.") {
+		_batLevel(""),
 		_supportsSensitivity(false) {
 }
 
@@ -247,12 +247,12 @@ bool WiimoteTracker::startWiimoteDevice() {
 		_view->setProgress(STG_WIIMOTE_ALLOCATE_FAILED);
 		return false;
 	}
-
+/*
 	if (!_wiimote->isValid()) {
 		_view->setProgress(STG_WIIMOTE_CONNECT_FAILED);
 		return false;
 	}
-
+*/
 	_view->setProgress(STG_WIIMOTE_RUNNING);
 	return true;
 }
@@ -400,6 +400,15 @@ bool WiimoteTracker::isSystemRunning() const {
 	std::cout << "In " << __FILE__ << ":" << __LINE__ << "  " << __FUNCTION__ << std::endl;
 #endif
 	return (_connection && _wiimote && _tracker && _client);
+}
+
+bool WiimoteTracker::isWiimoteConnected() {
+	if (_wiimote && _wiimote->isValid()) {
+		return true;
+	} else {
+		_batLevel.clear();
+		return false;
+	}
 }
 
 void WiimoteTracker::setReport(const std::string & pos, const std::string & rot, const double rate) {

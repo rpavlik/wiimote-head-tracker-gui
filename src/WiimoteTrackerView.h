@@ -89,6 +89,9 @@ class WiimoteTrackerView {
 
 		/// Controller pointer
 		WiimoteTracker * _controller;
+
+		/// What we think is the latest connection status
+		bool _wmConnected;
 };
 
 #endif // _WIIMOTETRACKERVIEW_H

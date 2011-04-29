@@ -41,13 +41,13 @@ Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {retu
 _view = view;} {}
 } 
 
-Function {refresh_ui()} {return_type bool
+Function {refresh_ui()} {open return_type bool
 } {
   code {Fl::flush();} {}
   code {return (Fl::check() != 0);} {}
 } 
 
-Function {mainloop_ui(const float timeout = 0.0)} {return_type bool
+Function {mainloop_ui(const float timeout = 0.0)} {open return_type bool
 } {
   code {return (Fl::wait(timeout) >= 0) && (Fl::first_window() != NULL);} {}
 } 
@@ -65,14 +65,14 @@ Function {closeStartupWindow(void* userdata)} {private return_type void
 p->cleanAndClose();} {}
 } 
 
-widget_class WiimoteTrackerConfigGUI {open
-  xywh {1252 338 420 160} type Double align 80
+widget_class WiimoteTrackerConfigGUI {
+  xywh {859 338 420 160} type Double align 80
   class Fl_Window modal visible
 } {
   Fl_Value_Input _ledDistance {
     label {Distance between LEDs (cm)}
     callback {_apply->activate();
-_save->deactivate();} selected
+_save->deactivate();}
     protected xywh {280 35 60 25} maximum 50 step 0.1 value 20.5
   }
   Fl_Input _trackerName {
@@ -221,8 +221,8 @@ hide();} {}
 
 widget_class WiimoteTrackerGUI {
   label {Wii Remote Head Tracker}
-  callback {quitApp();}
-  xywh {519 293 520 560} type Double align 80
+  callback {quitApp();} open
+  xywh {142 199 520 560} type Double align 80
   class Fl_Window visible
 } {
   decl {SoftwareVersions _vers;} {protected
@@ -267,7 +267,7 @@ widget_class WiimoteTrackerGUI {
       }
       Fl_Group _updateGroup {
         label {Updated every N reports} open
-        protected xywh {50 290 420 210} box THIN_DOWN_BOX
+        protected xywh {50 300 420 230} box THIN_DOWN_BOX
       } {
         Fl_Value_Output _rate {
           label {Average Tracker Report Rate (Hz)}
@@ -283,25 +283,34 @@ widget_class WiimoteTrackerGUI {
         }
         Fl_Output _bat {
           label {Wii Remote Battery Level}
-          protected xywh {215 455 220 30} box ENGRAVED_BOX color 49
+          protected xywh {270 485 165 30} box ENGRAVED_BOX color 49
+        }
+        Fl_Output _status {
+          label {Wii Remote Status}
+          protected xywh {270 450 165 30} box ENGRAVED_BOX color 49
         }
       }
       Fl_Group {} {
         label {Configuration Parameters} open
-        xywh {50 145 420 105} box THIN_DOWN_BOX
+        xywh {50 145 420 125} box THIN_DOWN_BOX
       } {
         Fl_Output _trackerName {
           label {Tracker Name}
-          protected xywh {245 160 170 30} box ENGRAVED_BOX color 49
+          protected xywh {245 156 170 30} box ENGRAVED_BOX color 49
         }
         Fl_Value_Output _ledDistance {
           label {LED Distance (cm)}
-          protected xywh {245 195 80 30} box ENGRAVED_BOX
+          protected xywh {245 191 80 30} box ENGRAVED_BOX
+        }
+        Fl_Slider _sensitivity {
+          label {Camera Sensitivity}
+          callback {_tracker->setSensitivity(o->value());} selected
+          protected xywh {244 225 150 30} type Horizontal align 4 minimum 1 maximum 5 step 1 value 3 deactivate
         }
       }
     }
     Fl_Group {} {
-      label About open
+      label About
       xywh {10 50 500 500} hide
     } {
       Fl_Box {} {
@@ -379,12 +388,12 @@ widget_class WiimoteTrackerGUI {
       }
     }
   }
-  Function {setWorking()} {return_type void
+  Function {setWorking()} {open return_type void
   } {
     code {_trackerButton->copy_label("Please wait...");
 _trackerButton->deactivate();} {}
   }
-  Function {setStatus(bool started)} {return_type void
+  Function {setStatus(bool started)} {open return_type void
   } {
     code {if (started) {
 	_trackerButton->label("@-5square    Stop Tracker");
@@ -392,10 +401,12 @@ _trackerButton->deactivate();} {}
 } else {
 	_trackerButton->label("@>    Start Tracker");
 	_trackerButton->value(0);
+	_sensitivity->deactivate();
+	_status->value("");
 }
 _trackerButton->activate();} {}
   }
-  Function {updateVersions()} {return_type void
+  Function {updateVersions()} {open return_type void
   } {
     code {_appVer->label(_vers._appVer.c_str());
 _vrpnVer->label(_vers._vrpnVer.c_str());
@@ -485,9 +496,26 @@ _fltkVer->label(_vers._fltkVer.c_str());} {}
     code {_licenses->show();
 refresh_ui();} {}
   }
-  Function {reconfigure()} {return_type void
+  Function {reconfigure()} {open return_type void
   } {
     code {_view->reconfigure();} {}
   }
   decl {friend class WiimoteTrackerView;} {}
+  Function {enableSensitivity()} {open return_type void
+  } {
+    code {_sensitivity->activate();
+_tracker->setSensitivity(_sensitivity->value());} {}
+  }
+  Function {updateWiimoteStatus(bool wmConnected)} {open return_type void
+  } {
+    code {if (wmConnected) {
+	_status->value("Connected");
+	if (_tracker->supportsSensitivityChange()) {
+		enableSensitivity();
+	}
+} else {
+	_status->value("Trying to connect...");
+	_bat->value("");
+}} {}
+  }
 } 

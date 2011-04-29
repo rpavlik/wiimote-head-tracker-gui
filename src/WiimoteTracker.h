@@ -69,6 +69,8 @@ class WiimoteTracker {
 
 		bool isSystemRunning() const;
 
+		bool isWiimoteConnected();
+
 		bool loadDefaultConfigFile();
 		bool applyNewConfiguration(const TrackerConfiguration & config);
 
