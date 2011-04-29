@@ -2,16 +2,7 @@
 # http://academic.cleardefinition.com/
 # Iowa State University HCI Graduate Program/VRAC
 
-#if("${CMAKE_VERSION}" VERSION_LESS 2.8.2)
-	# Buggy tar support doesn't like github tarballs
-	set(_url http://www.hci.iastate.edu/~rpavlik/downloads/vrpn/rpavlik-vrpn-wmhtgui-initial-requirements-283-g40d4af0.tar.gz)
-#else()
-	# Do the github dance.
-	#include(DownloadFollowing302)
-	#download_following_302("${CMAKE_CURRENT_BINARY_DIR}/vrpn-wiimote.tar.gz" http://github.com/rpavlik/vrpn/tarball/wii-head-tracker)
-	#set(_url "${CMAKE_CURRENT_BINARY_DIR}/vrpn-wiimote.tar.gz")
-#	set(_url http://github.com/rpavlik/vrpn/tarball/wii-head-tracker)
-#endif()
+set(_url http://www.hci.iastate.edu/~rpavlik/downloads/vrpn/rpavlik-vrpn-wmhtgui-sensitivity-0-gabeebb0.zip)
 
 # Disable everything except just what we need
 set(_args)
@@ -40,7 +31,6 @@ endforeach()
 ExternalProject_Add(vrpn
 	DEPENDS wiiuse
 	URL "${_url}"
-	#URL http://githubredir.debian.net/github/rpavlik/vrpn/wmhtgui-initial-requirements.tar.gz
 	CONFIGURE_COMMAND
 		"${CMAKE_COMMAND}"
 		"-G${CMAKE_GENERATOR}"

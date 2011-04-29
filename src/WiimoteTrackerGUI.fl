@@ -17,6 +17,9 @@ decl {\#include <string>} {global
 decl {\#include <iostream>} {global
 } 
 
+decl {\#include "launchByAssociation.h"} {global
+} 
+
 decl {\#undef VERBOSE} {global
 } 
 
@@ -41,13 +44,13 @@ Function {setTracker(WiimoteTracker * tracker, WiimoteTrackerView * view)} {retu
 _view = view;} {}
 } 
 
-Function {refresh_ui()} {return_type bool
+Function {refresh_ui()} {open return_type bool
 } {
   code {Fl::flush();} {}
   code {return (Fl::check() != 0);} {}
 } 
 
-Function {mainloop_ui(const float timeout = 0.0)} {return_type bool
+Function {mainloop_ui(const float timeout = 0.0)} {open return_type bool
 } {
   code {return (Fl::wait(timeout) >= 0) && (Fl::first_window() != NULL);} {}
 } 
@@ -65,14 +68,14 @@ Function {closeStartupWindow(void* userdata)} {private return_type void
 p->cleanAndClose();} {}
 } 
 
-widget_class WiimoteTrackerConfigGUI {open
-  xywh {1252 338 420 160} type Double align 80
+widget_class WiimoteTrackerConfigGUI {
+  xywh {859 338 420 160} type Double align 80
   class Fl_Window modal visible
 } {
   Fl_Value_Input _ledDistance {
     label {Distance between LEDs (cm)}
     callback {_apply->activate();
-_save->deactivate();} selected
+_save->deactivate();}
     protected xywh {280 35 60 25} maximum 50 step 0.1 value 20.5
   }
   Fl_Input _trackerName {
@@ -221,8 +224,8 @@ hide();} {}
 
 widget_class WiimoteTrackerGUI {
   label {Wii Remote Head Tracker}
-  callback {quitApp();}
-  xywh {519 293 520 560} type Double align 80
+  callback {quitApp();} open
+  xywh {142 199 520 560} type Double align 80
   class Fl_Window visible
 } {
   decl {SoftwareVersions _vers;} {protected
@@ -250,7 +253,7 @@ widget_class WiimoteTrackerGUI {
     xywh {10 30 500 520}
   } {
     Fl_Group {} {
-      label {Tracker Status} open
+      label {Tracker Status} open selected
       xywh {10 50 500 490}
     } {
       Fl_Light_Button _trackerButton {
@@ -267,7 +270,7 @@ widget_class WiimoteTrackerGUI {
       }
       Fl_Group _updateGroup {
         label {Updated every N reports} open
-        protected xywh {50 290 420 210} box THIN_DOWN_BOX
+        protected xywh {50 300 420 230} box THIN_DOWN_BOX
       } {
         Fl_Value_Output _rate {
           label {Average Tracker Report Rate (Hz)}
@@ -283,20 +286,29 @@ widget_class WiimoteTrackerGUI {
         }
         Fl_Output _bat {
           label {Wii Remote Battery Level}
-          protected xywh {215 455 220 30} box ENGRAVED_BOX color 49
+          protected xywh {270 485 165 30} box ENGRAVED_BOX color 49
+        }
+        Fl_Output _status {
+          label {Wii Remote Status}
+          protected xywh {270 450 165 30} box ENGRAVED_BOX color 49
         }
       }
       Fl_Group {} {
         label {Configuration Parameters} open
-        xywh {50 145 420 105} box THIN_DOWN_BOX
+        xywh {50 145 420 125} box THIN_DOWN_BOX
       } {
         Fl_Output _trackerName {
           label {Tracker Name}
-          protected xywh {245 160 170 30} box ENGRAVED_BOX color 49
+          protected xywh {245 156 170 30} box ENGRAVED_BOX color 49
         }
         Fl_Value_Output _ledDistance {
           label {LED Distance (cm)}
-          protected xywh {245 195 80 30} box ENGRAVED_BOX
+          protected xywh {245 191 80 30} box ENGRAVED_BOX
+        }
+        Fl_Slider _sensitivity {
+          label {Camera Sensitivity}
+          callback {_tracker->setSensitivity(o->value());}
+          protected xywh {244 225 150 30} type Horizontal align 4 minimum 1 maximum 5 step 1 value 3 deactivate
         }
       }
     }
@@ -314,50 +326,50 @@ widget_class WiimoteTrackerGUI {
       }
       Fl_Group {} {
         label {Original Author: Ryan Pavlik} open
-        xywh {20 120 480 105} box EMBOSSED_BOX labelfont 1 align 17
+        xywh {20 152 480 90} box EMBOSSED_BOX labelfont 1 align 17
       } {
         Fl_Box {} {
           label {<rpavlik@@iastate.edu> <abiryan@@ryand.net> http://academic.cleardefinition.com}
-          xywh {20 154 480 29} labelsize 12 align 128
+          xywh {20 174 480 29} labelsize 12 align 128
         }
         Fl_Box {} {
           label {Developed at the Virtual Reality Applications Center at Iowa State University}
-          xywh {20 186 480 14} labelsize 12 align 128
+          xywh {20 205 480 14} labelsize 12 align 128
         }
         Fl_Box {} {
           label {Funded by NSF Award CMMI-0928774}
-          xywh {20 204 480 16} labelsize 12 align 128
+          xywh {20 221 480 16} labelsize 12 align 128
         }
       }
       Fl_Group {} {
         label {Compiled Against} open
-        xywh {20 300 480 80} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
+        xywh {20 317 480 80} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
       } {
         Fl_Box _vrpnVer {
           label {vrpn: ver. XX.XX}
-          xywh {30 322 460 20} labelsize 12 align 128
+          xywh {30 339 460 20} labelsize 12 align 128
         }
         Fl_Box _wiiuseVer {
           label {WiiUse version X.XX}
-          xywh {30 342 460 18} labelsize 12 align 128
+          xywh {30 359 460 18} labelsize 12 align 128
         }
         Fl_Box _fltkVer {
           label {FLTK version X.XX}
-          xywh {30 358 460 22} labelsize 12 align 128
+          xywh {30 375 460 22} labelsize 12 align 128
         }
       }
       Fl_Group {} {
         label {Academic Citation} open
-        xywh {20 225 480 75} box EMBOSSED_BOX labelfont 1 align 17
+        xywh {20 242 480 75} box EMBOSSED_BOX labelfont 1 align 17
       } {
         Fl_Box {} {
           label {Pavlik, R.A., and Vance, J.M., 2010, "A Modular Implementation of Wii Remote Head Tracking for Virtual Reality," ASME Paper No. WINVR2010-3771. Proc. 2010 World Conference on Innovative Virtual Reality.}
-          xywh {30 245 460 50} labelsize 12 align 128
+          xywh {30 262 460 50} labelsize 12 align 128
         }
       }
       Fl_Group {} {
         label {Copyright and Licenses} open
-        xywh {20 380 480 160} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
+        xywh {20 397 480 140} box EMBOSSED_BOX labelfont 1 labelsize 12 align 17
       } {
         Fl_Button {} {
           label {Show Copyright and License Details}
@@ -366,25 +378,30 @@ widget_class WiimoteTrackerGUI {
         }
         Fl_Box {} {
           label {Based in part on the work of the FLTK project (http://www.fltk.org).}
-          xywh {40 412 440 18} labelsize 10 align 128
+          xywh {40 418 440 18} labelsize 10 align 128
         }
         Fl_Box {} {
           label {Based in part on Fl_Native_File_Chooser (http://seriss.com/people/erco/fltk/Fl_Native_File_Chooser/).}
-          xywh {40 428 440 32} labelsize 10 align 128
+          xywh {40 436 440 32} labelsize 10 align 128
         }
         Fl_Box {} {
-          label {Based in part on the work of the WiiUse project (http://wiiuse.net/).}
-          xywh {40 462 440 18} labelsize 10 align 128
+          label {Based in part on the WiiUse project (http://github.com/rpavlik/wiiuse http://wiiuse.net/).}
+          xywh {40 471 440 18} labelsize 10 align 128
         }
+      }
+      Fl_Button {} {
+        label {http://rpavlik.github.com/wiimote-head-tracker-gui/}
+        callback {util::launchByAssociation("http://rpavlik.github.com/wiimote-head-tracker-gui/");}
+        xywh {20 120 480 30} labelsize 12 labelcolor 4
       }
     }
   }
-  Function {setWorking()} {return_type void
+  Function {setWorking()} {open return_type void
   } {
     code {_trackerButton->copy_label("Please wait...");
 _trackerButton->deactivate();} {}
   }
-  Function {setStatus(bool started)} {return_type void
+  Function {setStatus(bool started)} {open return_type void
   } {
     code {if (started) {
 	_trackerButton->label("@-5square    Stop Tracker");
@@ -392,10 +409,12 @@ _trackerButton->deactivate();} {}
 } else {
 	_trackerButton->label("@>    Start Tracker");
 	_trackerButton->value(0);
+	_sensitivity->deactivate();
+	_status->value("");
 }
 _trackerButton->activate();} {}
   }
-  Function {updateVersions()} {return_type void
+  Function {updateVersions()} {open return_type void
   } {
     code {_appVer->label(_vers._appVer.c_str());
 _vrpnVer->label(_vers._vrpnVer.c_str());
@@ -485,9 +504,26 @@ _fltkVer->label(_vers._fltkVer.c_str());} {}
     code {_licenses->show();
 refresh_ui();} {}
   }
-  Function {reconfigure()} {return_type void
+  Function {reconfigure()} {open return_type void
   } {
     code {_view->reconfigure();} {}
   }
   decl {friend class WiimoteTrackerView;} {}
+  Function {enableSensitivity()} {open return_type void
+  } {
+    code {_sensitivity->activate();
+_tracker->setSensitivity(_sensitivity->value());} {}
+  }
+  Function {updateWiimoteStatus(bool wmConnected)} {open return_type void
+  } {
+    code {if (wmConnected) {
+	_status->value("Connected");
+	if (_tracker->supportsSensitivityChange()) {
+		enableSensitivity();
+	}
+} else {
+	_status->value("Trying to connect...");
+	_bat->value("");
+}} {}
+  }
 } 

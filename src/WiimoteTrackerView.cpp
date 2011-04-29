@@ -38,7 +38,8 @@ WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 		_config(new WiimoteTrackerConfigGUI(420, 160, "Tracker Configuration")),
 		_gui(new WiimoteTrackerGUI(520, 560, "Wii Remote Head Tracker")),
 		_fc(NULL),
-		_controller(controller) {
+		_controller(controller),
+		_wmConnected(false) {
 	assert(_progress);
 	assert(_config);
 	assert(_gui);
@@ -54,7 +55,7 @@ WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 			Fl::scheme("xp");
 	#elif defined(FL_GLEAM_UP_BOX)
 			// If we were built against an Fl_Gleam-patched FLTK
-			/Fl::scheme("gleam");
+			Fl::scheme("gleam");
 	#endif
 	
 #elif defined(_BUILT_ON_REDHAT)
@@ -117,6 +118,8 @@ void WiimoteTrackerView::run() {
 
 	// Prepare the main window
 	_gui->updateVersions();
+
+	_gui->updateWiimoteStatus(_wmConnected);
 
 	// Update the message about the report stride
 	std::ostringstream s;
@@ -291,6 +294,10 @@ void WiimoteTrackerView::systemIsDown() {
 
 void WiimoteTrackerView::systemIsUp() {
 	_gui->setStatus(true);
+	_gui->updateWiimoteStatus(_wmConnected);
+	if (_controller->supportsSensitivityChange()) {
+		_gui->enableSensitivity();
+	}
 	if (_progress->visible()) {
 		_progress->scheduleClose(PROGRESS_WINDOW_TIMEOUT);
 	}
@@ -378,6 +385,11 @@ bool WiimoteTrackerView::processView(bool wait) {
 		_gui->_rot->value(_controller->_rot.c_str());
 		_gui->_rate->value(_controller->_rate);
 		_controller->_newReport = false;
+	}
+	bool currentConnectStatus = _controller->isWiimoteConnected();
+	if (currentConnectStatus != _wmConnected) {
+		_wmConnected = currentConnectStatus;
+		_gui->updateWiimoteStatus(currentConnectStatus);
 	}
 	return mainloop_ui(wait ? PROGRESS_EVENT_TIMEOUT : 0);
 }
