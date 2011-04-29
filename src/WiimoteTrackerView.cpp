@@ -54,7 +54,7 @@ WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 			Fl::scheme("xp");
 	#elif defined(FL_GLEAM_UP_BOX)
 			// If we were built against an Fl_Gleam-patched FLTK
-			/Fl::scheme("gleam");
+			Fl::scheme("gleam");
 	#endif
 	
 #elif defined(_BUILT_ON_REDHAT)
