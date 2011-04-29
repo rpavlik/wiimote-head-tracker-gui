@@ -91,6 +91,7 @@ WiimoteTracker::WiimoteTracker() :
 		_tracker(NULL),
 		_client(NULL),
 		_wiimoteClient(NULL),
+		_wiimoteOutClient(NULL),
 		_view(new WiimoteTrackerView(this)),
 		_newReport(true),
 		_pos("Report not yet received."),
@@ -98,6 +99,7 @@ WiimoteTracker::WiimoteTracker() :
 		_rate(0),
 		_grabBattery(false),
 		_batLevel("Report not yet received.") {
+		_supportsSensitivity(false) {
 }
 
 WiimoteTracker::~WiimoteTracker() {
@@ -306,12 +308,15 @@ bool WiimoteTracker::startClientDevice() {
 	_wiimoteClient = new vrpn_Analog_Remote(WIIMOTE_NAME,
 			_connection);
 
-	if (!_wiimoteClient) {
-		// error condition creating client device
+	_wiimoteOutClient = new vrpn_Analog_Output_Remote(WIIMOTE_NAME,
+			_connection);
+	if (!_wiimoteClient || ! _wiimoteOutClient) {
+		// error condition creating client devices
 		_view->setProgress(STG_CLIENT_ALLOCATE_FAILED);
 		return false;
 	}
 	_wiimoteClient->register_change_handler(this, handle_wiimote);
+	_supportsSensitivity = (_wiimoteOutClient->getNumChannels() >= 2);
 
 	_view->setProgress(STG_CLIENT_RUNNING);
 	return true;
@@ -362,6 +367,8 @@ void WiimoteTracker::teardownClientDevice() {
 		delete _wiimoteClient;
 		_wiimoteClient = NULL;
 	}
+	delete _wiimoteOutClient;
+	_wiimoteOutClient = NULL;
 }
 
 bool WiimoteTracker::applyNewConfiguration(const TrackerConfiguration & config) {
@@ -410,5 +417,15 @@ void WiimoteTracker::setBattery(const double batLevel) {
 		bat << std::fixed << std::setprecision(1) <<
 			batLevel * 100.0 << "%";
 		_batLevel = bat.str();
+	}
+}
+
+bool WiimoteTracker::supportsSensitivityChange() const {
+	return _supportsSensitivity;
+}
+
+void WiimoteTracker::setSensitivity(int level) {
+	if (_supportsSensitivity) {
+		_wiimoteOutClient->request_change_channel_value(1, level);
 	}
 }
