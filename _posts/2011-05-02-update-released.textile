@@ -1,0 +1,6 @@
+---
+title: Updated public release of tracking server - v1.1.0
+layout: post
+---
+
+Version 1.1.0 is a significant improvement, released to the public today.  This new version includes the updated dependencies WiiUse 0.14.0 and a pre-release of VRPN 07.29. The GUI now supports the threaded (non-blocking) continuous connection to the Wiimote added in recent VRPN versions, so the Wiimote can disconnect and re-connect without shutting down the tracker (at least on Linux). It also provides a sensitivity adjustment (matching that of the Wii) allowing you to increase or decrease the camera's sensitivity to IR light. This should increase tracking robustness substantially.
