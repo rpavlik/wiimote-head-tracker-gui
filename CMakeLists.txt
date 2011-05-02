@@ -1,4 +1,4 @@
-# 2009-2010 Ryan Pavlik <rpavlik@iastate.edu> <abiryan@ryandnet>
+# 2009-2011 Ryan Pavlik <rpavlik@iastate.edu> <abiryan@ryandnet>
 # http://academic.cleardefinition.com/
 # Iowa State University HCI Graduate Program/VRAC
 
@@ -8,8 +8,8 @@ cmake_minimum_required(VERSION 2.6)
 project(wiimote-head-tracker-gui)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
-set(CPACK_PACKAGE_VERSION_MINOR "0")
-set(CPACK_PACKAGE_VERSION_PATCH "4pre")
+set(CPACK_PACKAGE_VERSION_MINOR "1")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
 set(CPACK_PACKAGE_VERSION
 	"${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
