@@ -4,7 +4,7 @@
 
 if(WIN32)
 	ExternalProject_Add(wiiuse
-		URL http://www.hci.iastate.edu/~rpavlik/downloads/wiiuse/WiiUse-0.13.1-vs9.zip
+		URL http://www.hci.iastate.edu/~rpavlik/downloads/wiiuse/wiiuse-0.14.0-vc9.zip
 		CONFIGURE_COMMAND ""
 		BUILD_COMMAND ""
 		INSTALL_DIR "${DEPENDENCY_INSTALL_DIR}"
@@ -51,7 +51,7 @@ if(WIN32)
 	set(WIIUSE_INCLUDE_DIR "${DEPENDENCY_INSTALL_DIR}/include" PARENT_SCOPE)
 else()	
 	ExternalProject_Add(wiiuse
-		URL http://www.hci.iastate.edu/~rpavlik/downloads/wiiuse/wiiuse-0.13.1.tar.gz
+		URL http://www.hci.iastate.edu/~rpavlik/downloads/wiiuse/wiiuse-0.14.0.tar.gz
 		CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DBUILD_EXAMPLE=NO -DBUILD_EXAMPLE_SDL=NO -DINSTALL_EXAMPLES=NO -DCMAKE_BUILD_TYPE=Release
 		INSTALL_DIR ${DEPENDENCY_INSTALL_DIR}
 	)
