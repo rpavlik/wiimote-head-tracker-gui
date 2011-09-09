@@ -4,3 +4,6 @@
 [submodule "vrpn"]
 	path = vrpn
 	url = git://github.com/rpavlik/vrpn.git
+[submodule "wiiuse"]
+	path = wiiuse
+	url = git://github.com/rpavlik/wiiuse.git
