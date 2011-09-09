@@ -1,0 +1,3 @@
+[submodule "qvrpn"]
+	path = qvrpn
+	url = git://github.com/rpavlik/qvrpn.git
