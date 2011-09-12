@@ -65,14 +65,14 @@ static void	VRPN_CALLBACK handle_pos(void* userdata, const vrpn_TRACKERCB t) {
 		const double frequency = count / interval;
 		std::ostringstream pos, rot;
 		pos << "(" << std::fixed << std::setprecision(4) <<
-			t.pos[0] << ", " <<
-			t.pos[1] << ", " <<
-			t.pos[2] << ")";
+		    t.pos[0] << ", " <<
+		    t.pos[1] << ", " <<
+		    t.pos[2] << ")";
 		rot << "(" << std::fixed << std::setprecision(3) <<
-			t.quat[0] << ", " <<
-			t.quat[1] << ", " <<
-			t.quat[2] << ", " <<
-			t.quat[3] << ")";
+		    t.quat[0] << ", " <<
+		    t.quat[1] << ", " <<
+		    t.quat[2] << ", " <<
+		    t.quat[3] << ")";
 		static_cast<WiimoteTracker*>(userdata)->setReport(pos.str(), rot.str(), frequency);
 		count = 0;
 		last_display = now;
@@ -85,21 +85,21 @@ static void VRPN_CALLBACK handle_wiimote(void* userdata, const vrpn_ANALOGCB a) 
 /// @}
 
 WiimoteTracker::WiimoteTracker() :
-		_activeConfig(),
-		_connection(NULL),
-		_wiimote(NULL),
-		_tracker(NULL),
-		_client(NULL),
-		_wiimoteClient(NULL),
-		_wiimoteOutClient(NULL),
-		_view(new WiimoteTrackerView(this)),
-		_newReport(true),
-		_pos("Report not yet received."),
-		_rot("Report not yet received."),
-		_rate(0),
-		_grabBattery(false),
-		_batLevel(""),
-		_supportsSensitivity(false) {
+	_activeConfig(),
+	_connection(NULL),
+	_wiimote(NULL),
+	_tracker(NULL),
+	_client(NULL),
+	_wiimoteClient(NULL),
+	_wiimoteOutClient(NULL),
+	_view(new WiimoteTrackerView(this)),
+	_newReport(true),
+	_pos("Report not yet received."),
+	_rot("Report not yet received."),
+	_rate(0),
+	_grabBattery(false),
+	_batLevel(""),
+	_supportsSensitivity(false) {
 }
 
 WiimoteTracker::~WiimoteTracker() {
@@ -127,7 +127,7 @@ bool WiimoteTracker::loadDefaultConfigFile() {
 		std::cerr << "Exception details: " << e.what() << std::endl;
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -247,12 +247,12 @@ bool WiimoteTracker::startWiimoteDevice() {
 		_view->setProgress(STG_WIIMOTE_ALLOCATE_FAILED);
 		return false;
 	}
-/*
-	if (!_wiimote->isValid()) {
-		_view->setProgress(STG_WIIMOTE_CONNECT_FAILED);
-		return false;
-	}
-*/
+	/*
+		if (!_wiimote->isValid()) {
+			_view->setProgress(STG_WIIMOTE_CONNECT_FAILED);
+			return false;
+		}
+	*/
 	_view->setProgress(STG_WIIMOTE_RUNNING);
 	return true;
 }
@@ -268,10 +268,10 @@ bool WiimoteTracker::startTrackerDevice() {
 	_view->setProgress(STG_TRACKER_STARTING);
 
 	_tracker = new vrpn_Tracker_WiimoteHead(_activeConfig.getTrackerName().c_str(),
-			_connection,
-			WIIMOTE_REMOTE_NAME,
-			TRACKER_FREQUENCY,
-			_activeConfig.getLEDDistance());
+	                                        _connection,
+	                                        WIIMOTE_REMOTE_NAME,
+	                                        TRACKER_FREQUENCY,
+	                                        _activeConfig.getLEDDistance());
 
 	if (!_tracker) {
 		// error condition creating tracker device
@@ -295,7 +295,7 @@ bool WiimoteTracker::startClientDevice() {
 	_view->setProgress(STG_CLIENT_STARTING);
 
 	_client = new vrpn_Tracker_Remote(_activeConfig.getTrackerName().c_str(),
-			_connection);
+	                                  _connection);
 
 	if (!_client) {
 		// error condition creating client device
@@ -306,10 +306,10 @@ bool WiimoteTracker::startClientDevice() {
 	_client->register_change_handler(this, handle_pos);
 
 	_wiimoteClient = new vrpn_Analog_Remote(WIIMOTE_NAME,
-			_connection);
+	                                        _connection);
 
 	_wiimoteOutClient = new vrpn_Analog_Output_Remote(WIIMOTE_NAME,
-			_connection);
+	        _connection);
 	if (!_wiimoteClient || ! _wiimoteOutClient) {
 		// error condition creating client devices
 		_view->setProgress(STG_CLIENT_ALLOCATE_FAILED);
@@ -424,7 +424,7 @@ void WiimoteTracker::setBattery(const double batLevel) {
 		_grabBattery = false;
 		std::ostringstream bat;
 		bat << std::fixed << std::setprecision(1) <<
-			batLevel * 100.0 << "%";
+		    batLevel * 100.0 << "%";
 		_batLevel = bat.str();
 	}
 }

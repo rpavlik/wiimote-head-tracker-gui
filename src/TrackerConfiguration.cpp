@@ -44,8 +44,8 @@ struct NotAConfig : public std::runtime_error {
 };
 
 TrackerConfiguration::TrackerConfiguration(const float ledDistance, const std::string & trackerName) :
-		_ledDistance(ledDistance),
-		_trackerName(trackerName) {
+	_ledDistance(ledDistance),
+	_trackerName(trackerName) {
 	if (_ledDistance <= 0.0 || _ledDistance > 1.0) {
 		throw InvalidLEDDistance();
 	}

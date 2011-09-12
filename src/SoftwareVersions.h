@@ -42,10 +42,10 @@ extern "C" {
 class SoftwareVersions {
 	public:
 		SoftwareVersions() :
-				_appVer("Version " TRACKER_APP_VERSION),
-				_vrpnVer(vrpn_MAGIC),
-				_wiiuseVer("WiiUse: version "),
-				_fltkVer("FLTK: version " ) {
+			_appVer("Version " TRACKER_APP_VERSION),
+			_vrpnVer(vrpn_MAGIC),
+			_wiiuseVer("WiiUse: version "),
+			_fltkVer("FLTK: version ") {
 			_wiiuseVer += wiiuse_version();
 			std::ostringstream s;
 			s << FL_MAJOR_VERSION << "." << FL_MINOR_VERSION << "." << FL_PATCH_VERSION;

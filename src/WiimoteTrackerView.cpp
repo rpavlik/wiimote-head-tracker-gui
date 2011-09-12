@@ -34,12 +34,12 @@
 #include <fstream>
 
 WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
-		_progress(new StartupProgress(430,360, "Starting Tracking System...")),
-		_config(new WiimoteTrackerConfigGUI(420, 160, "Tracker Configuration")),
-		_gui(new WiimoteTrackerGUI(520, 560, "Wii Remote Head Tracker")),
-		_fc(NULL),
-		_controller(controller),
-		_wmConnected(false) {
+	_progress(new StartupProgress(430, 360, "Starting Tracking System...")),
+	_config(new WiimoteTrackerConfigGUI(420, 160, "Tracker Configuration")),
+	_gui(new WiimoteTrackerGUI(520, 560, "Wii Remote Head Tracker")),
+	_fc(NULL),
+	_controller(controller),
+	_wmConnected(false) {
 	assert(_progress);
 	assert(_config);
 	assert(_gui);
@@ -48,24 +48,24 @@ WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 	// Pick an appropriate scheme
 #if defined(_APPLE)
 	Fl::scheme("plastic");
-	
+
 #elif defined(_WIN32)
-	#if defined(FL_XP_UP_BOX)
-			// If we were built against an XP scheme patched FLTK
-			Fl::scheme("xp");
-	#elif defined(FL_GLEAM_UP_BOX)
-			// If we were built against an Fl_Gleam-patched FLTK
-			Fl::scheme("gleam");
-	#endif
-	
+#if defined(FL_XP_UP_BOX)
+	// If we were built against an XP scheme patched FLTK
+	Fl::scheme("xp");
+#elif defined(FL_GLEAM_UP_BOX)
+	// If we were built against an Fl_Gleam-patched FLTK
+	Fl::scheme("gleam");
+#endif
+
 #elif defined(_BUILT_ON_REDHAT)
-	#if defined(FL_XP_UP_BOX)
-		// If we were built against an XP scheme patched FLTK
-		Fl::scheme("xp");
-	#else
-		Fl::scheme("gtk+");
-	#endif
-	
+#if defined(FL_XP_UP_BOX)
+	// If we were built against an XP scheme patched FLTK
+	Fl::scheme("xp");
+#else
+	Fl::scheme("gtk+");
+#endif
+
 #elif defined(_BUILT_ON_UBUNTU)
 	Fl::scheme("gtk+");
 #endif
@@ -73,7 +73,7 @@ WiimoteTrackerView::WiimoteTrackerView(WiimoteTracker * controller) :
 
 WiimoteTrackerView::~WiimoteTrackerView() {
 	delete _fc;
-	_fc= NULL;
+	_fc = NULL;
 
 	delete _progress;
 	_progress = NULL;
@@ -320,7 +320,7 @@ void WiimoteTrackerView::updateConfigDisplay() {
 	/// Update main window
 	_gui->_trackerName->value(_controller->_activeConfig.getTrackerName().c_str());
 	_gui->_ledDistance->value(_controller->_activeConfig.getLEDDistance() * 100.0);
-	
+
 	refresh_ui();
 }
 
@@ -358,7 +358,9 @@ void WiimoteTrackerView::openConfig() {
 	}
 
 	std::ifstream confFile(_fc->filename());
-	if (!confFile.is_open()) { return; }
+	if (!confFile.is_open()) {
+		return;
+	}
 	TrackerConfiguration newConfig;
 	try {
 		confFile >> newConfig;
