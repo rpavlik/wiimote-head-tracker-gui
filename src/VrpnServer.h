@@ -41,7 +41,7 @@ class VrpnServer : public QObject {
 		}
 
 		QString wiimoteName() const {
-			return _trackerName;
+			return _wiimoteName;
 		}
 
 		int port() const {
@@ -54,13 +54,16 @@ class VrpnServer : public QObject {
 
 	public slots:
 		void startServer();
-		void startServer(QString const& tracker_name, QString const& wiimote_name, int port, float _ledDistance);
+		void stopServer();
 
 	private slots:
 		void analogReport(QList<double> channels);
 
 	signals:
 		void gotBatteryLevel(double level);
+		void starting();
+		void started();
+		void stopped();
 
 	private:
 		QString _trackerName;

@@ -42,6 +42,9 @@ class MainWindow : public QMainWindow {
 		~MainWindow();
 
 	public slots:
+		void starting();
+		void started();
+		void stopped();
 		void gotBatteryLevel(double level);
 
 	private:

@@ -42,6 +42,8 @@ VrpnServer::VrpnServer(QObject *parent)
 
 
 void VrpnServer::startServer() {
+	emit starting();
+
 	_container.clear();
 
 	vrpn_ConnectionPtr connection = vrpn_ConnectionPtr::create_server_connection(_port);
@@ -65,21 +67,15 @@ void VrpnServer::startServer() {
 	_container.add(anaRemote);
 
 	_container.start();
+
+	emit started();
 }
 
-void VrpnServer::startServer(QString const& tracker_name, QString const& wiimote_name, int port, float led_distance) {
-	if (!tracker_name.isEmpty()) {
-		_trackerName = tracker_name;
-	}
-	if (!wiimote_name.isEmpty()) {
-		_wiimoteName = wiimote_name;
-	}
-	if (port > 0) {
-		_port = port;
-	}
-	if (led_distance > 0) {
-		_ledDistance = led_distance;
-	}
+
+void VrpnServer::stopServer() {
+	_container.stop();
+	_container.clear();
+	emit stopped();
 
 }
 
