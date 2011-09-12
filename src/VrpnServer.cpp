@@ -25,6 +25,8 @@
 #include <vrpn_ConnectionPtr.h>
 #include <vrpn_Tracker_WiimoteHead.h>
 
+#include <vrpn_QAnalogRemote.h>
+
 // Standard includes
 #include <cassert>
 
@@ -39,7 +41,7 @@ VrpnServer::VrpnServer(QObject *parent)
 }
 
 
-void VrpnServer::connect() {
+void VrpnServer::startServer() {
 	_container.clear();
 
 	vrpn_ConnectionPtr connection = vrpn_ConnectionPtr::create_server_connection(_port);
@@ -58,9 +60,12 @@ void VrpnServer::connect() {
 	        _ledDistance);
 	_container.add(tracker);
 
+	vrpn_QAnalogRemote * anaRemote = new vrpn_QAnalogRemote(_wiimoteName, connection.get());
+	connect(anaRemote, SIGNAL(analogReport(QList<double>)), this, SLOT(analogReport(QList<double>)));
+	_container.add(anaRemote);
 }
 
-void VrpnServer::connect(QString const& tracker_name, QString const& wiimote_name, int port, float led_distance) {
+void VrpnServer::startServer(QString const& tracker_name, QString const& wiimote_name, int port, float led_distance) {
 	if (!tracker_name.isEmpty()) {
 		_trackerName = tracker_name;
 	}
@@ -74,4 +79,8 @@ void VrpnServer::connect(QString const& tracker_name, QString const& wiimote_nam
 		_ledDistance = led_distance;
 	}
 
+}
+
+void VrpnServer::analogReport(QList<double> channels) {
+	emit gotBatteryLevel(channels[0]);
 }
