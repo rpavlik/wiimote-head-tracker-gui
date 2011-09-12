@@ -57,7 +57,7 @@ void MainWindow::starting() {
 	ui->actionStart->setEnabled(false);
 	ui->trackerDeviceName->setText(_server->trackerName());
 	ui->wiimoteDeviceName->setText(_server->wiimoteName());
-	ui->port->setText(QString("%p").arg(_server->port()));
+	ui->port->setText(QString("%1").arg(_server->port()));
 }
 
 void MainWindow::started() {
