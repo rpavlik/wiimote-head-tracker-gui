@@ -21,8 +21,57 @@
 #include "VrpnServer.h"
 
 // Library/third-party includes
-// - none
+#include <vrpn_WiiMote.h>
+#include <vrpn_ConnectionPtr.h>
+#include <vrpn_Tracker_WiimoteHead.h>
 
 // Standard includes
-// - none
+#include <cassert>
 
+VrpnServer::VrpnServer(QObject *parent)
+	: QObject(parent)
+	, _trackerName(QLatin1String("Tracker0"))
+	, _wiimoteName(QLatin1String("WiiMote0"))
+	, _port(vrpn_DEFAULT_LISTEN_PORT_NO)
+	, _ledDistance(0.18) {
+
+
+}
+
+
+void VrpnServer::connect() {
+	_container.clear();
+
+	vrpn_ConnectionPtr connection = vrpn_ConnectionPtr::create_server_connection(_port);
+	assert(connection);
+	_container.add(connection);
+
+	vrpn_WiiMote * wiimote = new vrpn_WiiMote(_wiimoteName.toLatin1(), connection.get(), 0, 1, 1, 1);
+	_container.add(wiimote);
+
+	QString wiimoteRemoteName = QLatin1String("*") + _wiimoteName;
+	float trackerFrequency = 60.0f;
+	vrpn_Tracker_WiimoteHead * tracker = new vrpn_Tracker_WiimoteHead(_trackerName.toLatin1(),
+	        connection.get(),
+	        wiimoteRemoteName.toLatin1(),
+	        trackerFrequency,
+	        _ledDistance);
+	_container.add(tracker);
+
+}
+
+void VrpnServer::connect(QString const& tracker_name, QString const& wiimote_name, int port, float led_distance) {
+	if (!tracker_name.isEmpty()) {
+		_trackerName = tracker_name;
+	}
+	if (!wiimote_name.isEmpty()) {
+		_wiimoteName = wiimote_name;
+	}
+	if (port > 0) {
+		_port = port;
+	}
+	if (led_distance > 0) {
+		_ledDistance = led_distance;
+	}
+
+}

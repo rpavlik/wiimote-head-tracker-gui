@@ -33,9 +33,18 @@
 class VrpnServer : public QObject {
 		Q_OBJECT
 	public:
-		VrpnServer(QObject * parent = NULL) : QObject(parent) {}
+		VrpnServer(QObject * parent = NULL);
 		~VrpnServer() {}
+
+	public slots:
+		void connect();
+		void connect(QString const& tracker_name, QString const& wiimote_name, int port, float _ledDistance);
 	private:
+		QString _trackerName;
+		QString _wiimoteName;
+		int _port;
+		float _ledDistance;
+
 		vrpn_QMainloopContainer _container;
 };
 

@@ -21,10 +21,11 @@
 #define INCLUDED_mainwindow_h_GUID_8ea3b0c5_933e_4bac_9549_985843a922ea
 
 // Internal Includes
-// - none
+#include "VrpnServer.h"
 
 // Library/third-party includes
 #include <QMainWindow>
+#include <QSharedPointer>
 
 // Standard includes
 // - none
@@ -42,6 +43,7 @@ class MainWindow : public QMainWindow {
 
 	private:
 		Ui::MainWindow *ui;
+		QSharedPointer<VrpnServer> _server;
 };
 
 #endif // INCLUDED_mainwindow_h_GUID_8ea3b0c5_933e_4bac_9549_985843a922ea
