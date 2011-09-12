@@ -25,6 +25,8 @@ add_definitions("-DTRACKER_APP_VERSION=\"${CPACK_PACKAGE_VERSION}\"")
 # Perform build configuration of dependencies
 ###
 
+find_package(Qt4 REQUIRED)
+
 set(BUILD_WIIUSE_SHARED_LIB FALSE)
 add_subdirectory(wiiuse)
 include_directories(${WIIUSE_INCLUDE_DIRS})

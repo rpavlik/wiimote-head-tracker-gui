@@ -1,33 +1,39 @@
 #set(FLTK_SOURCES WiimoteTrackerGUI.fl)
-#set(SOURCES
-#	FromString.h
-#	main.cpp
-#	launchByAssociation.h
-#	SoftwareVersions.h
-#	SystemComponents.h
-#	TrackerConfiguration.h
-#	TrackerConfiguration.cpp
-#	WiimoteTracker.cpp
-#	WiimoteTracker.h
-#	WiimoteTrackerView.cpp
-#	WiimoteTrackerView.h)
+set(SOURCES
+	mainwindow.cpp
+	qtmain.cpp)
 
-#fltk_wrap_ui(wiimoteheadtracker ${FLTK_SOURCES})
+set(MOCS
+	mainwindow.h)
 
-#include_directories(.)
-#add_executable(wiimoteheadtracker
-#	WIN32
-#	MACOSX_BUNDLE
-#	${SOURCES}
-#	${wiimoteheadtracker_FLTK_UI_SRCS})
-#target_link_libraries(wiimoteheadtracker ${EXTRA_LIBS})
+set(UIS
+	mainwindow.ui)
 
-#if(APPLE)
-#	set_target_properties(wiimoteheadtracker
-#		PROPERTIES
-#		OUTPUT_NAME "Wii Remote Head Tracker")
-#endif()
+include(${QT_USE_FILE})
 
-#install(TARGETS wiimoteheadtracker
-#		RUNTIME DESTINATION bin
-#		BUNDLE DESTINATION ./)
+
+# Let QT pre-process the files and add the generated files to the source list
+qt4_wrap_ui(GENERATED_SOURCES ${UIS})
+qt4_add_resources(GENERATED_SOURCES ${RESOURCES})
+qt4_wrap_cpp(GENERATED_SOURCES ${MOCS})
+
+source_group("Generated Sources - Do Not Edit" FILES ${GENERATED_SOURCES})
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${VRPN_INCLUDE_DIRS} ${QVRPN_INCLUDE_DIRS})
+
+add_executable(wiimoteheadtracker
+	WIN32
+	MACOSX_BUNDLE
+	${SOURCES}
+	${GENERATED_SOURCES})
+target_link_libraries(wiimoteheadtracker ${VRPN_LIBRARIES} ${QVRPN_LIBRARIES} ${QT_LIBRARIES})
+
+if(APPLE)
+	set_target_properties(wiimoteheadtracker
+		PROPERTIES
+		OUTPUT_NAME "Wii Remote Head Tracker")
+endif()
+
+install(TARGETS wiimoteheadtracker
+		RUNTIME DESTINATION bin
+		BUNDLE DESTINATION ./)
