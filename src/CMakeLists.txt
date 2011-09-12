@@ -1,10 +1,12 @@
 #set(FLTK_SOURCES WiimoteTrackerGUI.fl)
 set(SOURCES
 	mainwindow.cpp
-	qtmain.cpp)
+	qtmain.cpp
+	VrpnServer.cpp)
 
 set(MOCS
-	mainwindow.h)
+	mainwindow.h
+	VrpnServer.h)
 
 set(UIS
 	mainwindow.ui)
