@@ -41,6 +41,9 @@ class MainWindow : public QMainWindow {
 		explicit MainWindow(QWidget *parent = 0);
 		~MainWindow();
 
+	public slots:
+		void gotBatteryLevel(double level);
+
 	private:
 		Ui::MainWindow *ui;
 		QSharedPointer<VrpnServer> _server;

@@ -63,6 +63,8 @@ void VrpnServer::startServer() {
 	vrpn_QAnalogRemote * anaRemote = new vrpn_QAnalogRemote(_wiimoteName, connection.get());
 	connect(anaRemote, SIGNAL(analogReport(QList<double>)), this, SLOT(analogReport(QList<double>)));
 	_container.add(anaRemote);
+
+	_container.start();
 }
 
 void VrpnServer::startServer(QString const& tracker_name, QString const& wiimote_name, int port, float led_distance) {

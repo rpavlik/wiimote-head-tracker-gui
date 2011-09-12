@@ -20,6 +20,7 @@
 // Internal Includes
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "VrpnServer.h"
 
 // Library/third-party includes
 // - none
@@ -27,12 +28,20 @@
 // Standard includes
 // - none
 
-MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent)
+	: QMainWindow(parent)
+	, ui(new Ui::MainWindow)
+	, _server(new VrpnServer) {
 	ui->setupUi(this);
+
+	connect(_server.data(), SIGNAL(gotBatteryLevel(double)), this, SLOT(gotBatteryLevel(double)));
+	_server->startServer();
 }
 
 MainWindow::~MainWindow() {
 	delete ui;
+}
+
+void MainWindow::gotBatteryLevel(double level) {
+	ui->batteryBar->setValue(int(level * 100));
 }
