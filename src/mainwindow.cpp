@@ -35,9 +35,17 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->setupUi(this);
 
 	connect(_server.data(), SIGNAL(gotBatteryLevel(double)), this, SLOT(gotBatteryLevel(double)));
+
 	connect(_server.data(), SIGNAL(starting()), this, SLOT(starting()));
+
 	connect(_server.data(), SIGNAL(started()), this, SLOT(started()));
+
 	connect(_server.data(), SIGNAL(stopped()), this, SLOT(stopped()));
+
+	connect(ui->actionStart, SIGNAL(triggered()), _server.data(), SLOT(startServer()));
+
+	connect(ui->actionStop, SIGNAL(triggered()), _server.data(), SLOT(stopServer()));
+
 	_server->startServer();
 }
 
@@ -46,16 +54,19 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::starting() {
+	ui->actionStart->setEnabled(false);
 	ui->trackerDeviceName->setText(_server->trackerName());
 	ui->wiimoteDeviceName->setText(_server->wiimoteName());
-	ui->port->setText(QString("%").arg(_server->port()));
+	ui->port->setText(QString("%p").arg(_server->port()));
 }
 
 void MainWindow::started() {
-
+	ui->actionStop->setEnabled(true);
 }
 
 void MainWindow::stopped() {
+	ui->actionStart->setEnabled(true);
+	ui->actionStop->setEnabled(false);
 	ui->batteryBar->setValue(0);
 	ui->batteryBar->setFormat("Unknown");
 }
