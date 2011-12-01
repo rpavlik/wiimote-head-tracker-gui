@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VrpnServer_h_GUID_01d1ba2b_8769_470a_8ff6_29b83972d00f
 #define INCLUDED_VrpnServer_h_GUID_01d1ba2b_8769_470a_8ff6_29b83972d00f
 
+#ifndef NDEBUG
+#define VRPN_MAINLOOPOBJECT_VERBOSE
+#endif
+
 // Internal Includes
 // - none
 
