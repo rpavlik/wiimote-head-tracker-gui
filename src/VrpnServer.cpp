@@ -45,24 +45,25 @@ void VrpnServer::startServer() {
 	emit starting();
 
 	_container.clear();
+	vrpn_ConnectionPtr conn = vrpn_ConnectionPtr::create_server_connection(_port);
+	vrpn_Connection * connection = conn.get();
+	//vrpn_Connection * connection = vrpn_create_server_connection(_port);
+	assert(conn);
+	_container.add(conn);
 
-	vrpn_ConnectionPtr connection = vrpn_ConnectionPtr::create_server_connection(_port);
-	assert(connection);
-	_container.add(connection);
-
-	vrpn_WiiMote * wiimote = new vrpn_WiiMote(_wiimoteName.toLatin1(), connection.get(), 0, 1, 1, 1);
+	vrpn_WiiMote * wiimote = new vrpn_WiiMote(_wiimoteName.toLatin1(), connection, 0, 1, 1, 1);
 	_container.add(wiimote);
 
 	QString wiimoteRemoteName = QLatin1String("*") + _wiimoteName;
 	float trackerFrequency = 60.0f;
 	vrpn_Tracker_WiimoteHead * tracker = new vrpn_Tracker_WiimoteHead(_trackerName.toLatin1(),
-	        connection.get(),
+			connection,
 	        wiimoteRemoteName.toLatin1(),
 	        trackerFrequency,
 	        _ledDistance);
 	_container.add(tracker);
 
-	vrpn_QAnalogRemote * anaRemote = new vrpn_QAnalogRemote(_wiimoteName, connection.get());
+	vrpn_QAnalogRemote * anaRemote = new vrpn_QAnalogRemote(_wiimoteName, connection);
 	connect(anaRemote, SIGNAL(analogReport(QList<double>)), this, SLOT(analogReport(QList<double>)));
 	_container.add(anaRemote);
 
