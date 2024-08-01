@@ -3,6 +3,19 @@ Wii Remote Head Tracker (with Integrated GUI)
 
 http://www.github.com/rpavlik/wiimote-head-tracker-gui 
 
+Status
+------
+
+This should still work fine, but I have no capacity to maintain this
+in any reasonable fashion. You are welcome to fork and build on it
+pursuant to the license, but I will not be able to help with it.
+
+**This repo is unmaintained**
+
+
+Introduction
+------------
+
 This application builds on the Wii Remote Head Tracking filter module 
 for VRPN by providing an easy-to-use, fully-integrated tracking server. 
 
@@ -14,18 +27,6 @@ publications by citing the following paper:
   WINVR2010-3771. Proc. 2010 World Conference on Innovative Virtual 
   Reality. 
 
-If you cite this work or use this tracking system, we would appreciate 
-hearing from you. You may contact the main developer, Ryan Pavlik (Iowa 
-State University), by email at <rpavlik@iastate.edu> or 
-<abiryan@ryand.net>.
-
-Paper materials and copies of publications may be mailed to:
-
-  Ryan Pavlik
-  Virtual Reality Applications Center
-  1620 Howe Hall
-  Ames, Iowa 50011-2274
-  USA
 
 Build Dependencies
 ------------------
@@ -41,9 +42,9 @@ files for VRPN and this app
 
 - These dependencies can be built automatically by the build system:
 
-  - VRPN with Ryan's Tracker_WiimoteHead device (19 May 2010 or newer): 
+  - VRPN with Rylie's Tracker_WiimoteHead device (19 May 2010 or newer): 
   VRPN 07.27 might be compatible, VRPN 07.28 will likely be compatible, or 
-  go to http://www.github.com/rpavlik/vrpn (Public domain + BSL 1.0)
+  go to http://www.github.com/vrpn/vrpn (Public domain + BSL 1.0)
 
   - WiiUse - needed for VRPN (GPL3)
 
